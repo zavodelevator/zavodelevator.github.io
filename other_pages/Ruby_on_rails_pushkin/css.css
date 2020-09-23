@@ -7,22 +7,22 @@
 }
 
 
-.body, a:link {
+.body, ul, a:link {
     color: black;
     background-color: transparent;
     text-decoration: none;
   }
-  .body, a:visited {
+  .body, ul, a:visited {
     color: black;
     background-color: transparent;
     text-decoration: none;
   }
-  .body, a:hover {
+  .body, ul, a:hover {
     color: black;
     background-color: transparent;
     text-decoration: none;
   }
-  .body, a:active {
+  .body, ul, a:active {
     color: black;
     background-color: transparent;
     text-decoration: none;
