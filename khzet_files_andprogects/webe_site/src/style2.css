@@ -1,0 +1,628 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,500&subset=cyrillic');
+ @import url('https://fonts.googleapis.com/css?family=Ubuntu:400,500&subset=cyrillic');
+ * {
+	 font-family: 'Ubuntu', sans-serif;
+}
+ * .border {
+	 padding: 10px;
+	 margin: 0 0 70px 70px;
+	 width: 300px;
+	 border: 10px solid #f4f1f3;
+}
+ * .border h2 {
+	 position: relative;
+	 left: -70px;
+	 font-size: 2.5em;
+	 text-transform: uppercase;
+}
+ * .border h2 span {
+	 color: #dfdc1a;
+}
+ * .grey-border {
+	 border: 10px solid #48434b;
+}
+ * .grey-border h2 {
+	 color: #f2f2f2;
+}
+ * .line {
+	 width: 120px;
+	 height: 3px;
+	 background: #dfdc1a;
+	 margin: 20px 0;
+}
+ * .text {
+	 padding-bottom: 20px;
+}
+ * .logo-square {
+	 display: fixed;
+	 width: 60px;
+	 height: 50px;
+
+	 color: white;
+   text-align: center;
+   margin-right: 100px;
+	 padding: 15px 0;
+}
+ * .logo-square span {
+	 font-size: 1.7em;
+	 font-weight: 500;
+}
+ * .see-more {
+	 display: block;
+	 padding: 10px 30vw 0 0;
+}
+ * .see-more .button {
+	 text-align: center;
+	 height: 50px;
+	 width: 205px;
+	 font-size: 1em;
+	 text-transform: uppercase;
+	 border: 1px solid #f4f1f3;
+	 padding: 15px 10px;
+}
+ * .container-fluid, * .collapse {
+	 padding-right: 0 !important;
+}
+ * .container-fluid .navbar-header {
+	 margin-right: 0;
+}
+ * a, * a:hover, * a:active, * a:visited, * a:link {
+	 /* color: inherit; */
+	 text-decoration: none;
+}
+ * .menu .navbar {
+	 background: none;
+	 border: none;
+}
+ * .menu .navbar .navbar-brand {
+	 padding: 20px;
+}
+ * .menu .navbar ul {
+	 padding: 20px 0;
+}
+ * .menu .navbar ul li a {
+	 font-size: 0.8em;
+	 text-align: center;
+	 text-transform: uppercase;
+	 font-weight: 500;
+	 color: white;
+}
+ * .menu .navbar ul li a:hover {
+	 color: #dfdc1a;
+}
+ * .menu .navbar ul a:hover {
+	 background: #3b363d;
+}
+ * .menu .navbar ul a:focus {
+	 background: #3b363d;
+}
+ * .menu .navbar ul a:active {
+	 background: #3b363d;
+}
+ * .menu .navbar ul a:visited {
+	 color: white;
+}
+ * .menu .navbar ul .dropdown-menu {
+	 background: #3b363d;
+	 border: none;
+	 box-shadow: none;
+	 border-left: 1px solid #dfdc1a;
+	 border-bottom: 1px solid #dfdc1a;
+	 border-radius: 0;
+}
+ * .menu .navbar ul .dropdown-menu li a {
+	 text-align: left;
+	 text-transform: lowercase;
+	 padding: 5px 15px;
+}
+ * .menu .navbar ul .dropdown-toggle, * .menu .navbar ul .dropdown-active {
+	 background: #3b363d;
+	 color: white;
+}
+ * .menu .navbar .open > a:focus {
+	 background: #3b363d;
+	 color: #dfdc1a;
+}
+ header {
+	 background: url("https://github.com/peregudova-dasha/test/blob/gh-pages/img/bg1.jpg?raw=true") 50% 50% no-repeat;
+	 background-size: cover;
+}
+ header .container {
+	 width: 100%;
+	 margin: 0;
+	 padding: 0;
+}
+ header .grey-block {
+	 z-index: 0;
+	 height: inherit;
+	 background: #3b363d;
+	 top: 0;
+	 margin: 0;
+	 padding: 0;
+}
+ header .grey-block .head {
+	 padding: 150px 2vw 150px 15vw;
+}
+ header .grey-block .head h1 {
+	 font-size: 5em;
+	 color: white;
+}
+ header .grey-block .head p {
+	 color: white;
+}
+ header .grey-block .head .contacts {
+	 padding: 50px 0 0 0;
+}
+ header a {
+	 display: block;
+	 padding: 0 20px;
+}
+ header a .button {
+	 position: relative;
+	 top: 350px;
+	 float: left;
+	 color: white;
+	 font-size: 1.3em;
+	 text-transform: uppercase;
+	 border: 2px solid white;
+	 padding: 10px;
+}
+ .we-are {
+	 padding: 100px 0;
+}
+ .we-are img {
+	 width: 80%;
+	 float: right;
+}
+ .services {
+	 background: #3b363d;
+}
+ .services .border {
+	 border: 10px solid #48434b;
+}
+ .services .border h2 {
+	 color: #f2f2f2;
+}
+ .services .info {
+	 padding: 100px 0 30px 6vw;
+}
+ .services .info .serv-list ul li {
+	 width: 200px;
+	 font-size: 1em;
+	 color: #dfdc1a;
+	 padding: 5px 0;
+	 list-style-type: square;
+}
+ .services .info .serv-list ul li a {
+	 color: white;
+}
+ .services .info .serv-list ul li a:hover {
+	 color: #dfdc1a;
+}
+ .services .info .line {
+	 margin: 50px 25px;
+}
+ .services .container {
+	 padding: 0;
+	 margin: 0;
+	 width: 100%;
+}
+ .services .container .column {
+	 padding: 0;
+	 margin: 0;
+}
+ .services .service {
+	 width: 100%;
+	 height: 300px;
+	 border: none;
+	 background-position: 50% 50%;
+	 background-size: cover;
+}
+ .services .serv1 {
+	 background-image: url("https://github.com/peregudova-dasha/test/blob/gh-pages/img/img2.jpg?raw=true");
+}
+ .services .serv2 {
+	 background-image: url("https://github.com/peregudova-dasha/test/blob/gh-pages/img/img6.jpg?raw=true");
+}
+ .services .serv3 {
+	 background-image: url("https://github.com/peregudova-dasha/test/blob/gh-pages/img/img5.jpg?raw=true");
+}
+ .services .serv4 {
+	 background-image: url("https://github.com/peregudova-dasha/test/blob/gh-pages/img/img8.jpg?raw=true");
+}
+ .services .title {
+	 z-index: 15;
+	 position: relative;
+}
+ .services .title h4 {
+	 margin: 0;
+	 width: 100%;
+	 text-align: center;
+	 padding: 120px 0 20px 0;
+	 color: black;
+	 font-size: 1.3em;
+}
+ .services .title p {
+	 text-align: center;
+	 color: white;
+	 padding: 15px 12%;
+}
+ .services .hover {
+	 z-index: 0;
+	 position: absolute;
+	 background: #dfdc1a;
+	 opacity: 0.8;
+	 width: 80%;
+	 height: 240px;
+	 top: 30px;
+	 left: 10%;
+}
+ .services .hover-bottom {
+	 top: 330px;
+}
+ .services .title, .services .hover {
+	 display: none;
+}
+ .services .see-more {
+	 margin: 0;
+}
+ .portfolio {
+	 padding: 100px 0;
+}
+ .portfolio .border {
+	 width: 340px;
+}
+ .portfolio .border h2 {
+	 font-size: 2.2em;
+}
+ .portfolio .carousel {
+	 max-width: 980px;
+	/* ширина всего блока */
+	 width: 100%;
+}
+ .portfolio .carousel .carousel-wrapper {
+	 overflow: hidden;
+	/* скрываем содержимое, выходящее за рамки основной области */
+	 position: relative;
+}
+ .portfolio .carousel .carousel-items {
+	 width: 10000px;
+	/* устанавливаем большую ширину для набора элементов */
+	 position: relative;
+	/* позиционируем блок относительно основной области карусели */
+}
+ .portfolio .carousel .carousel-block {
+	 float: left;
+	/* выстраиваем все элементы карусели в ряд */
+	 width: 50vw;
+	/* задаём ширину каждого элемента */
+	 height: 100%;
+	 overflow: hidden;
+	 padding: 0 80px;
+	/* делаем оступы, чтобы элементы не сливались */
+}
+ .portfolio .carousel .carousel-block .work {
+	 display: block;
+}
+ .portfolio .carousel .carousel-block .work span {
+	 width: 170px;
+	 background: #dfdc1a;
+	 color: black;
+	 display: block;
+	 padding: 15px;
+	 font-weight: 500;
+	 position: relative;
+	 top: -30px;
+	 left: -20px;
+}
+ .portfolio .carousel .carousel-block .work p {
+	 font-size: 1em;
+	 position: relative;
+	 top: -20px;
+	 border: 3px solid #f4f1f3;
+	 padding: 5px;
+	 width: 98%;
+}
+ .portfolio .carousel .carousel-block .image {
+	 height: 300px;
+	 width: 100%;
+	 display: inline-block;
+}
+ .portfolio .carousel .carousel-block .work1 {
+	 background: url("https://github.com/peregudova-dasha/test/blob/gh-pages/img/img5.jpg?raw=true") 50% 50%;
+	 background-size: cover;
+}
+ .portfolio .carousel .carousel-block .work2 {
+	 background: url("https://github.com/peregudova-dasha/test/blob/gh-pages/img/img6.jpg?raw=true") 50% 50%;
+	 background-size: cover;
+}
+ .portfolio .carousel .carousel-block .work3 {
+	 background: url("https://github.com/peregudova-dasha/test/blob/gh-pages/img/img7.png?raw=true") 50% 50%;
+	 background-size: cover;
+}
+ .portfolio .carousel .carousel-block .work4 {
+	 background: url("https://github.com/peregudova-dasha/test/blob/gh-pages/img/img8.jpg?raw=true") 50% 50%;
+	 background-size: cover;
+}
+ .portfolio .carousel .carousel-block .work5 {
+	 background: url("https://github.com/peregudova-dasha/test/blob/gh-pages/img/img9.jpg?raw=true") 50% 50%;
+	 background-size: cover;
+}
+ .portfolio .carousel .buttons {
+	 width: 105px;
+	 margin: 0 auto;
+}
+ .portfolio .carousel .buttons .carousel-button-left, .portfolio .carousel .buttons .carousel-button-right {
+	 width: 50px;
+	 height: 50px;
+	 display: inline-block;
+	 border: 1px solid #f2f2f2;
+}
+ .portfolio .carousel .buttons .carousel-button-left {
+	 background: url("https://cdn0.iconfinder.com/data/icons/slim-square-icons-basics/100/basics-08-128.png");
+	 background-size: cover;
+	 transform: rotate(90deg);
+}
+ .portfolio .carousel .buttons .carousel-button-right {
+	 background: url("https://cdn0.iconfinder.com/data/icons/slim-square-icons-basics/100/basics-08-128.png");
+	 background-size: cover;
+	 transform: rotate(270deg);
+}
+ .contact-us {
+	 background: url("https://github.com/peregudova-dasha/test/blob/gh-pages/img/bg1.jpg?raw=true") no-repeat 100% 0% #3b363d;
+	 background-size: cover;
+}
+ .contact-us .container {
+	 margin: 0;
+	 padding: 0;
+	 width: 100%;
+}
+ .contact-us .left, .contact-us .right {
+	 margin: 0;
+	 padding: 100px 5%;
+}
+ .contact-us .left {
+	 padding-left: 120px;
+	 background: #3b363d;
+}
+ .contact-us .left .text {
+	 color: white;
+	 padding-top: 20px;
+}
+ .contact-us .left .text span {
+	 display: block;
+	 margin: 10px 0px;
+	 color: #dfdc1a;
+	 font-weight: 500;
+}
+ .contact-us .left .text .adress {
+	 padding-top: 30px;
+}
+ .contact-us .right form {
+	 padding-top: 70px;
+	/* Firefox 19+ */
+	/* Firefox 18- */
+}
+ .contact-us .right form input, .contact-us .right form textarea {
+	 margin: 20px 0;
+	 background: none;
+	 border-radius: 0;
+	 color: black;
+	 border: none;
+	 border-bottom: 2px solid #f4f1f3;
+	 box-shadow: none;
+	 padding: 5px 0 0 0;
+}
+ .contact-us .right form input:focus, .contact-us .right form textarea:focus {
+	 color: black;
+	 border-color: #dfdc1a;
+	 box-shadow: none;
+	 padding: 5px 0 0 0;
+}
+ .contact-us .right form ::-webkit-input-placeholder {
+	 color: #f2f2f2;
+}
+ .contact-us .right form ::-moz-placeholder {
+	 color: #f2f2f2;
+}
+ .contact-us .right form :-moz-placeholder {
+	 color: #f2f2f2;
+}
+ .contact-us .right form :-ms-input-placeholder {
+	 color: #f2f2f2;
+}
+ .contact-us .right form button {
+	 background: none;
+	 border: 2px solid #f4f1f3;
+	 color: #f4f1f3;
+	 text-transform: uppercase;
+	 padding: 10px;
+	 margin-top: 50px;
+}
+ .map {
+	 height: 200px;
+	 overflow: hidden;
+}
+ .map .cover {
+	 width: 100%;
+	 height: 200px;
+	 opacity: 0.6;
+	 position: relative;
+	 background: white;
+	 top: -205px;
+}
+ .map .open-map {
+	 cursor: pointer;
+	 position: relative;
+	 top: -360px;
+	 text-align: center;
+	 width: 250px;
+	 height: 120px;
+	 margin: 0 auto;
+	 background: white;
+	 padding-top: 10px;
+	 border: 5px solid #f4f1f3;
+}
+ .map .open-map img {
+	 width: 50px;
+}
+ .map .open-map h2 {
+	 font-size: 1.5em;
+	 text-transform: uppercase;
+	 color: #dfdc1a;
+	 font-weight: 500;
+}
+ footer {
+	 background: #3b363d;
+	 padding: 50px 0;
+}
+ footer .left {
+	 float: left;
+}
+ footer .center {
+	 padding-left: 70px;
+}
+ footer .right {
+	 float: right;
+}
+ footer .right .contact-info {
+	 text-align: center;
+}
+ footer p {
+	 color: white;
+	 display: block;
+	 padding: 5px 0;
+}
+ footer .border {
+	 padding: 10px;
+	 margin: 0;
+	 width: 70%;
+}
+ footer .border h2 {
+	 position: relative;
+	 left: -70px;
+	 font-size: 3em;
+	 text-transform: uppercase;
+}
+/* Media queries */
+/*PHONE*/
+ @media all and (max-width: 767px) {
+	 * .navbar-header button {
+		 margin: 20px;
+	}
+	 * .border {
+		 width: 200px;
+		 margin-left: 15%;
+	}
+	 * .border h2 {
+		 left: -30%;
+	}
+	 header .grey-block .head {
+		 padding: 100px 10%;
+	}
+	 header .grey-block .head h1 {
+		 font-size: 3.5em;
+	}
+	 header .grey-block .head p {
+		 font-size: 1em;
+	}
+	 .services .service {
+		 height: 150px;
+	}
+	 .services .hover {
+		 height: 120px;
+		 top: 15px;
+	}
+	 .services .title h4 {
+		 padding-top: 60px;
+		 font-size: 0.85em;
+	}
+	 .services .title p {
+		 display: none;
+	}
+	 .services .hover-bottom {
+		 top: 165px;
+	}
+	 .portfolio .border {
+		 width: 200px;
+		 margin-left: 15%;
+	}
+	 .portfolio .border h2 {
+		 left: -30%;
+	}
+	 .portfolio .column {
+		 padding-left: 0;
+	}
+	 .portfolio .carousel {
+		 padding-top: 50px;
+	}
+	 .portfolio .carousel .carousel-block {
+		 width: 100vw;
+		 padding: 0 40px;
+	}
+	 .portfolio .carousel .carousel-block p {
+		 width: 97%;
+	}
+	 .contact-us .left {
+		 padding-left: 10%;
+	}
+	 .contact-us .right {
+		 padding-top: 50px;
+	}
+	 footer .left {
+		 display: none;
+	}
+	 footer .right {
+		 padding-top: 50px;
+	}
+}
+/*TABLETS*/
+ @media all and (min-width: 768px) and (max-width: 991px) {
+	 * .border {
+		 width: 200px;
+		 margin-left: 15%;
+	}
+	 * .border h2 {
+		 left: -30%;
+	}
+	 * header .menu .navbar li a {
+		 font-size: 0.6em;
+		 padding: 15px 5px;
+	}
+	 .portfolio .border {
+		 width: 200px;
+		 margin-left: 15%;
+	}
+	 .portfolio .border h2 {
+		 left: -30%;
+	}
+	 .portfolio .line {
+		 margin: 20px 0 70px 0;
+	}
+	 .portfolio .column {
+		 padding-left: 0;
+	}
+	 .portfolio .carousel {
+		 padding-top: 50px;
+	}
+	 .portfolio .carousel .carousel-block {
+		 width: 50vw;
+		 padding: 0 40px;
+	}
+	 .portfolio .carousel .carousel-block p {
+		 width: 75%;
+	}
+}
+/*MEDIUM DEVICE*/
+ @media all and (min-width: 992px) and (max-width: 1200px) {
+	 .container {
+		 width: 100%;
+	}
+}
+/*LARGE DEVICE*/
+ @media all and (min-width: 1201px) {
+	 .container {
+		 width: 95%;
+	}
+}
+ 
