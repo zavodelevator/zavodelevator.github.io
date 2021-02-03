@@ -75,6 +75,42 @@ nav {
 
 
 
+
+
+
+
+
+
+
+
+
+
+.header-box
+  {
+    background-color: darkgray;
+    height: 300px;
+    padding-top: 10px;
+    margin-bottom: -20px;
+  }
+
+.header-box #h1
+  {
+    margin: 60px 120px;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #slider {
   position: relative;
   margin-top: 100px;
@@ -240,7 +276,8 @@ nav {
 
 
 .carousel-item {
-    height: 400px;  
+    height: 400px;
+    position: relative;  
 }
 .carousel-item img{
     height: 400px;
@@ -262,25 +299,44 @@ nav {
 
 
 /* carusel */
+.empty_wrap
+  {
+    opacity: 0;
+    height: 400px;
+  }
 
 
+.carousel-item-1 
+  {
+    background-image: url('./img/banner1.jpg'); 
+    background-size: cover;
+    background-position: center;
+    height: 480px;  
+  }
 
-.carousel-item-1 {
-  background-image: url('./img/banner1.jpg'); 
-  background-size: cover;
-  background-position: center;
-  height: 480px;  
-}
-.carousel-item-1 .text{
+.text_mobile
+  {
+    /* float: right; */
+    display: none;
+    margin-top: 10px 0 10px 20px;
+    /* padding: 20px 30px 10px 40px; */
+    width: 100%;
+    height: 100%;
+    background-color: rgba( 255, 255, 255, 0.65);
+  }
+
+.text_right{
+  /* position: absolute; */
+  float: right;
   margin-top: 50px 0 50px 0;
   padding: 20px 30px 10px 40px;
-  width: 60%;
+  width: 50%;
   height: 100%;
   background-color: rgba( 255, 255, 255, 0.65);
 }
 
-#h1 {
-  font-size: 54px;
+.header_text {
+  font-size: 54px !important;
 }
 
 .carousel-item-2 {
@@ -302,3 +358,74 @@ nav {
 /* body .main-vrapper{
   background-color: rgb(228, 254, 0);
 } */
+
+
+
+
+
+
+
+
+
+
+@media screen and (min-device-width: 1600px) 
+  {
+    
+  } 
+ @media screen and (device-width: 1280px) 
+  {
+
+  }
+ @media screen and (device-width: 1024px) 
+  {
+
+  }
+@media screen and (max-width: 800px) 
+  {
+
+    .text_mobile h3
+    {
+      margin: 80px 0 0 10%;
+      display: block;
+      font-size: 25px !important;
+      width: 80%;
+      height: 80px;
+      
+    }
+    .text_mobile
+      {
+        display: block;
+        z-index: 999  !important;
+      }
+    .text_left
+      {
+        display: none;
+      }
+    .text_right
+      {
+        display: none;
+      }
+    .carousel-item-1 
+      {
+        background-image: url('./img/banner1_mob.png'); 
+      }
+    .carousel-item-2 
+      {
+        background-image: url('./img/banner2_mob.png'); 
+      }
+    .carousel-item-3 
+      {
+        background-image: url('./img/banner1_mob.png'); 
+      }
+      #slider 
+      {
+        margin-top: -20px;
+      }
+
+
+  }
+
+@media screen and (device-width: 500px) 
+  {
+
+  }
