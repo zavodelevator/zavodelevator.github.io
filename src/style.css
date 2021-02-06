@@ -1,0 +1,468 @@
+body * {
+  font-family: 'Montserrat', sans-serif !important;
+}
+
+.main-vrapper #navbar {
+  position: fixed;
+  width: 100%;
+  margin-top: -50px;
+  z-index: 1000;
+}
+
+#main_logo {
+    background-color: #D1AC00;
+}
+
+.logo_png {
+  margin-top: -5px;
+}
+
+.logo_span {
+  margin-left: 5px;
+}
+
+
+.big  {
+  height: 1000px;
+  width: 20px;
+  background-color: #666;
+}
+
+
+.nav-item{
+  margin-left: 10px;
+}
+
+nav {
+  width: 100%;
+  height: 60px;
+  font-size: 18px;
+  background: -webkit-linear-gradient(white, white,white,white,white);
+  background: -o-linear-gradient(white,white,white,white,white);
+  background: linear-gradient(white,white,white,white,white);
+  border-radius: 6px !important;
+  -moz-border-radius: 6px !important;
+}
+
+.nav a{
+  color: white !important;
+  font-size: 1.8em !important;
+
+}
+
+.navbar-nav{
+  background: -o-linear-gradient(white,white,white,white,white);
+  background: linear-gradient(white,white,white,white,white);
+ 
+}
+
+.nav_phone a{
+  font-size: 10px;
+  margin: auto, 10px;
+  padding: 0px;
+}
+
+
+
+
+#top-banner {
+  margin-top: 50px;
+  background-image: url("img/wheat-5681617_960_720.jpg");
+  /* https://pixabay.com/photos/wheat-field-crops-wheat-field-5681617/ */
+  background-size: cover;
+ 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* .header-box
+  {
+    margin-top: 80px;
+    background-color: darkgray;
+    height: 340px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+.header-box #h1
+  {
+    margin: 60px 120px;
+    font-size: 50px;
+  } */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#slider {
+  position: relative;
+  margin-top: 100px;
+}
+
+/* .wrap_carusel {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background: -o-linear-gradient(white,white,white,white,white);
+  background: linear-gradient(white,white,white,white,white);
+  z-index: 100;
+  opacity: .7;
+
+}
+.wrap_carusel-2 {
+  position: absolute;
+  width: 100%;
+  height: 50px;
+  background-size: cover;
+  background: -o-linear-gradient(white,white,white,white,white);
+  background: linear-gradient(white,white,white,white,white);
+  z-index: 101;
+  opacity: .4;
+  -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1), rgba(0,0,0,0)), linear-gradient(to right, rgba(0,0,0,1), rgba(0,0,0,0));
+  -webkit-mask-size: 100% 50%;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: top bottom, top bottom;
+
+} */
+
+
+#works {
+    /*********** BUTTONS ***********/
+  
+  }
+  #works .carousel {
+    max-width: 980px;
+    /* ширина всего блока */
+  
+    margin: 50px auto;
+    width: 100%;
+    
+  }
+  #works .carousel-wrapper {
+    margin: 10px 30px;
+    /* отступы для стрелок */
+  
+    overflow: hidden;
+    /* скрываем содержимое, выходящее за рамки основной области */
+  
+    position: relative;
+  }
+  #works .carousel-items {
+    width: 10000px;
+    /* устанавливаем большую ширину для набора элементов */
+  
+    position: relative;
+    /* позиционируем блок относительно основной области карусели */
+  
+  }
+  #works .carousel-block {
+    float: left;
+    /* выстраиваем все элементы карусели в ряд */
+  
+    width: 210px;
+    /* задаём ширину каждого элемента */
+  
+    height: 100%;
+    overflow: hidden;
+    padding: 10px;
+    /* делаем оступы, чтобы элементы не сливались */
+  
+  }
+  #works .carousel-block .work {
+    display: block;
+  }
+  #works .carousel-block .work img {
+    height: 200px;
+  }
+  #works .carousel-block .work p {
+    font-size: 1em;
+  }
+  #works .carousel-button-left a,
+  #works .carousel-button-right a {
+    width: 50px;
+    height: 50px;
+    position: relative;
+    top: 150px;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  #works .carousel-button-left a {
+    float: left;
+    background: url("https://cdn3.iconfinder.com/data/icons/faticons/32/arrow-left-01-128.png");
+    background-size: cover;
+  }
+  #works .carousel-button-right a {
+    float: right;
+    background: url("https://cdn3.iconfinder.com/data/icons/faticons/32/arrow-left-01-128.png");
+    background-size: cover;
+    transform: rotate(180deg);
+  }
+.carousel-control-prev {
+  z-index: 101;
+}
+.carousel-control-next {
+  z-index: 101;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.MultiCarousel { float: left; overflow: hidden; padding: 15px; width: 100%; position:relative; }
+    .MultiCarousel .MultiCarousel-inner { transition: 1s ease all; float: left; }
+        .MultiCarousel .MultiCarousel-inner .item { float: left;}
+        .MultiCarousel .MultiCarousel-inner .item > div { text-align: center; padding:10px; margin:10px; background:#f1f1f1; color:#666;}
+    .MultiCarousel .leftLst, .MultiCarousel .rightLst { position:absolute; border-radius:50%;top:calc(50% - 20px); }
+    .MultiCarousel .leftLst { left:0; }
+    .MultiCarousel .rightLst { right:0; }
+    
+        .MultiCarousel .leftLst.over, .MultiCarousel .rightLst.over { pointer-events: none; background:#ccc; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+.jumbotron .vrapper{
+    background-color: rgba(255, 255, 255, 0.65);
+    width: 100%;
+    height: 100%;
+}
+
+.main-vrapper {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.photo_factory {
+    width: 100%;
+    height: 300px;
+    background-image: url("img/unit-factory.jpg");
+}
+
+
+
+.carousel-item {
+    height: 400px;
+    position: relative;  
+}
+.carousel-item img{
+    height: 400px;
+    width: 400px;
+}
+
+
+
+
+
+#footer .container{
+    background-color: rgba(205, 205, 205, 0.65);
+    width: 100%;
+}
+
+
+
+
+
+
+/* carusel */
+.empty_wrap
+  {
+    opacity: 0;
+    height: 400px;
+  }
+
+
+.carousel-item-1 
+  {
+    background-image: url('./img/banner1.jpg'); 
+    background-size: cover;
+    background-position: center;
+    height: 480px;  
+  }
+
+.text_mobile
+  {
+    /* float: right; */
+    display: none;
+    margin-top: 10px 0 10px 20px;
+    /* padding: 20px 30px 10px 40px; */
+    width: 100%;
+    height: 100%;
+    background-color: rgba( 255, 255, 255, 0.65);
+  }
+
+.text_right{
+  /* position: absolute; */
+  float: right;
+  margin-top: 50px 0 50px 0;
+  padding: 20px 30px 10px 40px;
+  width: 50%;
+  height: 100%;
+  background-color: rgba( 255, 255, 255, 0.65);
+}
+
+.header_text {
+  font-size: 54px !important;
+}
+
+.carousel-item-2 {
+  background-image: url('./img/banner2.jpg'); 
+  background-size: cover;
+  background-position: center;
+  height: 480px;
+}
+.carousel-item-3 {
+  background-image: url('./img/banner22.jpg');
+  background-size: cover;
+  background-position: center;
+  height: 480px; 
+}
+
+
+
+
+/* body .main-vrapper{
+  background-color: rgb(228, 254, 0);
+} */
+
+
+
+
+
+
+
+
+.goods_wrap
+  {
+    position: relative;
+  }
+
+.title_goods_bottom
+  { 
+    margin: 65% 0 0 0;   
+    position: absolute;
+    width: 100%;
+    height: 50%;
+    background-color: rgba( 255, 255, 255, 0.65);
+  }
+.title_goods_top
+  { 
+    position: absolute;
+    width: 100%;
+    height: 50%;
+    background-color: rgba( 255, 255, 255, 0.65);
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media screen and (min-device-width: 1600px) 
+  {
+    
+  } 
+ @media screen and (device-width: 1280px) 
+  {
+
+  }
+ @media screen and (device-width: 1024px) 
+  {
+
+  }
+@media screen and (max-width: 800px) 
+  {
+
+    .text_mobile h3
+    {
+      margin: 80px 0 0 10%;
+      display: block;
+      font-size: 25px !important;
+      width: 80%;
+      height: 80px;
+      
+    }
+    .text_mobile
+      {
+        display: block;
+        z-index: 999  !important;
+      }
+    .text_left
+      {
+        display: none;
+      }
+    .text_right
+      {
+        display: none;
+      }
+    .carousel-item-1 
+      {
+        background-image: url('./img/banner1_mob.png'); 
+      }
+    .carousel-item-2 
+      {
+        background-image: url('./img/banner2_mob.png'); 
+      }
+    .carousel-item-3 
+      {
+        background-image: url('./img/banner1_mob.png'); 
+      }
+      #slider 
+      {
+        margin-top: -20px;
+      }
+
+
+  }
+
+@media screen and (device-width: 500px) 
+  {
+
+  }
