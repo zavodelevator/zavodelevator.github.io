@@ -1,0 +1,12 @@
+.goods_1 {
+    background-image: url("img/photo_1.jpg");
+}
+
+.goods_2 {
+    background-image: url("img/photo_2.jpg");
+}
+
+.goods {
+    width: 100%;
+    height: 450px;
+}
