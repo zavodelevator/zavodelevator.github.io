@@ -36,16 +36,27 @@ h1 {
     margin: 20px 0 0 20px  ;
 }
 
+
 .img_photo_1 {    
     border-bottom: 2px solid #e8a847;
 }
 
-.img_photo_5 {    
+.img_photo_3 {
     border-bottom: 2px solid #e8a847;
 }
 
-.img_photo_6 {    
-    margin-top: 10px;
+.img_photo_4 {
+    
+}
+
+.img_photo_5 {    
+    border-left: 2px solid #e8a847;
+}
+
+.img_photo_6 { 
+    margin-top: 10px;   
+    padding-top: 10px;
+    border-top: 2px solid #e8a847;
 }
 
 .grit_col_2 {    
