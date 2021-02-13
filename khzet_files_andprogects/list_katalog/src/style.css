@@ -38,11 +38,11 @@ h1 {
 
 
 .img_photo_1 {    
-    border-bottom: 2px solid #e8a847;
+    border-bottom: 1px solid #e8a847;
 }
 
 .img_photo_3 {
-    border-bottom: 2px solid #e8a847;
+    border-bottom: 1px solid #e8a847;
 }
 
 .img_photo_4 {
@@ -50,17 +50,18 @@ h1 {
 }
 
 .img_photo_5 {    
-    border-left: 2px solid #e8a847;
+    border-left: 1px solid #e8a847;
 }
 
 .img_photo_6 { 
-    margin-top: 10px;   
+    margin-top: 30px;   
     padding-top: 10px;
-    border-top: 2px solid #e8a847;
+    border-left: 1px solid #e8a847;
+    border-top: 1px solid #e8a847;
 }
 
 .grit_col_2 {    
-    border-left: 2px solid #e8a847;
+    border-left: 1px solid #e8a847;
 }
 
 
