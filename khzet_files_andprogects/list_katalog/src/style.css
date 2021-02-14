@@ -1,3 +1,7 @@
+body * {
+    font-family: 'Montserrat', sans-serif !important;
+}
+
 .goods_1 {
     background-image: url("img/photo_1_1.jpg");
 }
@@ -33,7 +37,7 @@
 }
 
 h1 {
-    margin: 20px 0 0 20px  ;
+    margin: 20px 0 0 20px;
 }
 
 
