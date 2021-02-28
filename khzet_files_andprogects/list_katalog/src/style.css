@@ -4,10 +4,12 @@ body * {
 
 .goods_1 {
     background-image: url("img/photo_1_1.jpg");
+    background-repeat: no-repeat;
 }
 
 .goods_2 {
     background-image: url("img/photo_2_1.jpg");
+    background-repeat: no-repeat;
 }
 
 .goods {
