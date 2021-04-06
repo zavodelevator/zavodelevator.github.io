@@ -15,5 +15,5 @@ input = File.open "1.txt", "r"
 end
 
 @b2.each do |frrr|
-    p frrr[5]
+    p frrr[15]
 end
