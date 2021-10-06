@@ -98,7 +98,7 @@ function prace_vue() {
 
 
 
-
+// зачиска ціни при зміні параметрів
 $( "#params_trans" ).change(function() {
   cleen_prace()
 });
