@@ -92,10 +92,19 @@ function prace_vue() {
     }else{
       price_sh_transporter = 3000 + (params_trans[1]*1)+(params_trans[3]*l_trans*1.1)+(engine_params[2]*1);
     }
+
+  // перевірка на наявність бункерка та підставки
+  if($(".radio_boonker").prop("checked")){
+    price_sh_transporter += 2000
+  }
+
+  if($(".radio_pistavka").prop("checked")){
+    price_sh_transporter += 4000
+  }
+
   price_sh_transporter = parseInt(price_sh_transporter)
 
-
-  $(".price").html( " ₴ " + price_sh_transporter+ ".00");
+  $(".price").html( " ₴ " + price_sh_transporter+ ".00 з пдв");
 }
 
 
@@ -112,6 +121,15 @@ $( "#length_trans" ).change(function() {
 $( "#engine_params" ).change(function() {
   cleen_prace()
 });
+
+$( ".radio_boonker" ).change(function() {
+  cleen_prace()
+});
+
+$( ".radio_pistavka" ).change(function() {
+  cleen_prace()
+});
+
 
 
 
