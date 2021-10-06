@@ -1,31 +1,38 @@
+// ініціалізація змінних
 let l_trans 
 let params_trans
 let engine_params 
+
 
 let price_sh_transporter
 
 let chek_chose_radio 
 
+// перша перевірка радіобатона на вибір двигуна
 chek_chose_radio = $("#exampleRadios2").prop("checked");
 
+// клік евент 
 $( "#calck_price" ).click(function() {
     init_varible_value() 
     prace_vue();
   });
 
+
+// при зміні вибору мотор редуктора
 $( ".form-check-input_engyne" ).change(function() {
   chek_chose_radio = $("#exampleRadios2").prop("checked");
   build_select_engin();
+  cleen_prace();
 });
 
+// надання значень змінним
 function init_varible_value() {
   l_trans = $('#length_trans option:selected').val()
   params_trans = $('#params_trans option:selected').val().split(',');
   engine_params = $('#engine_params option:selected').val().split(',');
+}  
 
-   
-  }  
-
+// заміна селекта з двигунами
 function build_select_engin() {
   if(chek_chose_radio == false){
     $("#engine_params").html(
@@ -77,13 +84,35 @@ function build_select_engin() {
     }
 }
 
+// обрахунок та вивід прайса
 function prace_vue() {
   if(chek_chose_radio == false){
-    price_sh_transporter = (params_trans[2]*1)+(params_trans[1]*1)+(params_trans[3]*l_trans*1.1)+(engine_params[2]*1);
-  }else{
-    price_sh_transporter = (params_trans[1]*1)+(params_trans[3]*l_trans*1.1)+(engine_params[2]*1);
-  }
-    price_sh_transporter = parseInt(price_sh_transporter)
+      price_sh_transporter = (params_trans[2]*1)+(params_trans[1]*1)+(params_trans[3]*l_trans*1.1)+(engine_params[2]*1);
+    }else{
+      price_sh_transporter = (params_trans[1]*1)+(params_trans[3]*l_trans*1.1)+(engine_params[2]*1);
+    }
+  price_sh_transporter = parseInt(price_sh_transporter)
 
   $(".price").html( " ₴ " + price_sh_transporter+ ".00");
+}
+
+
+
+
+$( "#params_trans" ).change(function() {
+  cleen_prace()
+});
+
+$( "#length_trans" ).change(function() {
+  cleen_prace()
+});
+
+$( "#engine_params" ).change(function() {
+  cleen_prace()
+});
+
+
+
+function cleen_prace() {
+  $(".price").html( "" );
 }
