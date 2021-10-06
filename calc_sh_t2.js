@@ -64,7 +64,7 @@ function build_select_engin() {
     );
     }else{
       $("#engine_params").html(
-        '<option selected value="0,0,0">Без двигуна</option>'+
+        '<option selected value="0,0,0">Без мотор-редуктора</option>'+
         '<option value="0,1.1,8153">Мотор редуктор 1.1 кВт. WMI 63</option>'+
         '<option value="0,1.1,10013">Мотор редуктор 1.1 кВт. WMI 75</option>'+
         '<option value="0,1.5,9083">Мотор редуктор 1.5 кВт. WMI 63</option>'+
