@@ -3,8 +3,14 @@ let l_trans
 let params_trans
 let engine_params 
 
+let woworking_angle
+let weight_product
+
+
+
 
 let price_sh_transporter
+let production_sh_transporter
 
 let chek_chose_radio 
 
@@ -18,19 +24,40 @@ $( "#calck_price" ).click(function() {
   });
 
 
+$( "#calck_production" ).click(function() {
+  init_varible_value() 
+  calck_production()
+});
+
+
+
+
+
+
 // при зміні вибору мотор редуктора
 $( ".form-check-input_engyne" ).change(function() {
   chek_chose_radio = $("#exampleRadios2").prop("checked");
   build_select_engin();
-  cleen_prace();
+  clean_prace();
 });
+
+
+
 
 // надання значень змінним
 function init_varible_value() {
   l_trans = $('#length_trans option:selected').val()
   params_trans = $('#params_trans option:selected').val().split(',');
   engine_params = $('#engine_params option:selected').val().split(',');
+
+  woworking_angle = $('#woworking_angle').val().split(',');
+  weight_product = $('#weight_product').val().split(',');
 }  
+
+
+
+
+
 
 // заміна селекта з двигунами
 function build_select_engin() {
@@ -84,6 +111,9 @@ function build_select_engin() {
     }
 }
 
+
+
+
 // обрахунок та вивід прайса
 function prace_vue() {
   // перевірка та обрахунок на моторі та мотор-редукторі
@@ -109,30 +139,52 @@ function prace_vue() {
 
 
 
+// обрахунок та иввід продуктивності
+function calck_production(){
+  console.log(params_trans[0])
+}
+
+
 // зачиска ціни при зміні параметрів
 $( "#params_trans" ).change(function() {
-  cleen_prace()
+  clean_prace()
+  clean_producthion()
 });
 
 $( "#length_trans" ).change(function() {
-  cleen_prace()
+  clean_prace()
+  clean_producthion()
 });
 
 $( "#engine_params" ).change(function() {
-  cleen_prace()
+  clean_prace()
+  clean_producthion()
 });
 
 $( ".radio_boonker" ).change(function() {
-  cleen_prace()
+  clean_prace()
 });
 
 $( ".radio_pistavka" ).change(function() {
-  cleen_prace()
+  clean_prace()
+});
+
+// зачиска ціни при зміні параметрів продуктивності
+$( "#weight_product" ).change(function() {
+  clean_producthion()
+});
+
+$( "#working_angle" ).change(function() {
+  clean_producthion()
 });
 
 
 
 
-function cleen_prace() {
+function clean_prace() {
   $(".price").html( "" );
+}
+
+function clean_producthion() {
+  $(".production_sh").html( "" );
 }

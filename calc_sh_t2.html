@@ -230,11 +230,12 @@
             <hr>
 
             <div class="row">
-              <div class="col-sm">
-                <div class="ower_info">
+              
+                <div class="col-sm">
+                  
                   <h3>Додаткова інфа</h3>
-                  <label for="exampleFormControlSelect2">Продукт насипна маса на т./м. куб.</label>
-                          <select class="form-control" id="exampleFormControlSelect2">
+                  <label for="weight_product">Продукт насипна маса на т./м. куб.</label>
+                          <select class="form-control" id="weight_product">
                             <option value="0.1">0.1</option>
                             <option value="0.2">0.2</option>
                             <option value="0.3">0.3</option>
@@ -255,53 +256,56 @@
                           
       
       
-                          <label for="exampleFormControlSelect3">Кут роботи (градусів)</label>
-                          <select class="form-control" id="exampleFormControlSelect3">
-                            <option selected>0</option>
+                          <label for="working_angle">Кут роботи (градусів)</label>
+                          <select class="form-control" id="working_angle">
+                            <option value="0" selected>0</option>
                             <option value="15">15°</option>
                             <option value="30">30°</option>
                             <option value="45">45°</option>
                             <option value="60">60°</option>
                             <option value="90">90°</option>
                           </select>
-    
+
                           <br>
-                          <button type="button" id="calck_price" class="btn btn-dark" >Розрахувати</button>
-                     
-                </div>    
-              </div>
-              <div class="col-sm">
-                 
-                <br/>
-                <div class="table-responsive">
-                  <table class="table table-sm table-borderless mb-0">
-                    <tbody>
-                      <tr>
-                        <th class="pl-0 w-25" scope="row"><strong>Ціна</strong></th>
-                        <td> <p>
-                                <span class="mr-3">
-                                  <strong>
-                                    <span class="price">
-                                      
-                                    </span>
-                                  </strong>
-                                </span>
-                              </p>
-                            </td>
-                      </tr>
-                      <!-- <tr>
-                        <th class="pl-0 w-25" scope="row"><strong>Color</strong></th>
-                        <td>Black</td>
-                      </tr>
-                      <tr>
-                        <th class="pl-0 w-25" scope="row"><strong>Delivery</strong></th>
-                        <td>USA, Europe</td>
-                      </tr> -->
-                    </tbody>
-                  </table>
+                          <button type="button" id="calck_production" class="btn btn-dark" >Розрахувати</button>
+                      
+                  
                 </div>
-    
-              </div>
+
+                <div class="col-sm">
+                    
+                  <br/>
+                  <div class="table-responsive">
+                    <table class="table table-sm table-borderless mb-0">
+                      <tbody>
+                        <tr>
+                          <th class="pl-0 w-25" scope="row"><strong>Продуктивність</strong></th>
+                          <td> <p>
+                                  <span class="mr-3">
+                                    <strong>
+                                      <span class="production_sh">
+                                        
+                                      </span>
+                                    </strong>
+                                  </span>
+                                </p>
+                              </td>
+                        </tr>
+                        <!-- <tr>
+                          <th class="pl-0 w-25" scope="row"><strong>Color</strong></th>
+                          <td>Black</td>
+                        </tr>
+                        <tr>
+                          <th class="pl-0 w-25" scope="row"><strong>Delivery</strong></th>
+                          <td>USA, Europe</td>
+                        </tr> -->
+                      </tbody>
+                    </table>
+                  </div>
+      
+                </div>
+
+              
             </div> 
           </div>
           <!-- <blockquote class="blockquote mb-0">
