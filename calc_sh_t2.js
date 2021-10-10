@@ -3,8 +3,9 @@ let l_trans
 let params_trans
 let engine_params 
 
-let woworking_angle
+let working_angle
 let weight_product
+let pi = 3.1415926535
 
 
 
@@ -50,8 +51,8 @@ function init_varible_value() {
   params_trans = $('#params_trans option:selected').val().split(',');
   engine_params = $('#engine_params option:selected').val().split(',');
 
-  woworking_angle = $('#woworking_angle').val().split(',');
-  weight_product = $('#weight_product').val().split(',');
+  working_angle = $('#working_angle').val().split(',')*1;
+  weight_product = $('#weight_product').val().split(',')*1;
 }  
 
 
@@ -141,7 +142,67 @@ function prace_vue() {
 
 // обрахунок та иввід продуктивності
 function calck_production(){
-  console.log(params_trans[0])
+  
+  let params_inner_volume_pipe = params_trans[0] - 7
+  params_inner_volume_pipe = (( params_inner_volume_pipe / 2 ) * pi)
+  params_inner_volume_pipe = params_inner_volume_pipe * params_inner_volume_pipe
+
+  
+  
+  let scrw_p = params_trans[0] - 11
+
+
+
+
+
+  let  engine_speed
+
+  if(chek_chose_radio == false){
+   engine_speed = engine_params[0]*0.32
+  }else{
+   alert ("на мотор редуктрі поки що не обраховується")
+  }
+
+
+
+
+
+  let volume_smale_pipe
+
+  if(params_trans[0]==102||params_trans[0]==127){
+    volume_smale_pipe = (( 34 / 2 ) * pi)
+    volume_smale_pipe = volume_smale_pipe * volume_smale_pipe 
+  }
+  else {
+    volume_smale_pipe = (( 42 / 2 ) * pi)
+    volume_smale_pipe = volume_smale_pipe * volume_smale_pipe    
+  } 
+
+
+  let cooficient_speed_working
+
+  if (working_angle==0){
+    cooficient_speed_working = 0.85
+  }else if(working_angle==15){
+    cooficient_speed_working = 0.75
+  }else if(working_angle==30){
+    cooficient_speed_working = 0.7
+  }else if(working_angle==45){
+    cooficient_speed_working = 0.6
+  }else if(working_angle==60){
+    cooficient_speed_working = 0.5
+  }else if(working_angle==90){
+    cooficient_speed_working = 0.5
+  }
+
+  production_sh_transporter = ((params_inner_volume_pipe*scrw_p)/1000000000 - (volume_smale_pipe*scrw_p)/1000000000) * 
+  cooficient_speed_working * engine_speed * 60  * weight_product
+
+  
+
+  $(".production_sh").html( " " + production_sh_transporter+ " тон на годину");
+
+console.log( engine_speed  )
 }
 
 
