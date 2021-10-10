@@ -144,21 +144,17 @@ function prace_vue() {
 function calck_production(){
   
   let params_inner_volume_pipe = params_trans[0] - 7
-  params_inner_volume_pipe = (( params_inner_volume_pipe / 2 ) * pi)
-  params_inner_volume_pipe = params_inner_volume_pipe * params_inner_volume_pipe
-
+  params_inner_volume_pipe = Math.sqrt( params_inner_volume_pipe / 2 *0.001 ) * pi
   
-  
-  let scrw_p = params_trans[0] - 11
 
 
-
+  let scrw_p = (params_trans[0] - 11) * 0.001
 
 
   let  engine_speed
 
   if(chek_chose_radio == false){
-   engine_speed = engine_params[0]*0.32
+   engine_speed = engine_params[0]*0.25
   }else{
    alert ("на мотор редуктрі поки що не обраховується")
   }
@@ -170,11 +166,11 @@ function calck_production(){
   let volume_smale_pipe
 
   if(params_trans[0]==102||params_trans[0]==127){
-    volume_smale_pipe = (( 34 / 2 ) * pi)
+    volume_smale_pipe = (( 34 / 2 ) * pi) * 0.001
     volume_smale_pipe = volume_smale_pipe * volume_smale_pipe 
   }
   else {
-    volume_smale_pipe = (( 42 / 2 ) * pi)
+    volume_smale_pipe = (( 42 / 2 ) * pi ) * 0.001
     volume_smale_pipe = volume_smale_pipe * volume_smale_pipe    
   } 
 
@@ -195,14 +191,13 @@ function calck_production(){
     cooficient_speed_working = 0.5
   }
 
-  production_sh_transporter = ((params_inner_volume_pipe*scrw_p)/1000000000 - (volume_smale_pipe*scrw_p)/1000000000) * 
-  cooficient_speed_working * engine_speed * 60  * weight_product
+  production_sh_transporter = (params_inner_volume_pipe *  scrw_p) - (volume_smale_pipe*scrw_p) *   cooficient_speed_working * engine_speed * 60  * weight_product
 
   
 
   $(".production_sh").html( " " + production_sh_transporter+ " тон на годину");
 
-console.log( engine_speed  )
+  console.log(params_inner_volume_pipe)
 }
 
 
