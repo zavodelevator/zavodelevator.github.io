@@ -142,9 +142,25 @@ function prace_vue() {
 
 // обрахунок та иввід продуктивності
 function calck_production(){
+
+  let volume_smale_pipe
+  let diam_smale_pipe
   
-  let params_inner_volume_pipe = params_trans[0] - 7
-  params_inner_volume_pipe = Math.sqrt( params_inner_volume_pipe / 2 *0.001 ) * pi
+  if(params_trans[0]==102||params_trans[0]==127){
+    diam_smale_pipe = 34
+    
+    volume_smale_pipe = count_value_circle(diam_smale_pipe)
+  }
+  else {
+
+    diam_smale_pipe = 42
+    
+    volume_smale_pipe = count_value_circle(diam_smale_pipe)
+
+  } 
+  
+  let params_inner_volume_pipe = count_value_circle(params_trans[0] - 7)
+  alert(params_inner_volume_pipe)
   
   let scrw_p = (params_trans[0] - 11) * 0.001
 
@@ -157,21 +173,7 @@ function calck_production(){
    alert ("на мотор редуктрі поки що не обраховується")
   }
 
-  let volume_smale_pipe
-  let diam_smale_pipe
-  
-  if(params_trans[0]==102||params_trans[0]==127){
-    diam_smale_pipe = 34
-    
-    alert(count_value_circle(diam_smale_pipe))
-  }
-  else {
-
-    diam_smale_pipe = 42
-    
-    alert(count_value_circle(diam_smale_pipe))
-
-  } 
+ 
 
 
   let cooficient_speed_working
