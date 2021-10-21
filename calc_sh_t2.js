@@ -225,7 +225,7 @@ function calck_production(){
     // alert()
   
 
-  $(".production_sh").html( " " + production_sh_transporter+ " тон на годину");
+  $(".production_sh").html( " " + production_sh_transporter.toFixed(2)+ " тон на годину");
 
   console.log(params_inner_volume_pipe)
 }
