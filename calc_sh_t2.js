@@ -159,7 +159,7 @@ function calck_production(){
   let volume_smale_pipe
   let diam_smale_pipe
 
-  let s_out_pipe = 7
+  let s_out_pipe = 3.5
 
   let scrw_p = (params_trans[0] - 11) * 0.0001
 
@@ -177,14 +177,14 @@ function calck_production(){
   } 
   
   // обєм зовнішньої труби
-  let params_volume_pipe = count_value_circle(params_trans[0] - s_out_pipe)
+  let params_volume_pipe = count_value_circle(params_trans[0] - (s_out_pipe*2) )
     
   let engine_speed
  
   if(chek_chose_radio == false){
    engine_speed = engine_params[0]*pered_zdatnist_shkiv
   }else{
-   alert ("на мотор редуктрі поки що не обраховується")
+   alert ("на мотор редуктрі поки-що не обраховується")
   }
 
   let cooficient_angle_working
@@ -210,12 +210,12 @@ function calck_production(){
     engine_speed *     
     weight_product *
     60  
-    alert("params_volume =" + (params_volume_pipe *  scrw_p - volume_smale_pipe * scrw_p))
+    // alert("params_volume =" + (params_volume_pipe *  scrw_p - volume_smale_pipe * scrw_p))
 
-    alert("cooficient_angle_working * = " + cooficient_angle_working)
-    alert("engine_speed * =" + engine_speed)
-    alert(" weight_product * =" +  weight_product)
-    alert(" 60  * 60 =" +  60  * 60)
+    // alert("cooficient_angle_working * = " + cooficient_angle_working)
+    // alert("engine_speed * =" + engine_speed)
+    // alert("weight_product * =" +  weight_product)
+    // alert("60 * 60 =" +  60 )
 
 
     // alert(    (params_volume_pipe *  scrw_p) -
@@ -282,6 +282,6 @@ function clean_producthion() {
 
 // обрахунок площі кола
 function count_value_circle(diametr){
-  return  (( diametr / 2 )* ( diametr / 2 )  * pi ) *0.000001
+  return  (( diametr / 2 )* ( diametr / 2 )  * pi ) *0.00001
  
 }
