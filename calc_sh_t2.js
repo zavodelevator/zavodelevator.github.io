@@ -204,13 +204,12 @@ function calck_production(){
   }
 
   production_sh_transporter =
-    (params_volume_pipe *  scrw_p) -
-    (volume_smale_pipe * scrw_p) *
+    ((params_volume_pipe *  scrw_p) -
+    (volume_smale_pipe * scrw_p)) *
     cooficient_angle_working *
     engine_speed *     
     weight_product *
-    60  * 60
-
+    60  
     alert("params_volume =" + (params_volume_pipe *  scrw_p - volume_smale_pipe * scrw_p))
 
     alert("cooficient_angle_working * = " + cooficient_angle_working)
