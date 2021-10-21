@@ -53,6 +53,9 @@ function init_varible_value() {
 
   working_angle = $('#working_angle').val().split(',')*1;
   weight_product = $('#weight_product').val().split(',')*1;
+
+ 
+
 }  
 
 
@@ -133,6 +136,10 @@ function prace_vue() {
     price_sh_transporter += 4000
   }
 
+  if($(".radio_krot").prop("checked")){
+    price_sh_transporter += (params_trans[3]*0.5)
+  }
+
   price_sh_transporter = parseInt(price_sh_transporter)
 
   $(".price").html( " ₴ " + price_sh_transporter+ ".00 з пдв");
@@ -140,60 +147,83 @@ function prace_vue() {
 
 
 
-// обрахунок та иввід продуктивності
+
+
+
+
+
+
+// обрахунок та вивід продуктивності
 function calck_production(){
 
   let volume_smale_pipe
   let diam_smale_pipe
-  
+
+  let s_out_pipe = 7
+
+  let scrw_p = (params_trans[0] - 11) * 0.0001
+
+  let pered_zdatnist_shkiv = 0.25
+
+
+ // обєм внутрінньої труби
   if(params_trans[0]==102||params_trans[0]==127){
-    diam_smale_pipe = 34
-    
+    diam_smale_pipe = 34    
     volume_smale_pipe = count_value_circle(diam_smale_pipe)
   }
   else {
-
     diam_smale_pipe = 42
-    
     volume_smale_pipe = count_value_circle(diam_smale_pipe)
-
   } 
   
-  let params_inner_volume_pipe = count_value_circle(params_trans[0] - 7)
-  alert(params_inner_volume_pipe)
-  
-  let scrw_p = (params_trans[0] - 11) * 0.001
-
-  let  engine_speed
-  let pered_zdatnist_shkiv = 0.25
-
+  // обєм зовнішньої труби
+  let params_volume_pipe = count_value_circle(params_trans[0] - s_out_pipe)
+    
+  let engine_speed
+ 
   if(chek_chose_radio == false){
    engine_speed = engine_params[0]*pered_zdatnist_shkiv
   }else{
    alert ("на мотор редуктрі поки що не обраховується")
   }
 
- 
-
-
-  let cooficient_speed_working
+  let cooficient_angle_working
 
   if (working_angle==0){
-    cooficient_speed_working = 0.85
+    cooficient_angle_working = 0.85
   }else if(working_angle==15){
-    cooficient_speed_working = 0.75
+    cooficient_angle_working = 0.75
   }else if(working_angle==30){
-    cooficient_speed_working = 0.7
+    cooficient_angle_working = 0.7
   }else if(working_angle==45){
-    cooficient_speed_working = 0.6
+    cooficient_angle_working = 0.6
   }else if(working_angle==60){
-    cooficient_speed_working = 0.5
+    cooficient_angle_working = 0.5
   }else if(working_angle==90){
-    cooficient_speed_working = 0.5
+    cooficient_angle_working = 0.5
   }
 
-  production_sh_transporter = (params_inner_volume_pipe *  scrw_p) - (volume_smale_pipe*scrw_p) *   cooficient_speed_working * engine_speed * 60  * weight_product
+  production_sh_transporter =
+    (params_volume_pipe *  scrw_p) -
+    (volume_smale_pipe * scrw_p) *
+    cooficient_angle_working *
+    engine_speed *     
+    weight_product *
+    60  * 60
 
+    alert("params_volume =" + (params_volume_pipe *  scrw_p - volume_smale_pipe * scrw_p))
+
+    alert("cooficient_angle_working * = " + cooficient_angle_working)
+    alert("engine_speed * =" + engine_speed)
+    alert(" weight_product * =" +  weight_product)
+    alert(" 60  * 60 =" +  60  * 60)
+
+
+    // alert(    (params_volume_pipe *  scrw_p) -
+    // (volume_smale_pipe * scrw_p) )
+    // alert()
+    // alert()
+    // alert()
   
 
   $(".production_sh").html( " " + production_sh_transporter+ " тон на годину");
