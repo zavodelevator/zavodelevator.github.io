@@ -210,7 +210,34 @@ else if ($(".form-check-input_motor_engyne").prop("checked")){
 
 }
 else {
+  
 }
+
+
+
+// if ($("#shkiv_shnek").length && chek_chose_radio == true){
+
+//   $("#diam_out_pipe").empty()
+
+//   $("#diam_out_pipe").before(
+//     '<div class="form-group">'+ 
+//       '<label for="ob_motor_redukt">Обороти мотор-редуктора</label>'+
+//       '<select class="form-control" id="ob_motor_redukt">'+
+//         '<option value="30">30 об/хв</option>'+
+//         '<option value="42">42 об/хв</option>'+
+//         '<option value="70">70 об/хв</option>'+
+//         '<option value="93" selected>93 об/хв</option>'+
+//         '<option value="112">112 об/хв</option>'+
+//         '<option value="140">140 об/хв</option>'+
+//       '</select>'+
+//     '</div>'
+//   )
+// }
+// else{
+  
+// }
+
+
 
  // обєм внутрінньої труби
   if(params_trans[0]==102||params_trans[0]==127){
