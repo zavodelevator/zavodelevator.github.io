@@ -296,12 +296,12 @@ else {
     engine_speed *     
     weight_product *
     60  
-    alert("params_volume =" + (params_volume_pipe *  scrw_p - volume_smale_pipe * scrw_p))
-// 
-    alert("cooficient_angle_working * = " + cooficient_angle_working)
-    alert("engine_speed * =" + engine_speed)
-    alert("weight_product * =" +  weight_product)
-    alert("60  =" +  60 )
+//     alert("params_volume =" + (params_volume_pipe *  scrw_p - volume_smale_pipe * scrw_p))
+// // 
+//     alert("cooficient_angle_working * = " + cooficient_angle_working)
+//     alert("engine_speed * =" + engine_speed)
+//     alert("weight_product * =" +  weight_product)
+//     alert("60  =" +  60 )
 
 
     // alert(    (params_volume_pipe *  scrw_p) -
