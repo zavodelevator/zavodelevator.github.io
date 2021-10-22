@@ -10,6 +10,7 @@ let pi = 3.1415926535
 
 
 
+
 let price_sh_transporter
 let production_sh_transporter
 
@@ -188,23 +189,27 @@ else if ($(".form-check-input_engyne").prop("checked")){
   )
 }
 else if ($(".form-check-input_motor_engyne").prop("checked")){
-  $("#diam_out_pipe").before(
-    '<div class="form-group">'+ 
-      '<label for="shkiv_shnek">Обороти мотор-редуктора</label>'+
-      '<select class="form-control" id="shkiv_shnek">'+
-        '<option value="30">30 об/хв</option>'+
-        '<option value="42">42 об/хв</option>'+
-        '<option value="70">70 об/хв</option>'+
-        '<option value="93" selected>93 об/хв</option>'+
-        '<option value="112">112 об/хв</option>'+
-        '<option value="140">140 об/хв</option>'+
-      '</select>'+
-    '</div>'
-  )
+  if ($("#ob_motor_redukt").length){
+
+  }
+  else{
+    $("#diam_out_pipe").before(
+      '<div class="form-group">'+ 
+        '<label for="ob_motor_redukt">Обороти мотор-редуктора</label>'+
+        '<select class="form-control" id="ob_motor_redukt">'+
+          '<option value="30">30 об/хв</option>'+
+          '<option value="42">42 об/хв</option>'+
+          '<option value="70">70 об/хв</option>'+
+          '<option value="93" selected>93 об/хв</option>'+
+          '<option value="112">112 об/хв</option>'+
+          '<option value="140">140 об/хв</option>'+
+        '</select>'+
+      '</div>'
+    )
+  }
+
 }
-
 else {
-
 }
 
  // обєм внутрінньої труби
@@ -221,14 +226,46 @@ else {
 
   // обєм зовнішньої труби
   let params_volume_pipe = count_value_circle(params_trans[0] - (s_out_pipe*2) )
-    
+  
+  
+
+
+
+
+
+
+
+
+
+  // швидкість шнека на двигуні та мотор-редукторі
   let engine_speed
- 
+  let engine_reduktor_speed
+
+  // швидкіть обертів шнека на редукторі
+  if ($("#ob_motor_redukt").length && chek_chose_radio == true){
+      engine_reduktor_speed = $('#ob_motor_redukt option:selected').val().split(',');
+    }
+    else{
+      engine_reduktor_speed = 93
+    }
+
+    // ініціалізація параметра обортів шнека для вирахунку продуктивності
   if(chek_chose_radio == false){
    engine_speed = engine_params[0]*pered_zdatnist_shkiv
-  }else{
-   alert ("на мотор редуктрі поки-що не обраховується")
+  }else{    
+    engine_speed = engine_reduktor_speed    
   }
+
+
+
+
+
+
+
+
+
+
+
 
   let cooficient_angle_working
 
@@ -246,6 +283,12 @@ else {
     cooficient_angle_working = 0.5
   }
 
+
+
+
+
+
+
   production_sh_transporter =
     ((params_volume_pipe *  scrw_p) -
     (volume_smale_pipe * scrw_p)) *
@@ -253,12 +296,12 @@ else {
     engine_speed *     
     weight_product *
     60  
-    // alert("params_volume =" + (params_volume_pipe *  scrw_p - volume_smale_pipe * scrw_p))
-
-    // alert("cooficient_angle_working * = " + cooficient_angle_working)
-    // alert("engine_speed * =" + engine_speed)
-    // alert("weight_product * =" +  weight_product)
-    // alert("60 * 60 =" +  60 )
+    alert("params_volume =" + (params_volume_pipe *  scrw_p - volume_smale_pipe * scrw_p))
+// 
+    alert("cooficient_angle_working * = " + cooficient_angle_working)
+    alert("engine_speed * =" + engine_speed)
+    alert("weight_product * =" +  weight_product)
+    alert("60  =" +  60 )
 
 
     // alert(    (params_volume_pipe *  scrw_p) -
@@ -328,3 +371,48 @@ function count_value_circle(diametr){
   return  (( diametr / 2 )* ( diametr / 2 )  * pi ) *0.00001
  
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ****************** попрбувати реалізувати на хеш
+
+// var obj2 = { bro: "bro", note_bro: "note_bro" };
+// if (obj2.hasOwnProperty("bro")) {
+//   alert(obj2{:bro})
+// }
+// else{
+//   alert("dont work")
+// }
