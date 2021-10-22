@@ -36,7 +36,7 @@ $( "#calck_production" ).click(function() {
 
 
 // при зміні вибору мотор редуктора
-$( ".form-check-input_engyne" ).change(function() {
+$( ".form-check-input_motor_engyne" ).change(function() {
   chek_chose_radio = $("#exampleRadios2").prop("checked");
   build_select_engin();
   clean_prace();
@@ -127,6 +127,7 @@ function prace_vue() {
       price_sh_transporter = 3000 + (params_trans[1]*1)+(params_trans[3]*l_trans*1.1)+(engine_params[2]*1);
     }
 
+
   // перевірка на наявність бункерка та підставки
   if($(".radio_boonker").prop("checked")){
     price_sh_transporter += 2000
@@ -165,6 +166,46 @@ function calck_production(){
 
   let pered_zdatnist_shkiv = 0.25
 
+  // добавити передатний коофіцієнт шківів
+if($("#shkiv_shnek").length){
+
+}
+else if ($(".form-check-input_engyne").prop("checked")){
+  $("#diam_out_pipe").before(
+    '<div class="form-group">'+ 
+      '<label for="shkiv_shnek">Шків шнека</label>'+
+      '<select class="form-control" id="shkiv_shnek">'+
+        '<option value="300" selected>300 мм</option>'+
+        '<option value="410">410 мм</option>'+
+      '</select>'+
+      '<label for="shkin_engine">Шків двигуна</label>'+
+      '<select class="form-control" id="shkin_engine">'+
+        '<option value="80">80 мм.</option>'+
+        '<option value="90" selected>90 мм.</option>'+    
+        '<option value="135">135 мм.</option>'+
+      '</select>'+
+    '</div>'
+  )
+}
+else if ($(".form-check-input_motor_engyne").prop("checked")){
+  $("#diam_out_pipe").before(
+    '<div class="form-group">'+ 
+      '<label for="shkiv_shnek">Обороти мотор-редуктора</label>'+
+      '<select class="form-control" id="shkiv_shnek">'+
+        '<option value="30">30 об/хв</option>'+
+        '<option value="42">42 об/хв</option>'+
+        '<option value="70">70 об/хв</option>'+
+        '<option value="93" selected>93 об/хв</option>'+
+        '<option value="112">112 об/хв</option>'+
+        '<option value="140">140 об/хв</option>'+
+      '</select>'+
+    '</div>'
+  )
+}
+
+else {
+
+}
 
  // обєм внутрінньої труби
   if(params_trans[0]==102||params_trans[0]==127){
@@ -176,6 +217,8 @@ function calck_production(){
     volume_smale_pipe = count_value_circle(diam_smale_pipe)
   } 
   
+
+
   // обєм зовнішньої труби
   let params_volume_pipe = count_value_circle(params_trans[0] - (s_out_pipe*2) )
     
