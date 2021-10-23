@@ -8,9 +8,6 @@ let weight_product
 let pi = 3.1415926535
 
 
-
-
-
 let price_sh_transporter
 let production_sh_transporter
 
@@ -28,7 +25,7 @@ $( "#calck_price" ).click(function() {
 
 $( "#calck_production" ).click(function() {
   init_varible_value() 
-  calck_production()
+  calck_production()  
 });
 
 
@@ -48,15 +45,14 @@ $( ".form-check-input_motor_engyne" ).change(function() {
 
 // надання значень змінним
 function init_varible_value() {
+
   l_trans = $('#length_trans option:selected').val()
   params_trans = $('#params_trans option:selected').val().split(',');
   engine_params = $('#engine_params option:selected').val().split(',');
 
   working_angle = $('#working_angle').val().split(',')*1;
   weight_product = $('#weight_product').val().split(',')*1;
-
- 
-
+  
 }  
 
 
@@ -155,6 +151,10 @@ function prace_vue() {
 
 
 
+
+
+
+
 // обрахунок та вивід продуктивності
 function calck_production(){
 
@@ -167,103 +167,105 @@ function calck_production(){
 
   let pered_zdatnist_shkiv = 0.25
 
-  // добавити передатний коофіцієнт шківів
-if($("#shkiv_shnek").length){
 
-}
-else if ($(".form-check-input_engyne").prop("checked")){
-  $("#diam_out_pipe").before(
-    '<div class="form-group">'+ 
-      '<label for="shkiv_shnek">Шків шнека</label>'+
-      '<select class="form-control" id="shkiv_shnek">'+
-        '<option value="300" selected>300 мм</option>'+
-        '<option value="410">410 мм</option>'+
-      '</select>'+
-      '<label for="shkin_engine">Шків двигуна</label>'+
-      '<select class="form-control" id="shkin_engine">'+
-        '<option value="80">80 мм.</option>'+
-        '<option value="90" selected>90 мм.</option>'+    
-        '<option value="135">135 мм.</option>'+
-      '</select>'+
-    '</div>'
-  )
-}
-else if ($(".form-check-input_motor_engyne").prop("checked")){
-  if ($("#ob_motor_redukt").length){
 
-  }
-  else{
-    $("#diam_out_pipe").before(
-      '<div class="form-group">'+ 
-        '<label for="ob_motor_redukt">Обороти мотор-редуктора</label>'+
-        '<select class="form-control" id="ob_motor_redukt">'+
-          '<option value="30">30 об/хв</option>'+
-          '<option value="42">42 об/хв</option>'+
-          '<option value="70">70 об/хв</option>'+
-          '<option value="93" selected>93 об/хв</option>'+
-          '<option value="112">112 об/хв</option>'+
-          '<option value="140">140 об/хв</option>'+
-        '</select>'+
-      '</div>'
-    )
+  function add_write_select_engine_params(){
+    $("#engine_params_block").empty()
+    if( chek_chose_radio == true){
+      $("#engine_params_block").append(
+        '<div class="form-group">'+ 
+          '<label for="ob_motor_redukt">Обороти мотор-редуктора</label>'+
+          '<select class="form-control" id="ob_motor_redukt">'+
+            '<option value="30">30 об/хв</option>'+
+            '<option value="42">42 об/хв</option>'+
+            '<option value="70">70 об/хв</option>'+
+            '<option value="93" selected>93 об/хв</option>'+
+            '<option value="112">112 об/хв</option>'+
+            '<option value="140">140 об/хв</option>'+
+          '</select>'+
+        '</div>'
+      )
+    }
+    else if (chek_chose_radio == false){
+      $("#engine_params_block").append('<div class="form-group">'+ 
+          '<label for="shkiv_shnek">Шків шнека</label>'+
+          '<select class="form-control" id="shkiv_shnek">'+
+            '<option value="300" selected>300 мм</option>'+
+            '<option value="410">410 мм</option>'+
+          '</select>'+
+          '<label for="shkin_engine">Шків двигуна</label>'+
+          '<select class="form-control" id="shkin_engine">'+
+            '<option value="80">80 мм.</option>'+
+            '<option value="90" selected>90 мм.</option>'+    
+            '<option value="135">135 мм.</option>'+
+          '</select>'+
+        '</div>'
+      )
+    }
+    else{}
   }
 
-}
-else {
+
+
+
+
+
+
+  function add_content_params_select (){
+    if ($("#diam_out_pipe").length){
+      
+    }
+    else{
+      $("#content_weight_product").show()
+
+      $("#pipe_group").append(
+        '<div class="form-group">'+
+          '<input value="" type="text" class="form-control" id="diam_out_pipe" placeholder="Умоаний прохід зовн. труби">'+
+        '</div>'+
+      
+        '<div class="form-group">'+
+          '<input value="" type="text" class="form-control" id="screw_p" placeholder="Крок спіралі">'+
+        '</div>'+
+
+        '<div class="form-group">'+
+          '<input value="" type="text" class="form-control" id="diam_smale_pipe" placeholder="Діам. трубовалу">'+
+        '</div>'  
+      )
+    }
+  }
   
-}
-
-
-
-// if ($("#shkiv_shnek").length && chek_chose_radio == true){
-
-//   $("#diam_out_pipe").empty()
-
-//   $("#diam_out_pipe").before(
-//     '<div class="form-group">'+ 
-//       '<label for="ob_motor_redukt">Обороти мотор-редуктора</label>'+
-//       '<select class="form-control" id="ob_motor_redukt">'+
-//         '<option value="30">30 об/хв</option>'+
-//         '<option value="42">42 об/хв</option>'+
-//         '<option value="70">70 об/хв</option>'+
-//         '<option value="93" selected>93 об/хв</option>'+
-//         '<option value="112">112 об/хв</option>'+
-//         '<option value="140">140 об/хв</option>'+
-//       '</select>'+
-//     '</div>'
-//   )
-// }
-// else{
-  
-// }
+  add_content_params_select ()
+  add_write_select_engine_params()
 
 
 
  // обєм внутрінньої труби
   if(params_trans[0]==102||params_trans[0]==127){
     diam_smale_pipe = 34    
-    volume_smale_pipe = count_value_circle(diam_smale_pipe)
+    
   }
   else {
     diam_smale_pipe = 42
-    volume_smale_pipe = count_value_circle(diam_smale_pipe)
   } 
   
 
+  volume_smale_pipe = count_value_circle(diam_smale_pipe)
+  
 
   // обєм зовнішньої труби
   let params_volume_pipe = count_value_circle(params_trans[0] - (s_out_pipe*2) )
   
   
+  
+  
 
 
 
 
 
-
-
-
-
+  
+  
+  
   // швидкість шнека на двигуні та мотор-редукторі
   let engine_speed
   let engine_reduktor_speed
