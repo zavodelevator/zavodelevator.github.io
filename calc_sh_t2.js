@@ -214,6 +214,81 @@ else {
 }
 
 
+let equal_engene_redukt_for_params = [
+  [102,1,1.1],
+  [102,2,1.1],
+  [102,3,1.5],
+  [102,4,1.5],
+  [102,5,1.5],
+  [102,6,1.5],
+  [102,7,2.2],
+  [102,8,2.2],
+
+  [127,1,1.5],
+  [127,2,1.5],
+  [127,3,1.5],
+  [127,4,1.5],
+  [127,5,2.2],
+  [127,6,2.2],
+  [127,7,2.2],
+  [127,8,2.2],
+  [127,9,3],
+  [127,10,3],
+  
+  [159,1,2.2],
+  [159,2,2.2],
+  [159,3,2.2],
+  [159,4,2.2],
+  [159,5,3],
+  [159,6,3],
+  [159,7,3],
+  [159,8,3],
+  [159,9,4],
+  [159,10,4],
+  [159,11,4],
+  [159,12,4],
+  
+  [219,1,3],
+  [219,2,3],
+  [219,3,3],
+  [219,4,3],
+  [219,5,4],
+  [219,6,4],
+  [219,7,4],
+  [219,8,4],
+  [219,9,4],
+  [219,10,4],
+  [219,11,5.5],
+  [219,12,5.5],
+  
+  [250,1,2.2],
+  [250,2,2.2],
+  [250,3,2.2],
+  [250,4,2.2],
+  [250,5,3],
+  [250,6,3],
+  [250,7,4],
+  [250,8,4],
+  [250,11,4],
+  [250,10,4],
+  [250,11,5.5],
+  [250,12,5.5],
+  
+  [300,1,3],
+  [300,2,3],
+  [300,3,4],
+  [300,4,4],
+  [300,5,4],
+  [300,6,4],
+  [300,7,5.5],
+  [300,8,5.5],
+  [300,9,5.5],
+  [300,10,5.5],
+  [300,11,7.5],
+  [300,12,7.5]
+]
+
+
 
 // if ($("#shkiv_shnek").length && chek_chose_radio == true){
 
@@ -323,12 +398,15 @@ else {
     engine_speed *     
     weight_product *
     60  
-//     alert("params_volume =" + (params_volume_pipe *  scrw_p - volume_smale_pipe * scrw_p))
-// // 
-//     alert("cooficient_angle_working * = " + cooficient_angle_working)
-//     alert("engine_speed * =" + engine_speed)
-//     alert("weight_product * =" +  weight_product)
-//     alert("60  =" +  60 )
+    
+    
+    alert("params_volume =" + (params_volume_pipe *  scrw_p - volume_smale_pipe * scrw_p))
+    alert("(volume_smale_pipe * scrw_p) =" + (volume_smale_pipe * scrw_p))
+
+    alert("cooficient_angle_working * = " + cooficient_angle_working)
+    alert("engine_speed * =" + engine_speed)
+    alert("weight_product * =" +  weight_product)
+    alert("60  =" +  60 )
 
 
     // alert(    (params_volume_pipe *  scrw_p) -
@@ -377,9 +455,15 @@ $( "#weight_product" ).change(function() {
   clean_producthion()
 });
 
-$( "#working_angle" ).change(function() {
+$( "#working_angle" ).change(function() {  
+  clean_prace()
   clean_producthion()
 });
+
+$( "#engine_params" ).change(function() {
+  clean_producthion()
+});
+
 
 
 
