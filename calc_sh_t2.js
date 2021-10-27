@@ -131,10 +131,20 @@ function init_varible_value() {
 
   working_angle = $('#working_angle').val().split(',')*1;
   weight_product = $('#weight_product').val().split(',')*1;
+
 }  
 
 
+function chose_kvt(){
 
+  equal_engene_redukt_for_params.forEach(element => {
+    if(params_trans [0]==element[0] && l_trans==element[1]){
+        alert(element[2])
+    }
+  
+  });
+  
+}
 
 
 
