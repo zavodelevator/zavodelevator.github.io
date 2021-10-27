@@ -133,20 +133,18 @@ function prace_vue() {
   if($(".radio_boonker").prop("checked")){
     if(params_trans[0]<160){
       price_sh_transporter += 2000
-    }
-    else{
+    }else{
       price_sh_transporter += 3000
     }
   }
 
   if($(".radio_pidstavka").prop("checked")){
-      if(params_trans[0]<160){
-        price_sh_transporter += 4000
-      }
-      else{
-        price_sh_transporter += 5000
-      }
+    if(params_trans[0]<160){
+      price_sh_transporter += 4000
+    }else{
+      price_sh_transporter += 5000
     }
+  }
 
   if($(".radio_krot").prop("checked")){
     price_sh_transporter += (params_trans[3]*0.5)
@@ -456,7 +454,7 @@ $( ".radio_boonker" ).change(function() {
   clean_prace()
 });
 
-$( ".radio_pidstavka" ).change(function() {
+$( ".radio_pistavka" ).change(function() {
   clean_prace()
 });
 
