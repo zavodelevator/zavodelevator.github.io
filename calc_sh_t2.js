@@ -16,6 +16,83 @@ let production_sh_transporter
 
 let chek_chose_radio 
 
+
+let equal_engene_redukt_for_params = [
+  [102,1,1.1],
+  [102,2,1.1],
+  [102,3,1.5],
+  [102,4,1.5],
+  [102,5,1.5],
+  [102,6,1.5],
+  [102,7,2.2],
+  [102,8,2.2],
+
+  [127,1,1.5],
+  [127,2,1.5],
+  [127,3,1.5],
+  [127,4,1.5],
+  [127,5,2.2],
+  [127,6,2.2],
+  [127,7,2.2],
+  [127,8,2.2],
+  [127,9,3],
+  [127,10,3],
+  
+  [159,1,2.2],
+  [159,2,2.2],
+  [159,3,2.2],
+  [159,4,2.2],
+  [159,5,3],
+  [159,6,3],
+  [159,7,3],
+  [159,8,3],
+  [159,9,4],
+  [159,10,4],
+  [159,11,4],
+  [159,12,4],
+  
+  [219,1,3],
+  [219,2,3],
+  [219,3,3],
+  [219,4,3],
+  [219,5,4],
+  [219,6,4],
+  [219,7,4],
+  [219,8,4],
+  [219,9,4],
+  [219,10,4],
+  [219,11,5.5],
+  [219,12,5.5],
+  
+  [250,1,2.2],
+  [250,2,2.2],
+  [250,3,2.2],
+  [250,4,2.2],
+  [250,5,3],
+  [250,6,3],
+  [250,7,4],
+  [250,8,4],
+  [250,11,4],
+  [250,10,4],
+  [250,11,5.5],
+  [250,12,5.5],
+  
+  [300,1,3],
+  [300,2,3],
+  [300,3,4],
+  [300,4,4],
+  [300,5,4],
+  [300,6,4],
+  [300,7,5.5],
+  [300,8,5.5],
+  [300,9,5.5],
+  [300,10,5.5],
+  [300,11,7.5],
+  [300,12,7.5]
+]
+
+
+
 // перша перевірка радіобатона на вибір двигуна
 chek_chose_radio = $("#exampleRadios2").prop("checked");
 
@@ -54,9 +131,6 @@ function init_varible_value() {
 
   working_angle = $('#working_angle').val().split(',')*1;
   weight_product = $('#weight_product').val().split(',')*1;
-
- 
-
 }  
 
 
@@ -163,7 +237,9 @@ function prace_vue() {
 
 
 
+
 // обрахунок та вивід продуктивності
+
 function calck_production(){
 
   let volume_smale_pipe
@@ -175,178 +251,110 @@ function calck_production(){
 
   let pered_zdatnist_shkiv = 0.25
 
-  // добавити передатний коофіцієнт шківів
-if($("#shkiv_shnek").length){
+  $( ".form-check-input_engyne" ).change(function() {
+    chek_chose_radio = $("#exampleRadios2").prop("checked");
+    add_write_select_engine_params()
+  });
 
-}
-else if ($(".form-check-input_engyne").prop("checked")){
-  $("#diam_out_pipe").before(
-    '<div class="form-group">'+ 
-      '<label for="shkiv_shnek">Шків шнека</label>'+
-      '<select class="form-control" id="shkiv_shnek">'+
-        '<option value="300" selected>300 мм</option>'+
-        '<option value="410">410 мм</option>'+
-      '</select>'+
-      '<label for="shkin_engine">Шків двигуна</label>'+
-      '<select class="form-control" id="shkin_engine">'+
-        '<option value="80">80 мм.</option>'+
-        '<option value="90" selected>90 мм.</option>'+    
-        '<option value="135">135 мм.</option>'+
-      '</select>'+
-    '</div>'
-  )
-}
-else if ($(".form-check-input_motor_engyne").prop("checked")){
-  if ($("#ob_motor_redukt").length){
 
+
+  function add_write_select_engine_params(){
+    $("#engine_params_block").empty()
+    if( chek_chose_radio == true){
+      $("#engine_params_block").append(
+        '<div class="form-group">'+ 
+          '<label for="ob_motor_redukt">Обороти мотор-редуктора</label>'+
+          '<select class="form-control" id="ob_motor_redukt">'+
+            '<option value="30">30 об/хв</option>'+
+            '<option value="42">42 об/хв</option>'+
+            '<option value="70">70 об/хв</option>'+
+            '<option value="93" selected>93 об/хв</option>'+
+            '<option value="112">112 об/хв</option>'+
+            '<option value="140">140 об/хв</option>'+
+          '</select>'+
+        '</div>'
+      )
+    }
+    else if (chek_chose_radio == false){
+      $("#engine_params_block").append('<div class="form-group">'+ 
+          '<label for="shkiv_shnek">Шків шнека</label>'+
+          '<select class="form-control" id="shkiv_shnek">'+
+            '<option value="300" selected>300 мм</option>'+
+            '<option value="410">410 мм</option>'+
+          '</select>'+
+          '<label for="shkin_engine">Шків двигуна</label>'+
+          '<select class="form-control" id="shkin_engine">'+
+            '<option value="80">80 мм.</option>'+
+            '<option value="90" selected>90 мм.</option>'+    
+            '<option value="135">135 мм.</option>'+
+          '</select>'+
+        '</div>'
+      )
+    }
+    else{}
   }
-  else{
-    $("#diam_out_pipe").before(
-      '<div class="form-group">'+ 
-        '<label for="ob_motor_redukt">Обороти мотор-редуктора</label>'+
-        '<select class="form-control" id="ob_motor_redukt">'+
-          '<option value="30">30 об/хв</option>'+
-          '<option value="42">42 об/хв</option>'+
-          '<option value="70">70 об/хв</option>'+
-          '<option value="93" selected>93 об/хв</option>'+
-          '<option value="112">112 об/хв</option>'+
-          '<option value="140">140 об/хв</option>'+
-        '</select>'+
-      '</div>'
-    )
+
+
+
+
+
+
+
+  function add_content_params_select (){
+    if ($("#diam_out_pipe").length){
+      
+    }
+    else{
+      $("#content_weight_product").show()
+
+      $("#pipe_group").append(
+        '<div class="form-group">'+
+          '<input value="" type="text" class="form-control" id="diam_out_pipe" placeholder="Умоаний прохід зовн. труби">'+
+        '</div>'+
+      
+        '<div class="form-group">'+
+          '<input value="" type="text" class="form-control" id="screw_p" placeholder="Крок спіралі">'+
+        '</div>'+
+
+        '<div class="form-group">'+
+          '<input value="" type="text" class="form-control" id="diam_smale_pipe" placeholder="Діам. трубовалу">'+
+        '</div>'  
+      )
+    }
   }
-
-}
-else {
   
-}
-
-
-let equal_engene_redukt_for_params = [
-  [102,1,1.1],
-  [102,2,1.1],
-  [102,3,1.5],
-  [102,4,1.5],
-  [102,5,1.5],
-  [102,6,1.5],
-  [102,7,2.2],
-  [102,8,2.2],
-
-  [127,1,1.5],
-  [127,2,1.5],
-  [127,3,1.5],
-  [127,4,1.5],
-  [127,5,2.2],
-  [127,6,2.2],
-  [127,7,2.2],
-  [127,8,2.2],
-  [127,9,3],
-  [127,10,3],
-  
-  [159,1,2.2],
-  [159,2,2.2],
-  [159,3,2.2],
-  [159,4,2.2],
-  [159,5,3],
-  [159,6,3],
-  [159,7,3],
-  [159,8,3],
-  [159,9,4],
-  [159,10,4],
-  [159,11,4],
-  [159,12,4],
-  
-  [219,1,3],
-  [219,2,3],
-  [219,3,3],
-  [219,4,3],
-  [219,5,4],
-  [219,6,4],
-  [219,7,4],
-  [219,8,4],
-  [219,9,4],
-  [219,10,4],
-  [219,11,5.5],
-  [219,12,5.5],
-  
-  [250,1,2.2],
-  [250,2,2.2],
-  [250,3,2.2],
-  [250,4,2.2],
-  [250,5,3],
-  [250,6,3],
-  [250,7,4],
-  [250,8,4],
-  [250,11,4],
-  [250,10,4],
-  [250,11,5.5],
-  [250,12,5.5],
-  
-  [300,1,3],
-  [300,2,3],
-  [300,3,4],
-  [300,4,4],
-  [300,5,4],
-  [300,6,4],
-  [300,7,5.5],
-  [300,8,5.5],
-  [300,9,5.5],
-  [300,10,5.5],
-  [300,11,7.5],
-  [300,12,7.5]
-]
-
-
-
-// if ($("#shkiv_shnek").length && chek_chose_radio == true){
-
-//   $("#diam_out_pipe").empty()
-
-//   $("#diam_out_pipe").before(
-//     '<div class="form-group">'+ 
-//       '<label for="ob_motor_redukt">Обороти мотор-редуктора</label>'+
-//       '<select class="form-control" id="ob_motor_redukt">'+
-//         '<option value="30">30 об/хв</option>'+
-//         '<option value="42">42 об/хв</option>'+
-//         '<option value="70">70 об/хв</option>'+
-//         '<option value="93" selected>93 об/хв</option>'+
-//         '<option value="112">112 об/хв</option>'+
-//         '<option value="140">140 об/хв</option>'+
-//       '</select>'+
-//     '</div>'
-//   )
-// }
-// else{
-  
-// }
+  add_content_params_select ()
+  add_write_select_engine_params()
 
 
 
  // обєм внутрінньої труби
   if(params_trans[0]==102||params_trans[0]==127){
     diam_smale_pipe = 34    
-    volume_smale_pipe = count_value_circle(diam_smale_pipe)
+    
   }
   else {
     diam_smale_pipe = 42
-    volume_smale_pipe = count_value_circle(diam_smale_pipe)
   } 
   
 
+  volume_smale_pipe = count_value_circle(diam_smale_pipe)
+  
 
   // обєм зовнішньої труби
   let params_volume_pipe = count_value_circle(params_trans[0] - (s_out_pipe*2) )
   
   
+  
+  
 
 
 
 
 
-
-
-
-
+  
+  
+  
   // швидкість шнека на двигуні та мотор-редукторі
   let engine_speed
   let engine_reduktor_speed
@@ -406,19 +414,15 @@ let equal_engene_redukt_for_params = [
     engine_speed *     
     weight_product *
     60  
-    
-    
-    alert("params_volume =" + (params_volume_pipe *  scrw_p - volume_smale_pipe * scrw_p))
-    alert("(volume_smale_pipe * scrw_p) =" + (volume_smale_pipe * scrw_p))
-
-    alert("cooficient_angle_working * = " + cooficient_angle_working)
-    alert("engine_speed * =" + engine_speed)
-    alert("weight_product * =" +  weight_product)
-    alert("60  =" +  60 )
+//     alert("params_volume =" + (params_volume_pipe *  scrw_p - volume_smale_pipe * scrw_p))
+// // 
+//     alert("cooficient_angle_working * = " + cooficient_angle_working)
+//     alert("engine_speed * =" + engine_speed)
+//     alert("weight_product * =" +  weight_product)
+//     alert("60  =" +  60 )
 
 
-    // alert(    (params_volume_pipe *  scrw_p) -
-    // (volume_smale_pipe * scrw_p) )
+
     // alert()
     // alert()
     // alert()
@@ -428,6 +432,25 @@ let equal_engene_redukt_for_params = [
 
   console.log(params_inner_volume_pipe)
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -463,15 +486,9 @@ $( "#weight_product" ).change(function() {
   clean_producthion()
 });
 
-$( "#working_angle" ).change(function() {  
-  clean_prace()
+$( "#working_angle" ).change(function() {
   clean_producthion()
 });
-
-$( "#engine_params" ).change(function() {
-  clean_producthion()
-});
-
 
 
 

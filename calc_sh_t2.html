@@ -116,17 +116,6 @@
                   
 
 
-<!-- 
-                  <div id="radio_shkiv">
-                    <div class="form-check form-switch">
-                      <input class="form-check-input radio_shkiv" type="checkbox" id="flexSwitchCheckChecked_3">
-                      <label class="form-check-label" for="flexSwitchCheckChecked_3">Шківи та ремні</label>
-                    </div>
-                  </div>
-     -->
-
-
-
                   <select class="form-control" id="engine_params">
                     <option selected value="0,0,0">Без двигуна</option>
                     <option value="1500,1.1,3237">Мотор 1.1 кВт. 1500 об./хв.</option>
@@ -178,21 +167,49 @@
                                 </p>
                               </td>
                         </tr>
-                        <!-- <tr>
-                          <th class="pl-0 w-25" scope="row"><strong>Color</strong></th>
-                          <td>Black</td>
-                        </tr>
-                        <tr>
-                          <th class="pl-0 w-25" scope="row"><strong>Delivery</strong></th>
-                          <td>USA, Europe</td>
-                        </tr> -->
+
                       </tbody>
                     </table>
                   </div>
 
+                  
 
-                  <!-- <label for="exampleFormControlSelect2">Продукт насипна маса на т./м. куб.</label>
-                  <select class="form-control" id="exampleFormControlSelect2">
+                </div>
+
+              </div>
+
+            </div>    
+            
+            <hr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <div class="row"> 
+
+              <div class="col-sm">
+                
+                <h3>Продуктивність транспортера</h3>
+                <h3 class="text-danger">! В розробці поки-що не працює</h3>
+                
+                <div id="content_weight_product" style="display: none;">
+
+                  <label for="weight_product">Продукт насипна маса на т./м. куб.</label>
+                  <select class="form-control" id="weight_product">
                     <option value="0.1">0.1</option>
                     <option value="0.2">0.2</option>
                     <option value="0.3">0.3</option>
@@ -209,135 +226,73 @@
                     <option value="1.75">1.75</option>
                     <option value="2">2</option>
                   </select>
-
                   
+                  <label for="working_angle">Кут роботи (градусів)</label>
+                  <select class="form-control" id="working_angle">
+                    <option value="0" selected>0</option>
+                    <option value="15">15°</option>
+                    <option value="30">30°</option>
+                    <option value="45">45°</option>
+                    <option value="60">60°</option>
+                    <option value="90">90°</option>
+                  </select>
 
-
-                  <label for="exampleFormControlSelect3">Кут роботи (градусів)</label>
-                  <select class="form-control" id="exampleFormControlSelect3">
-                    <option selected>0</option>
-                    <option>15</option>
-                    <option>30</option>
-                    <option>45</option>
-                    <option>60</option>
-                    <option>90</option>
-                  </select> -->
-
-                  
 
                 </div>
 
+                
+                <br>
+                <button type="button" id="calck_production" class="btn btn-dark" >Розрахувати</button>
+                    
+                
               </div>
 
-            </div>    
-            
-            <hr>
-
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>      
-
-            <div class="row"> 
-
-                <div class="col-sm">
+              <div class="col-sm">
                   
-                  <h3>Додаткова інфа</h3>
-                  <h3 class="text-danger">! В розробці поки-що не працює</h3>
-                  <label for="weight_product">Продукт насипна маса на т./м. куб.</label>
-                          <select class="form-control" id="weight_product">
-                            <option value="0.1">0.1</option>
-                            <option value="0.2">0.2</option>
-                            <option value="0.3">0.3</option>
-                            <option value="0.4">0.4</option>
-                            <option value="0.5">0.5</option>
-                            <option value="0.6">0.6</option>
-                            <option selected value="0.7">0.7 зерно пшениці</option>                          
-                            <option value="0.8">0.8</option>
-                            <option value="0.9">0.9</option>
-                            <option value="1">1</option>
-                            <option value="1.1">1.1</option>
-                            <option value="1.2">1.2</option>
-                            <option value="1.5"> 1.5</option>
-                            <option value="1.75">1.75</option>
-                            <option value="2">2</option>
-                          </select>
-      
-                          
-      
-      
-                          <label for="working_angle">Кут роботи (градусів)</label>
-                          <select class="form-control" id="working_angle">
-                            <option value="0" selected>0</option>
-                            <option value="15">15°</option>
-                            <option value="30">30°</option>
-                            <option value="45">45°</option>
-                            <option value="60">60°</option>
-                            <option value="90">90°</option>
-                          </select>
+                <br/>
+                <div class="table-responsive form_productation_sh_tr">
+                  <table class="table table-sm table-borderless mb-0">
+                    <tbody>
+                      <tr>
+                        <th class="pl-0 w-25" scope="row"><strong>Продуктивність</strong></th>
+                        <td> <p>
+                                <span class="mr-3">
+                                  <strong>
+                                    <span class="production_sh">
+                                      
+                                    </span>
+                                  </strong>
+                                </span>
+                              </p>
+                            </td>
+                      </tr>
 
-                          <br>
-                          <button type="button" id="calck_production" class="btn btn-dark" >Розрахувати</button>
                       
-                  
-                </div>
+   
+                    </tbody>
+                  </table>
 
-                <div class="col-sm">
-                    
-                  <br/>
-                  <div class="table-responsive form_productation_sh_tr">
-                    <table class="table table-sm table-borderless mb-0">
-                      <tbody>
-                        <tr>
-                          <th class="pl-0 w-25" scope="row"><strong>Продуктивність</strong></th>
-                          <td> <p>
-                                  <span class="mr-3">
-                                    <strong>
-                                      <span class="production_sh">
-                                        
-                                      </span>
-                                    </strong>
-                                  </span>
-                                </p>
-                              </td>
-                        </tr>
+                  <div id="engine_params_block">
 
-                        
-                        <!-- <tr>
-                          <th class="pl-0 w-25" scope="row"><strong>Color</strong></th>
-                          <td>Black</td>
-                        </tr>
-                        <tr>
-                          <th class="pl-0 w-25" scope="row"><strong>Delivery</strong></th>
-                          <td>USA, Europe</td>
-                        </tr> -->
-                      </tbody>
-                    </table>
-
-                    <div class="form-group">
-                      <input value="" type="text" class="form-control" id="diam_out_pipe" placeholder="Умоаний прохід зовн. труби">
-                    </div>
-                    
-                    <div class="form-group">
-                      <input value="" type="text" class="form-control" id="screw_p" placeholder="Крок спіралі">
-                    </div>
-
-                    <div class="form-group">
-                      <input value="" type="text" class="form-control" id="diam_smale_pipe" placeholder="Діам. трубовалу">
-                    </div>
-                 
                   </div>
-      
-                </div>
 
-              
-            </div> 
-          </div>
-          <!-- <blockquote class="blockquote mb-0">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-            <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source Title</cite></footer>
-          </blockquote> -->
-        
+                  <div id="pipe_group">
+
+                  </div>
+
+                </div>
+    
+              </div>
+
+            
+          </div> 
         </div>
-              
+   
       </div>
+            
+    </div>
+
+
 
 
 
