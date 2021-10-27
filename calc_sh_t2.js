@@ -37,7 +37,7 @@ $( "#calck_production" ).click(function() {
 
 
 // при зміні вибору мотор редуктора
-$( ".form-check-input_motor_engyne" ).change(function() {
+$( ".form-check-input_engyne" ).change(function() {
   chek_chose_radio = $("#exampleRadios2").prop("checked");
   build_select_engin();
   clean_prace();
@@ -131,12 +131,22 @@ function prace_vue() {
 
   // перевірка на наявність бункерка та підставки
   if($(".radio_boonker").prop("checked")){
-    price_sh_transporter += 2000
+    if(params_trans[0]<160){
+      price_sh_transporter += 2000
+    }
+    else{
+      price_sh_transporter += 3000
+    }
   }
 
-  if($(".radio_pistavka").prop("checked")){
-    price_sh_transporter += 4000
-  }
+  if($(".radio_pidstavka").prop("checked")){
+      if(params_trans[0]<160){
+        price_sh_transporter += 4000
+      }
+      else{
+        price_sh_transporter += 5000
+      }
+    }
 
   if($(".radio_krot").prop("checked")){
     price_sh_transporter += (params_trans[3]*0.5)
@@ -446,7 +456,7 @@ $( ".radio_boonker" ).change(function() {
   clean_prace()
 });
 
-$( ".radio_pistavka" ).change(function() {
+$( ".radio_pidstavka" ).change(function() {
   clean_prace()
 });
 
