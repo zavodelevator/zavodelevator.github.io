@@ -96,6 +96,7 @@ let stala_price
 
 
 init_varible_value() 
+chose_kvt()
 // перша перевірка радіобатона на вибір двигуна
 chek_chose_radio = $("#exampleRadios2").prop("checked");
 
