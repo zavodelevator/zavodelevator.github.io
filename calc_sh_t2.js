@@ -1,4 +1,3 @@
-// ініціалізація змінних
 let l_trans 
 let params_trans
 let engine_params 
@@ -96,8 +95,6 @@ let stala_price
 
 
 init_varible_value() 
-chose_kvt()
-
 // перша перевірка радіобатона на вибір двигуна
 chek_chose_radio = $("#exampleRadios2").prop("checked");
 
@@ -146,9 +143,6 @@ function chose_kvt(){
   equal_engene_redukt_for_params.forEach(element => {
     if(params_trans [0]==element[0] && l_trans==element[1]){
         $(".need_engyne").html( " рекоммендованний двигун " + element[2]+ " кВт.");
-    }
-    else{
-        $(".need_engyne").html("");
     }
   
   });
