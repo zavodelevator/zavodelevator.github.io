@@ -91,10 +91,7 @@ let equal_engene_redukt_for_params = [
 ]
 
 
-let stala_price
 
-
-init_varible_value() 
 // перша перевірка радіобатона на вибір двигуна
 chek_chose_radio = $("#exampleRadios2").prop("checked");
 
@@ -102,7 +99,6 @@ chek_chose_radio = $("#exampleRadios2").prop("checked");
 $( "#calck_price" ).click(function() {
     init_varible_value() 
     prace_vue();
-    chose_kvt();
   });
 
 
@@ -142,7 +138,7 @@ function chose_kvt(){
 
   equal_engene_redukt_for_params.forEach(element => {
     if(params_trans [0]==element[0] && l_trans==element[1]){
-        $(".need_engyne").html( " рекоммендованний двигун " + element[2]+ " кВт.");
+        alert(element[2])
     }
   
   });
@@ -215,8 +211,6 @@ function prace_vue() {
       price_sh_transporter = 3000 + (params_trans[1]*1)+(params_trans[3]*l_trans*1.1)+(engine_params[2]*1);
     }
 
-    
-
 
   // перевірка на наявність бункерка та підставки
   if($(".radio_boonker").prop("checked")){
@@ -242,9 +236,6 @@ function prace_vue() {
   price_sh_transporter = parseInt(price_sh_transporter)
 
   $(".price").html( " ₴ " + price_sh_transporter+ ".00 з пдв");
-
-                        
-
 }
 
 
@@ -479,15 +470,11 @@ function calck_production(){
 $( "#params_trans" ).change(function() {
   clean_prace()
   clean_producthion()
-  init_varible_value() 
-  chose_kvt()
 });
 
 $( "#length_trans" ).change(function() {
   clean_prace()
   clean_producthion()
-  init_varible_value() 
-  chose_kvt()
 });
 
 $( "#engine_params" ).change(function() {
