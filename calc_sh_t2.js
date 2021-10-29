@@ -26,6 +26,18 @@ let equal_engene_redukt_for_params = [
   [102,6,1.5],
   [102,7,2.2],
   [102,8,2.2],
+  [102,9,2.2],
+  [102,10," Невідомо "],
+  [102,11," Невідомо "],
+  [102,12," Невідомо "],
+  [102,13," Невідомо "],
+  [102,14," Невідомо "],
+  [102,15," Невідомо "],
+  [102,16," Невідомо "],
+  [102,17," Невідомо "],
+  [102,18," Невідомо "],
+  [102,19," Невідомо "],
+  [102,20," Невідомо "],
 
   [127,1,1.5],
   [127,2,1.5],
@@ -37,6 +49,16 @@ let equal_engene_redukt_for_params = [
   [127,8,2.2],
   [127,9,3],
   [127,10,3],
+  [127,11," Невідомо "],
+  [127,12," Невідомо "],
+  [127,13," Невідомо "],
+  [127,14," Невідомо "],
+  [127,15," Невідомо "],
+  [127,16," Невідомо "],
+  [127,17," Невідомо "],
+  [127,18," Невідомо "],
+  [127,19," Невідомо "],
+  [127,20," Невідомо "],
   
   [159,1,2.2],
   [159,2,2.2],
@@ -50,6 +72,14 @@ let equal_engene_redukt_for_params = [
   [159,10,4],
   [159,11,4],
   [159,12,4],
+  [159,13," Невідомо "],
+  [159,14," Невідомо "],
+  [159,15," Невідомо "],
+  [159,16," Невідомо "],
+  [159,17," Невідомо "],
+  [159,18," Невідомо "],
+  [159,19," Невідомо "],
+  [159,20," Невідомо "],
   
   [219,1,3],
   [219,2,3],
@@ -63,6 +93,15 @@ let equal_engene_redukt_for_params = [
   [219,10,4],
   [219,11,5.5],
   [219,12,5.5],
+  [219,13," Невідомо "],
+  [219,14," Невідомо "],
+  [219,15," Невідомо "],
+  [219,16," Невідомо "],
+  [219,17," Невідомо "],
+  [219,18," Невідомо "],
+  [219,19," Невідомо "],
+  [219,20," Невідомо "],
+  
   
   [250,1,2.2],
   [250,2,2.2],
@@ -76,6 +115,14 @@ let equal_engene_redukt_for_params = [
   [250,10,4],
   [250,11,5.5],
   [250,12,5.5],
+  [250,13," Невідомо "],
+  [250,14," Невідомо "],
+  [250,15," Невідомо "],
+  [250,16," Невідомо "],
+  [250,17," Невідомо "],
+  [250,18," Невідомо "],
+  [250,19," Невідомо "],
+  [250,20," Невідомо "],
   
   [300,1,3],
   [300,2,3],
@@ -88,14 +135,24 @@ let equal_engene_redukt_for_params = [
   [300,9,5.5],
   [300,10,5.5],
   [300,11,7.5],
-  [300,12,7.5]
+  [300,12,7.5],
+  [300,13," Невідомо "],
+  [300,14," Невідомо "],
+  [300,15," Невідомо "],
+  [300,16," Невідомо "],
+  [300,17," Невідомо "],
+  [300,18," Невідомо "],
+  [300,19," Невідомо "],
+  [300,20," Невідомо "],
 ]
 
 
 let stala_price
 
 
-init_varible_value() 
+init_varible_value()
+chose_kvt()
+
 // перша перевірка радіобатона на вибір двигуна
 chek_chose_radio = $("#exampleRadios2").prop("checked");
 
@@ -109,7 +166,7 @@ $( "#calck_price" ).click(function() {
 
 $( "#calck_production" ).click(function() {
   init_varible_value() 
-  calck_production()
+  // calck_production()
 });
 
 
@@ -140,13 +197,21 @@ function init_varible_value() {
 
 
 function chose_kvt(){
-
+  
   equal_engene_redukt_for_params.forEach(element => {
     if(params_trans [0]==element[0] && l_trans==element[1]){
-        $(".need_engyne").html( " рекоммендованний двигун " + element[2]+ " кВт.");
+      
+      $(".need_engyne").html( " рекоммендованний двигун " + element[2]+ " кВт.");
+     
     }
   
   });
+
+  if($(".need_engyne").text().includes("Невідомо")){
+    $(".need_engyne").html( '');
+  }
+
+
   
 }
 
@@ -239,6 +304,13 @@ function prace_vue() {
   if($(".radio_krot").prop("checked")){
     price_sh_transporter += (params_trans[3]*0.5)
   }
+
+
+  if($(".radio_zholob").prop("checked")){
+    price_sh_transporter = price_sh_transporter*1.1
+  }
+
+  
 
   price_sh_transporter = parseInt(price_sh_transporter)
 
@@ -482,6 +554,9 @@ $( "#params_trans" ).change(function() {
   clean_producthion()
   init_varible_value() 
   chose_kvt()
+  prace_vue()
+  // calck_production()
+  
 });
 
 $( "#length_trans" ).change(function() {
@@ -489,28 +564,63 @@ $( "#length_trans" ).change(function() {
   clean_producthion()
   init_varible_value() 
   chose_kvt()
+  prace_vue()
 });
+  
+  
 
 $( "#engine_params" ).change(function() {
   clean_prace()
   clean_producthion()
+  init_varible_value() 
+  // calck_production()
+  prace_vue()
 });
+
+
+
 
 $( ".radio_boonker" ).change(function() {
   clean_prace()
+  init_varible_value() 
+  
+  prace_vue()
 });
 
-$( ".radio_pistavka" ).change(function() {
+
+
+
+$( ".radio_pidstavka" ).change(function() {
   clean_prace()
+
+  init_varible_value() 
+  prace_vue()
 });
+
+$( ".radio_krot" ).change(function() {
+  clean_prace()
+  init_varible_value() 
+  prace_vue()
+});
+
+$( ".radio_zholob" ).change(function() {
+  clean_prace()
+  init_varible_value() 
+
+  prace_vue()
+});
+
+
 
 // зачиска ціни при зміні параметрів продуктивності
 $( "#weight_product" ).change(function() {
   clean_producthion()
+  // calck_production()
 });
 
 $( "#working_angle" ).change(function() {
   clean_producthion()
+  // calck_production()
 });
 
 
