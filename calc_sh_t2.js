@@ -146,11 +146,20 @@ let equal_engene_redukt_for_params = [
   [300,20," Невідомо "],
 ]
 
-
-let stala_price
-
-
 init_varible_value()
+
+
+// let stala_price = [false, 0,"Ціна за метр ("+params_trans[3]+") * на дорж транс ("+l_trans+") та + 10% = "+(params_trans[3]*l_trans*1.1)]
+// let price_navisn  = [false, 0,"Ціна навісного = "+  params_trans[1]]
+// let price_enge = [false, 0,"Ціна за метр "+ engine_params[2]]
+// let price_shkiv_pidsh = [false, 4500,"Ціна шкіків та підшипніків = "+ price_shkiv_pidsh[1] ]
+// let price_pidstavka = [false,4000,"Ціна підcтавки = "+ price_pidstavka[1]]
+// let price_bunker = [false,2000,"Ціна бункера = "+ price_pidstavka[1]]
+// let price_krot = [false,(params_trans[3]*0.5),"Ціна крот = "+ price_bunker[1]]
+// let price_zholob = [false,,"Ціна жолоба = "+ price_sh_transporter*0.1] 
+
+
+
 chose_kvt()
 
 // перша перевірка радіобатона на вибір двигуна
