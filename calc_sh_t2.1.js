@@ -149,14 +149,14 @@ let equal_engene_redukt_for_params = [
 init_varible_value()
 
 
-// let stala_price = [false, 0,"Ціна за метр ("+params_trans[3]+") * на дорж транс ("+l_trans+") та + 10% = "+(params_trans[3]*l_trans*1.1)]
-// let price_navisn  = [false, 0,"Ціна навісного = "+  params_trans[1]]
-// let price_enge = [false, 0,"Ціна за метр "+ engine_params[2]]
-// let price_shkiv_pidsh = [false, 4500,"Ціна шкіків та підшипніків = "+ price_shkiv_pidsh[1] ]
-// let price_pidstavka = [false,4000,"Ціна підcтавки = "+ price_pidstavka[1]]
-// let price_bunker = [false,2000,"Ціна бункера = "+ price_pidstavka[1]]
-// let price_krot = [false,(params_trans[3]*0.5),"Ціна крот = "+ price_bunker[1]]
-// let price_zholob = [false,,"Ціна жолоба = "+ price_sh_transporter*0.1] 
+let stala_price
+let price_navisn
+let price_metr
+let price_shkiv_pidsh
+let price_pidstavka
+let price_bunker
+let price_krot
+let price_zholob
 
 
 
@@ -203,6 +203,10 @@ function init_varible_value() {
   weight_product = $('#weight_product').val().split(',')*1;
 
 }  
+
+
+
+
 
 
 function chose_kvt(){
@@ -285,11 +289,16 @@ function build_select_engin() {
 
 
 
+
+
+
 // обрахунок та вивід прайса
 function prace_vue() {
   // перевірка та обрахунок на моторі та мотор-редукторі
   if(chek_chose_radio == false){
-      price_sh_transporter = (params_trans[2]*1)+(params_trans[1]*1)+(params_trans[3]*l_trans*1.1)+(engine_params[2]*1);
+      price_sh_transporter = (params_trans[2]*1)+
+      (params_trans[1]*1)+(params_trans[3]*l_trans*1.1)+
+      (engine_params[2]*1);
     }else{
       price_sh_transporter = 3000 + (params_trans[1]*1)+(params_trans[3]*l_trans*1.1)+(engine_params[2]*1);
     }
@@ -329,7 +338,63 @@ function prace_vue() {
 
   $(".price").html( " ₴ " + price_sh_transporter+ ".00 з пдв");
 
-                        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  stala_price = params_trans[3]
+  price_navisn = params_trans[1]
+  price_metr = engine_params[2]
+  price_shkiv_pidsh = 
+
+alert(stala_price)
+alert(price_navisn)
+alert(price_metr)
+alert(price_shkiv_pidsh)
+alert(price_pidstavka)
+alert(price_bunker)
+alert(price_krot)
+alert(price_zholob)
+
+// let stala_price = [false, 0,"Ціна за метр ("+params_trans[3]+") * на дорж транс ("+l_trans+") та + 10% = "+(params_trans[3]*l_trans*1.1)]
+// let price_navisn  = [false, 0,"Ціна навісного = "+  params_trans[1]]
+// let price_metr = [false, 0,"Ціна за метр "+ engine_params[2]]
+// let price_shkiv_pidsh = [false, 4500,"Ціна шкіків та підшипніків = "+ price_shkiv_pidsh[1] ]
+// let price_pidstavka = [false,4000,"Ціна підcтавки = "+ price_pidstavka[1]]
+// let price_bunker = [false,2000,"Ціна бункера = "+ price_pidstavka[1]]
+// let price_krot = [false,(params_trans[3]*0.5),"Ціна крот = "+ price_bunker[1]]
+// let price_zholob = [false,,"Ціна жолоба = "+ price_sh_transporter*0.1] 
+
+
+           
+
+
+
+
+``
 
 }
 
