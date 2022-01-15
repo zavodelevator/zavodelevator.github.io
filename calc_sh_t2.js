@@ -1,4 +1,5 @@
 // ініціалізація змінних
+<<<<<<< Updated upstream
 let l_trans 
 let params_trans
 let engine_params 
@@ -12,13 +13,339 @@ let price_sh_transporter
 let production_sh_transporter
 
 let chek_chose_radio 
+=======
+
+
+
+let calc_sh_transporter = {
+  l_trans: $('#length_trans option:selected').val(),
+  params_trans: $('#params_trans option:selected').val().split(','),
+  engine_params: $('#engine_params option:selected').val().split(','),
+  working_angle: $('#working_angle').val().split(',')*1,
+  weight_product: $('#weight_product').val().split(',')*1,
+  pi: 3.1415926535,
+  production_sh_transporter: 0,
+
+  price_sh_transporter : {
+    price_parth1: 0,
+    price_parth2: 0,
+    price_parth3: 0,
+    price_parth4: 0,
+    price_parth5: 0,
+    price_bunker: 0,
+    price_zholob: 0,
+    price_pidstavka: 0,
+    price_krot: 0,
+  },
+
+  
+
+  rbtn_chek_privod: false,
+
+  equal_engene_redukt_for_params: [
+    [102,1,1.1],
+    [102,2,1.1],
+    [102,3,1.5],
+    [102,4,1.5],
+    [102,5,1.5],
+    [102,6,1.5],
+    [102,7,2.2],
+    [102,8,2.2],
+    [102,9,2.2],
+    [102,10," Невідомо "],
+    [102,11," Невідомо "],
+    [102,12," Невідомо "],
+    [102,13," Невідомо "],
+    [102,14," Невідомо "],
+    [102,15," Невідомо "],
+    [102,16," Невідомо "],
+    [102,17," Невідомо "],
+    [102,18," Невідомо "],
+    [102,19," Невідомо "],
+    [102,20," Невідомо "],
+  
+    [127,1,1.5],
+    [127,2,1.5],
+    [127,3,1.5],
+    [127,4,1.5],
+    [127,5,2.2],
+    [127,6,2.2],
+    [127,7,2.2],
+    [127,8,2.2],
+    [127,9,3],
+    [127,10,3],
+    [127,11," Невідомо "],
+    [127,12," Невідомо "],
+    [127,13," Невідомо "],
+    [127,14," Невідомо "],
+    [127,15," Невідомо "],
+    [127,16," Невідомо "],
+    [127,17," Невідомо "],
+    [127,18," Невідомо "],
+    [127,19," Невідомо "],
+    [127,20," Невідомо "],
+    
+    [159,1,2.2],
+    [159,2,2.2],
+    [159,3,2.2],
+    [159,4,2.2],
+    [159,5,3],
+    [159,6,3],
+    [159,7,3],
+    [159,8,3],
+    [159,9,4],
+    [159,10,4],
+    [159,11,4],
+    [159,12,4],
+    [159,13," Невідомо "],
+    [159,14," Невідомо "],
+    [159,15," Невідомо "],
+    [159,16," Невідомо "],
+    [159,17," Невідомо "],
+    [159,18," Невідомо "],
+    [159,19," Невідомо "],
+    [159,20," Невідомо "],
+    
+    [219,1,3],
+    [219,2,3],
+    [219,3,3],
+    [219,4,3],
+    [219,5,4],
+    [219,6,4],
+    [219,7,4],
+    [219,8,4],
+    [219,9,4],
+    [219,10,4],
+    [219,11,5.5],
+    [219,12,5.5],
+    [219,13," Невідомо "],
+    [219,14," Невідомо "],
+    [219,15," Невідомо "],
+    [219,16," Невідомо "],
+    [219,17," Невідомо "],
+    [219,18," Невідомо "],
+    [219,19," Невідомо "],
+    [219,20," Невідомо "],
+    
+    
+    [250,1,2.2],
+    [250,2,2.2],
+    [250,3,2.2],
+    [250,4,2.2],
+    [250,5,3],
+    [250,6,3],
+    [250,7,4],
+    [250,8,4],
+    [250,11,4],
+    [250,10,4],
+    [250,11,5.5],
+    [250,12,5.5],
+    [250,13," Невідомо "],
+    [250,14," Невідомо "],
+    [250,15," Невідомо "],
+    [250,16," Невідомо "],
+    [250,17," Невідомо "],
+    [250,18," Невідомо "],
+    [250,19," Невідомо "],
+    [250,20," Невідомо "],
+    
+    [300,1,3],
+    [300,2,3],
+    [300,3,4],
+    [300,4,4],
+    [300,5,4],
+    [300,6,4],
+    [300,7,5.5],
+    [300,8,5.5],
+    [300,9,5.5],
+    [300,10,5.5],
+    [300,11,7.5],
+    [300,12,7.5],
+    [300,13," Невідомо "],
+    [300,14," Невідомо "],
+    [300,15," Невідомо "],
+    [300,16," Невідомо "],
+    [300,17," Невідомо "],
+    [300,18," Невідомо "],
+    [300,19," Невідомо "],
+    [300,20," Невідомо "],
+  ],
+
+  target_rbtn_chek_privod : function (){
+    rbtn_chek_privod = $("#btn_engyne_reduktor").prop("checked");
+  },
+
+  build_select_engin:function() {
+    let tmp = "",
+        engines_params = [
+          [0,    0,   0, "Без двигуна"]
+          [1500, 1.1, 3237],
+          [1500, 1.5, 3582],
+          [1500, 2.2, 5448],
+          [1500, 3.0, 6306],
+          [1500, 4.0, 7161],
+          [1500, 5.5, 8778],
+          [1500, 7.5, 11421],
+          [1500, 11.0, 14145],
+          [1000, 1.1, 3747],
+          [1000, 1.5, 5115],
+          [1000, 2.2, 6045],
+          [1000, 3.0, 8352],
+          [1000, 4.0, 8946],
+          [1000, 5.5, 9375],
+          [1000, 7.5, 12015],
+          [1000, 11.0, 20136],
+          [750, 1.1, 5448],
+          [750, 1.5, 6390],
+          [750, 2.2, 8517],
+          [750, 3.0, 9375],
+          [750, 4.0, 12183],
+          [750, 5.5, 12015],
+          [750, 7.5, 19056],
+          [750, 11.0, 23370]
+        ],
+  
+        motor_engine_params = [
+          [0,  0,   0, "Без мотор редуктора"],
+          [0,1.1,8153],
+          [0,1.1,10013],
+          [0,1.5,9083],
+          [0,1.5,10943],
+          [0,2.2,12090],
+          [0,2.2,15345],
+          [0,3,16275],
+          [0,3,19716],
+          [0,4,17918],
+          [0,4,20925],
+          [0,5.5,22320],
+          [0,5.5,26505],
+          [0,7.5,26040],
+          [0,7.5,30225],
+          [0,11,39990]
+        ]
+  
+    if(rbtn_chek_privod == false){
+        engines_params.forEach(function(item, i, engines_params){
+          if (i===0) { 
+            tmp+='<option selected value="0,0,0">Без двигуна</option>';
+          }else{
+            tmp+=`<option value="${item[0]},${item[1]},${item[2]}">Мотор ${item[1]} кВт. ${item[0]} об./хв.</option>`;
+          }  
+        });
+        
+        $("#engine_params").html(
+          tmp
+        );
+  
+      }else{
+        motor_engine_params.forEach(function(item, i, engines_params){
+          if (i===0) { 
+            tmp+='<option selected value="0,0,0">Без мотор-редуктора</option>';
+          }else{
+            tmp+=`<option value="${item[0]},${item[1]},${item[2]}">Мотор ${item[1]} кВт. ${item[0]} об./хв.</option>`;
+          }  
+        });
+        $("#engine_params").html(
+          tmp
+        );  
+      }
+  },
+
+  chose_kvt: function(){
+  
+    equal_engene_redukt_for_params.forEach(element => {
+      if(params_trans [0]==element[0] && l_trans==element[1]){
+        $(".need_engyne").html( "" + element[2]+ " кВт.");     
+      } 
+    });
+
+    if($(".need_engyne").text().includes("Невідомо")){
+      $(".need_engyne").html( '');
+    }    
+  },
+  
+  prace_calck_and_vue: function () {
+    // перевірка та обрахунок на моторі та мотор-редукторі
+    
+        price_sh_transporter = (params_trans[2]*1)+(params_trans[1]*1)+(params_trans[3]*l_trans*1.1)+(engine_params[2]*1);
+        
+        rbtn_chek_privod == false ? price_parth1 = params_trans[2]*1 : price_parth1 = 3000;
+        
+        price_parth2 = params_trans[1]*1;
+        price_parth3 = params_trans[3]*l_trans;
+        price_parth4 = params_trans[3]*l_trans*0.1;
+        price_parth5 = engine_params[2]*1;
+
+        if($(".radio_boonker").prop("checked")){
+          if(params_trans[0]<160){
+            price_bunker = 2000
+          }else{
+            price_bunker = 3000
+          }  
+        }
+      
+        if($(".radio_pistavka").prop("checked")){
+          if(params_trans[0]<160){
+            price_pidstavka = 4000
+          }else{
+            price_pidstavka = 5000
+          }
+        }
+       
+        if($(".radio_krot").prop("checked")){
+          price_krot = (params_trans[3]*0.5)
+        }
+
+        let ful_price = {
+          price_parth + +price_parth2 + price_parth3 + price_parth4 + price_parth5 + price_bunker + price_zholob + price_pidstavka + price_krot:
+        },
+
+        if($(".radio_zholob").prop("checked")){
+          price_zholob = 
+        }
+        price_zholob = 0
+
+      
+        
+    
+  
+      
+  
+  
+    // перевірка на наявність бункерка та підставки
+  
+    
+  
+  
+  
+  
+    
+  
+    price_sh_transporter = parseInt(price_sh_transporter)
+  
+    $(".price").html( " ₴ " + price_sh_transporter+ ".00 з пдв");
+  
+                          
+  
+  }
+    
+  
+
+}
+
+
+
+
+
+chose_kvt()
+>>>>>>> Stashed changes
 
 // перша перевірка радіобатона на вибір двигуна
 chek_chose_radio = $("#exampleRadios2").prop("checked");
 
 // клік евент 
 $( "#calck_price" ).click(function() {
-    init_varible_value() 
+     
     prace_vue();
   });
 
@@ -42,6 +369,7 @@ $( ".form-check-input_motor_engyne" ).change(function() {
 
 
 
+<<<<<<< Updated upstream
 
 // надання значень змінним
 function init_varible_value() {
@@ -154,6 +482,9 @@ function prace_vue() {
 
 
 
+=======
+// обрахунок та вивід продуктивності
+>>>>>>> Stashed changes
 
 // обрахунок та вивід продуктивності
 function calck_production(){
