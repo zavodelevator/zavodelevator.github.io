@@ -408,6 +408,7 @@ function calck_production(){
     if ($("#diam_out_pipe").length){
       
     }
+    
     else{
       $("#content_weight_product").show()
 
