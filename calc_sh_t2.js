@@ -231,53 +231,53 @@ function build_select_engin() {
   if(chek_chose_radio == false){
     $("#engine_params").html(
       '<option selected value="0,0,0">Без двигуна</option>'+
-      '<option value="1500,1.1,3237">Мотор 1.1 кВт. 1500 об./хв.</option>'+
-      '<option value="1500,1.5,3582">Мотор 1.5 кВт. 1500 об./хв.</option>'+
-      '<option value="1500,2.2,5448">Мотор 2.2 кВт. 1500 об./хв.</option>'+
+      '<option value="1500,1.1,4208">Мотор 1.1 кВт. 1500 об./хв.</option>'+
+      '<option value="1500,1.5,4656">Мотор 1.5 кВт. 1500 об./хв.</option>'+
+      '<option value="1500,2.2,7082">Мотор 2.2 кВт. 1500 об./хв.</option>'+
       '<option value="1500,3.0,6306">Мотор 3.0 кВт. 1500 об./хв.</option>'+
-      '<option value="1500,4.0,7161">Мотор 4.0 кВт. 1500 об./хв.</option>'+
-      '<option value="1500,5.5,8778">Мотор 5.5 кВт. 1500 об./хв.</option>'+
-      '<option value="1500,7.5,11421">Мотор 7.5 кВт. 1500 об./хв.</option>'+
-      '<option value="1500,11.0,14145">Мотор 11.0 кВт. 1500 об./хв.</option>'+
-      '<option value="1000,1.1,3747">Мотор 1.1 кВт. 1000 об./хв.</option>'+
-      '<option value="1000,1.5,5115">Мотор 1.5 кВт. 1000 об./хв.</option>'+
-      '<option value="1000,2.2,6045">Мотор 2.2 кВт. 1000 об./хв.</option>'+
-      '<option value="1000,3.0,8352">Мотор 3.0 кВт. 1000 об./хв.</option>'+
-      '<option value="1000,4.0,8946">Мотор 4.0 кВт. 1000 об./хв.</option>'+
-      '<option value="1000,5.5,12015">Мотор 5.5 кВт. 1000 об./хв.</option>'+
-      '<option value="1000,7.5,13884">Мотор 7.5 кВт. 1000 об./хв.</option>'+
-      '<option value="1000,11.0,20136">Мотор 11.0 кВт. 1000 об./хв.</option>'+
-      '<option value="750,1.1,5448">Мотор 1.1 кВт. 750 об./хв.</option>'+
-      '<option value="750,1.5,6390">Мотор 1.5 кВт. 750 об./хв.</option>'+
-      '<option value="750,2.2,8517">Мотор 2.2 кВт. 750 об./хв.</option>'+
-      '<option value="750,3.0,9375">Мотор 3.0 кВт. 750 об./хв.</option>'+
-      '<option value="750,4.0,12183">Мотор 4.0 кВт. 750 об./хв.</option>'+
-      '<option value="750,5.5,13716">Мотор 5.5 кВт. 750 об./хв.</option>'+
-      '<option value="750,7.5,19056">Мотор 7.5 кВт. 750 об./хв.</option>'+
-      '<option value="750,11.0,23370">Мотор 11.0 кВт. 750 об./хв.</option>'      
+      '<option value="1500,4.0,8197">Мотор 4.0 кВт. 1500 об./хв.</option>'+
+      '<option value="1500,5.5,11411">Мотор 5.5 кВт. 1500 об./хв.</option>'+
+      '<option value="1500,7.5,14847">Мотор 7.5 кВт. 1500 об./хв.</option>'+
+      '<option value="1500,11.0,18388">Мотор 11.0 кВт. 1500 об./хв.</option>'+
+      '<option value="1000,1.1,4871">Мотор 1.1 кВт. 1000 об./хв.</option>'+
+      '<option value="1000,1.5,6649">Мотор 1.5 кВт. 1000 об./хв.</option>'+
+      '<option value="1000,2.2,7858">Мотор 2.2 кВт. 1000 об./хв.</option>'+
+      '<option value="1000,3.0,10857">Мотор 3.0 кВт. 1000 об./хв.</option>'+
+      '<option value="1000,4.0,11629">Мотор 4.0 кВт. 1000 об./хв.</option>'+
+      '<option value="1000,5.5,15619">Мотор 5.5 кВт. 1000 об./хв.</option>'+
+      '<option value="1000,7.5,18049">Мотор 7.5 кВт. 1000 об./хв.</option>'+
+      '<option value="1000,11.0,26176">Мотор 11.0 кВт. 1000 об./хв.</option>'+
+      '<option value="750,1.1,7082">Мотор 1.1 кВт. 750 об./хв.</option>'+
+      '<option value="750,1.5,8307">Мотор 1.5 кВт. 750 об./хв.</option>'+
+      '<option value="750,2.2,11072">Мотор 2.2 кВт. 750 об./хв.</option>'+
+      '<option value="750,3.0,12187">Мотор 3.0 кВт. 750 об./хв.</option>'+
+      '<option value="750,4.0,15837">Мотор 4.0 кВт. 750 об./хв.</option>'+
+      '<option value="750,5.5,17830">Мотор 5.5 кВт. 750 об./хв.</option>'+
+      '<option value="750,7.5,24772">Мотор 7.5 кВт. 750 об./хв.</option>'+
+      '<option value="750,11.0,30381">Мотор 11.0 кВт. 750 об./хв.</option>'      
     );
     }else{
       $("#engine_params").html(
         '<option selected value="0,0,0">Без мотор-редуктора</option>'+
-        '<option value="0,1.1,8943">Мотор редуктор 1.1 кВт. WMI 63</option>'+
-        '<option value="0,1.1,10168">Мотор редуктор 1.1 кВт. WMI 75</option>'+
-        '<option value="0,1.5,9595">Мотор редуктор 1.5 кВт. WMI 63</option>'+
-        '<option value="0,1.5,11439">Мотор редуктор 1.5 кВт. WMI 75</option>'+
-        '<option value="0,2.2,12043">Мотор редуктор 2.2 кВт. WMI 75</option>'+
-        '<option value="0,2.2,14291">Мотор редуктор 2.2 кВт. WMI 90</option>'+
-        '<option value="0,3,15926">Мотор редуктор 3 кВт. WMI 90</option>'+
-        '<option value="0,3,20398">Мотор редуктор 3 кВт. WMI 110</option>'+
-        '<option value="0,4,17406">Мотор редуктор 4 кВт. WMI 90</option>'+
-        '<option value="0,4,21886">Мотор редуктор 4 кВт. WMI 110</option>'+
-        '<option value="0,5.5,25017">Мотор редуктор 5.5 кВт. WMI 110</option>'+
-        '<option value="0,5.5,29295">Мотор редуктор 5.5 кВт. WMI 130</option>'+
-        '<option value="0,7.5,28520">Мотор редуктор 7.5 кВт. WMI 110</option>'+
-        '<option value="0,7.5,31930">Мотор редуктор 7.5 кВт. WMI 130</option>'+
-        '<option value="0,7.5,40641">Мотор редуктор 7.5 кВт. WMI 150</option>'+
-        '<option value="0,9.2,35851">Мотор редуктор 9.2 кВт. WMI 130</option>'+
-        '<option value="0,9.2,44151">Мотор редуктор 9.2 кВт. WMI 150</option>'+
-        '<option value="0,11,46128">Мотор редуктор 11 кВт. WMI 150</option>'+
-        '<option value="0,15,55257">Мотор редуктор 15 кВт. WMI 150</option>'
+        '<option value="0,1.1,11848">Мотор редуктор 1.1 кВт. WMI 63</option>'+
+        '<option value="0,1.1,13483">Мотор редуктор 1.1 кВт. WMI 75</option>'+
+        '<option value="0,1.5,12669">Мотор редуктор 1.5 кВт. WMI 63</option>'+
+        '<option value="0,1.5,14334">Мотор редуктор 1.5 кВт. WMI 75</option>'+
+        '<option value="0,2.2,16869">Мотор редуктор 2.2 кВт. WMI 75</option>'+
+        '<option value="0,2.2,18948">Мотор редуктор 2.2 кВт. WMI 90</option>'+
+        '<option value="0,3,21098">Мотор редуктор 3 кВт. WMI 90</option>'+
+        '<option value="0,3,27090">Мотор редуктор 3 кВт. WMI 110</option>'+
+        '<option value="0,4,23051">Мотор редуктор 4 кВт. WMI 90</option>'+
+        '<option value="0,4,29043">Мотор редуктор 4 кВт. WMI 110</option>'+
+        '<option value="0,5.5,33169">Мотор редуктор 5.5 кВт. WMI 110</option>'+
+        '<option value="0,5.5,36666">Мотор редуктор 5.5 кВт. WMI 130</option>'+
+        '<option value="0,7.5,39359">Мотор редуктор 7.5 кВт. WMI 110</option>'+
+        '<option value="0,7.5,42855">Мотор редуктор 7.5 кВт. WMI 130</option>'+
+        '<option value="0,7.5,53987">Мотор редуктор 7.5 кВт. WMI 150</option>'+
+        '<option value="0,9.2,47478">Мотор редуктор 9.2 кВт. WMI 130</option>'+
+        '<option value="0,9.2,58610">Мотор редуктор 9.2 кВт. WMI 150</option>'+
+        '<option value="0,11,61201">Мотор редуктор 11 кВт. WMI 150</option>'+
+        '<option value="0,15,76006">Мотор редуктор 15 кВт. WMI 150</option>'
       );  
     }
 }
@@ -289,9 +289,9 @@ function build_select_engin() {
 function prace_vue() {
   // перевірка та обрахунок на моторі та мотор-редукторі
   if(chek_chose_radio == false){
-      price_sh_transporter = (params_trans[2]*1)+(params_trans[1]*1)+(params_trans[3]*l_trans*1.1)+(engine_params[2]*1);
+      price_sh_transporter = ((params_trans[2]*1)+(params_trans[1]*1)+(params_trans[3]*l_trans*1.1)*1.2)+(engine_params[2]*1);
     }else{
-      price_sh_transporter = 3000 + (params_trans[1]*1)+(params_trans[3]*l_trans*1.1)+(engine_params[2]*1);
+      price_sh_transporter = (3000 + (params_trans[1]*1)+(params_trans[3]*l_trans*1.1)*1.2)+(engine_params[2]*1);
     }
 
     
@@ -330,7 +330,7 @@ function prace_vue() {
   }
   
 
-  price_sh_transporter = parseInt(price_sh_transporter*1.3)
+  price_sh_transporter = parseInt(price_sh_transporter)
 
   $(".price").html( " ₴ " + price_sh_transporter+ ".00 з пдв");
 
