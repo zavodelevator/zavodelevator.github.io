@@ -330,7 +330,7 @@ function prace_vue() {
   }
   
 
-  price_sh_transporter = parseInt(price_sh_transporter)
+  price_sh_transporter = parseInt(price_sh_transporter*1.15)
 
   $(".price").html( " ₴ " + price_sh_transporter+ ".00 з пдв");
 
