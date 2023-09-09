@@ -40,9 +40,6 @@
                   </div> -->
                 </div> 
 
-                <div class="card_price">
-                  <div class="card-body">Розшифровка ціни</div>                
-                </div>
 
               </div>
 
@@ -52,45 +49,53 @@
 
                 <div class="form-group">
 
+                  
+                  
+                  <button id="Button_params_trans" class="btn-sm btn-dark">+</button>
+                  
+                  <div class="form-group row">
 
+                    <label class="col-sm-6" for="params_trans">Діаметер труби шнека мм.</label>
+                    <select class="col-sm-6 form-control" id="params_trans">
+                      <option value="102,4050,4500,2048">102</option>
+                      <option value="127,4116,4500,2486">127</option>
+                      <option value="159,4512,4500,2914">159</option>
+                      <option value="219,7350,4500,4384">219</option>
+                      <option value="250,8000,4500,5000">250</option>
+                      <option value="300,9000,4500,6000">300</option>
+                    </select>
 
+                  </div>  
 
-                  <label for="params_trans">Діаметер труби шнека мм.</label>
-                  <select class="form-control" id="params_trans">
-                    <option value="102,4050,4500,2048">102</option>
-                    <option value="127,4116,4500,2486">127</option>
-                    <option value="159,4512,4500,2914">159</option>
-                    <option value="219,7350,4500,4384">219</option>
-                    <option value="250,8000,4500,5000">250</option>
-                    <option value="300,9000,4500,6000">300</option>
+                  <div class="form-group row">
 
-                  </select>
+                    <label for="length_trans" class="col-sm-6" >Довжина шнека</label>
+                    <select class="col-sm-6 form-control" id="length_trans">
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                      <option value="6">6</option>
+                      <option value="7">7</option>
+                      <option value="8">8</option>
+                      <option value="9">9</option>
+                      <option value="10">10</option>
+                      <option value="11">11</option>
+                      <option value="12">12</option>
+                      <option value="13">13</option>
+                      <option value="14">14</option>
+                      <option value="15">15</option>
+                      <option value="16">16</option>
+                      <option value="17">17</option>
+                      <option value="18">18</option>
+                      <option value="19">19</option>
+                      <option value="20">20</option>
+                        
+                    </select>
 
+                  </div>
 
-                  <label for="length_trans">Довжина шнека</label>
-                  <select class="form-control" id="length_trans">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                    <option value="11">11</option>
-                    <option value="12">12</option>
-                    <option value="13">13</option>
-                    <option value="14">14</option>
-                    <option value="15">15</option>
-                    <option value="16">16</option>
-                    <option value="17">17</option>
-                    <option value="18">18</option>
-                    <option value="19">19</option>
-                    <option value="20">20</option>
-                      
-                  </select>
 
                   <div class="form-check form-switch">
                     <input class="form-check-input radio_boonker" type="checkbox" id="flexSwitchCheckChecked_1">
@@ -186,6 +191,20 @@
 
                   </div>
 
+<!-- button example -->
+                  <br>
+                  <button id="toggleButton" class="btn-sm btn-dark">+</button>
+      
+                  <div id="panelContent" class="panel panel-default">
+                    <br>
+                    <label for="params_trans">Покриття</label>
+                    <select  class="form-control" id="paint_cover">
+                      <option selected value="1">Грунт Емаль</option>
+                      <option value="2">Проршкове фарбування</option>
+                      <option value="3">Цинк</option>
+                    </select>
+      
+                  </div>
                   
 
                 </div>
@@ -330,6 +349,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="calc_sh_t2.js"></script>
+    
     
 
 

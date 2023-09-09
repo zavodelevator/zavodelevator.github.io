@@ -1,3 +1,5 @@
+document.write('<script src="buton.js"></script>');
+
 // ініціалізація змінних
 let l_trans 
 let params_trans
@@ -147,6 +149,8 @@ let equal_engene_redukt_for_params = [
 ]
 
 init_varible_value()
+
+
 
 
 // let stala_price = [false, 0,"Ціна за метр ("+params_trans[3]+") * на дорж транс ("+l_trans+") та + 10% = "+(params_trans[3]*l_trans*1.1)]
