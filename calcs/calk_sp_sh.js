@@ -14,11 +14,11 @@ function calk_sp_sh(d_out, d_inner, p, s, price_metal = 55, koof = [5, 6]) {
   let weight_one_m_spital = (s * h_shrtrips * leangth_shtrips_on_m * 0.00786) / 1000;
 
   return [
-    pd.pdv(weight_one_m_spital * price_metal * koof[0]),
-    pd.pdv(weight_one_m_spital * price_metal * koof[1]) 
+    pd.pdv(weight_one_m_spital * price_metal * 1.1 * koof[0]),
+    pd.pdv(weight_one_m_spital * price_metal * 1.1 * koof[1]) 
   ];
 }
 
-const result = calk_sp_sh(75, 25, 75, 3);
+const result = calk_sp_sh(75, 27, 75, 3);
 console.log(result); // This will print the result to the console
   
