@@ -102,6 +102,8 @@ $(document).ready(function(){
   
   function filterByDd(dd) {//фільтрація
     let a = JSON.parse(localStorage.getItem('sclad_sp_json')) || [];
+    customSort(a);
+    console.log(a);
     
     if (dd === "") {
       return a.slice(1);
@@ -145,8 +147,18 @@ $(document).ready(function(){
   }
       
 
-
-  // ***********************
+function customSort(arr) {
+    arr.sort((a, b) => {
+        if (a.dd !== b.dd) {
+            return a.dd - b.dd;
+        } else if (a.d !== b.d) {
+            return a.d - b.d;
+        } else {
+            return a.p - b.p;
+        }
+    });
+    return arr;
+}
 
   function displayContent() {
     $(".product-container").empty();
