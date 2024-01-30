@@ -26,7 +26,7 @@
         <a class="nav-link" href="https://zavodelevator.github.io/calc_sh_t2.html">Шнековий транспортер<span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link" href="https://zavodelevator.github.io/sclad_sp2.html">Цільнокатана спірал</a>
+        <a class="nav-link" href="https://zavodelevator.github.io/sclad_sp2.html">Цільнокатана спіраль</a>
       </li>
 
     </ul>
@@ -39,32 +39,21 @@
       <input type="text" class="form-control" id="dd" placeholder="Введіть параметр">
     </div>
 
-    <div style="width: 10px; background-color: #f0f0f0; height: 50px;"></div>
+    <div style="width: 10px; height: 50px;"></div>
 
 
     <div class="btn-group btn-group-toggle" data-toggle="buttons">
       <label class="btn btn-outline-primary active">
-        <input type="radio" name="options" id="option1" value="block" checked> block
+        <input type="radio" name="options" id="option1" value="block" checked>table
       </label>
       <label class="btn btn-outline-primary">
-        <input type="radio" name="options" id="option2" value="table"> table
-      </label>
-    </div>
-    
-    <div style="width: 10px; background-color: #f0f0f0; height: 50px;"></div>
-    
-    <div class="btn-group btn-group-toggle" data-toggle="buttons" style="display: none;">
-      <label class="btn btn-outline-primary active">
-        <input type="radio" name="options" id="option3" value="of" checked> of
-      </label>
-      <label class="btn btn-outline-primary">
-        <input type="radio" name="options" id="option4" value="Manager"> Manager
+        <input type="radio" name="options" id="option2" value="table">block
       </label>
     </div>
     
     
 
-    <div style="width: 15px; background-color: #f0f0f0; height: 50px;"></div>
+    <div style="width: 15px; height: 50px;"></div>
     
 
     <button type="button" class="btn btn-info" onclick="displayContent()">Фільтрувати</button>
@@ -99,14 +88,61 @@ $(document).ready(function(){
     });
   
   });
+
+  function filterAndMapArray(inputArray) {//видалення та сумування дублікатів
+    // Сортуємо масив за параметром "dd"
+    inputArray.sort((a, b) => a.dd - b.dd);
+    
+    // Створюємо новий масив для результатів
+    let resultArray = [];
+    
+    // Обхід по вхідному масиву
+    for (let i = 0; i < inputArray.length; i++) {
+        let currentElement = inputArray[i];
+        let found = false;
+        
+        // Пошук елемента в результативному масиві
+        for (let j = 0; j < resultArray.length; j++) {
+            let resultElement = resultArray[j];
+            
+            // Перевірка на співпадіння параметрів
+            if (currentElement.dd === resultElement.dd &&
+                currentElement.d === resultElement.d &&
+                currentElement.p === resultElement.p &&
+                currentElement.s === resultElement.s &&
+                currentElement.l_r === resultElement.l_r) {
+                
+                // Якщо знайдено співпадіння, додаємо "saldo_m" та виходимо з циклу
+                resultElement.saldo_m = parseInt(resultElement.saldo_m) + parseInt(currentElement.saldo_m);
+                found = true;
+                break;
+            }
+        }
+        
+        // Якщо співпадіння не знайдено, додаємо елемент в результативний масив
+        if (!found) {
+            resultArray.push({
+                dd: currentElement.dd,
+                d: currentElement.d,
+                p: currentElement.p,
+                s: currentElement.s,
+                saldo_m: currentElement.saldo_m,
+                l_r: currentElement.l_r
+            });
+        }
+    }
+    
+    return resultArray;
+}
+
   
   function filterByDd(dd) {//фільтрація
     let a = JSON.parse(localStorage.getItem('sclad_sp_json')) || [];
-    customSort(a);
-    console.log(a);
+    let b = customSort(a);
+    let c = filterAndMapArray(b);
     
     if (dd === "") {
-      return a.slice(1);
+      return c.slice(1);
     }
 
     if (dd[0] === "*" && dd.includes("-")) {
@@ -116,7 +152,7 @@ $(document).ready(function(){
       
       for (let i = range_arrey[0]; i <= range_arrey[1]; i++) {
         console.log("a")
-        let res_fil = a.filter((item) => item.d == i);
+        let res_fil = c.filter((item) => item.d == i);
         tamp = tamp.concat(res_fil);
       }
       return tamp;
@@ -124,7 +160,7 @@ $(document).ready(function(){
     
     if (dd[0] === "*") {
       let ddd = dd.slice(1);
-      let res_fil = a.filter((item) => item.d == ddd);       
+      let res_fil = c.filter((item) => item.d == ddd);       
       return res_fil;
     }
   
@@ -133,13 +169,13 @@ $(document).ready(function(){
       let range_arrey = dd.split("-").map(Number);
         
       for (let i = range_arrey[0]; i <= range_arrey[1]; i++) {
-        let res_fil = a.filter((item) => item.dd == i);
+        let res_fil = c.filter((item) => item.dd == i);
         tamp = tamp.concat(res_fil);
       }
       return tamp;
     }
   
-    return a.filter((item) => item.dd === dd);
+    return c.filter((item) => item.dd === dd);
   }
   
   function roundToDecimal(number) {
@@ -167,16 +203,13 @@ function customSort(arr) {
     const productContainer = document.querySelector('.product-container');
     const option1 = document.getElementById('option1');
 
-    if (option1.checked) {
+    if (!option1.checked) {
         result.forEach((item) => {
             const productBlock = document.createElement('div');
             productBlock.classList.add('product-block');
             productBlock.innerHTML =
                 `<h4>${item.dd}/${item.d}/${item.p}/${item.l_r === "Права" ? "R" : "L"} S-${item.s}мм.</h4>
-                <p>L-${item.l}м.</p>
-                <p>${item.saldo_prc}шт.</p>
                 <p>${roundToDecimal(item.saldo_m)}.м</p>
-                <p>${item.sclad}*${item.stilaj}*${item.place_on_sclad}</p>
                 <p>Вміст</p>
                 <p>Вміст</p>`;
             productContainer.appendChild(productBlock);
@@ -190,10 +223,7 @@ function customSort(arr) {
                     <thead>
                         <tr>
                             <th>Парам</th>
-                            <th>L(м.)</th>
-                            <th>ШТ</th>
                             <th>Залиш</th>
-                            <th>Склад</th>
                             <th>Роздр</th>
                             <th>Опт</th>
                         </tr>
@@ -213,17 +243,9 @@ function customSort(arr) {
                     ${item.dd}/${item.d}/${item.p}/${item.l_r === "Права" ? "R" : "L"} S-${item.s}мм.
                 </td>
                 <td>
-                    L-${item.l}м.
-                </td>
-                <td>
-                    ${item.saldo_prc}шт.
-                </td>
-                <td>
                     ${roundToDecimal(item.saldo_m)}.м
                 </td>
-                <td>
-                    ${item.sclad}*${item.stilaj}*${item.place_on_sclad}
-                </td>
+
                 <td>Вміст</td>
                 <td>Вміст</td>`;
             resultDiv.appendChild(itemRow);
