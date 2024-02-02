@@ -34,31 +34,85 @@
 </nav>
 
 <div class="container">
-  <form class="form-inline">
-    <div class="form-group mr-2">
-      <input type="text" class="form-control" id="dd" placeholder="Введіть параметр">
-    </div>
 
-    <div style="width: 10px; height: 50px;"></div>
+  <div class="question_block">
 
+    <form class="form-inline">
+      <div class="form-group mr-2">
+        <input type="text" class="form-control" id="dd" placeholder="Введіть параметр">
+      </div>
 
-    <div class="btn-group btn-group-toggle" data-toggle="buttons">
-      <label class="btn btn-outline-primary active">
-        <input type="radio" name="options" id="option1" value="block" checked>table
-      </label>
-      <label class="btn btn-outline-primary">
-        <input type="radio" name="options" id="option2" value="table">block
-      </label>
-    </div>
-    
-    
+      <div style="width: 10px; height: 50px;"></div>
 
-    <div style="width: 15px; height: 50px;"></div>
-    
+      <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-outline-primary active">
+          <input type="radio" name="options1" id="option1" value="block" checked>table
+        </label>
+        <label class="btn btn-outline-primary">
+          <input type="radio" name="options2" id="option2" value="table">block
+        </label>
+      </div>
+      
+      <div style="width: 15px; height: 50px;"></div>
+       
+      <button type="button" class="btn btn-info" onclick="displayContent()">Фільтрувати</button>
+      
+    </form>
 
-    <button type="button" class="btn btn-info" onclick="displayContent()">Фільтрувати</button>
+    <br>
+    <hr>
+<!-- 
+    <form class="form-inline">
+      <div class="form-group mr-2">
+        <input type="text" class="form-control" id="dd2" placeholder="D">
+      </div>
 
-  </form>
+      <div style="width: 10px; height: 50px;"></div>
+
+      <div class="form-group mr-2">
+        <input type="text" class="form-control" id="d" placeholder="d">
+      </div>
+
+      <div style="width: 10px; height: 50px;"></div>
+
+      <div class="form-group mr-2">
+        <input type="text" class="form-control" id="p" placeholder="p">
+      </div>
+
+      <div style="width: 10px; height: 50px;"></div>
+
+      <div class="form-group mr-2">
+        <input type="text" class="form-control" id="s" placeholder="S">
+      </div>
+
+      <div style="width: 10px; height: 50px;"></div>
+
+      <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-outline-primary active">
+          <input type="radio" name="options3" id="option3" value="block" checked>Ремонт Шнека
+        </label>
+        <label class="btn btn-outline-primary">
+          <input type="radio" name="options4" id="option4" value="table">Спіраль та сегменти
+        </label>  
+      </div>
+  
+
+      <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-outline-primary active">
+          <input type="radio" name="options1" id="option5" value="block" checked>Сегмент
+        </label>
+        <label class="btn btn-outline-primary">
+          <input type="radio" name="options2" id="option6" value="table">Спіраль
+        </label>
+      </div>
+      
+      <div style="width: 15px; height: 50px;"></div>
+       
+      <button type="button" class="btn btn-info" onclick="">Розрахувати</button>
+      
+    </form> -->
+
+  </div>
 
   <div class="product-container">
                     
@@ -151,7 +205,7 @@ $(document).ready(function(){
       let range_arrey = ddd.split("-").map(Number);
       
       for (let i = range_arrey[0]; i <= range_arrey[1]; i++) {
-        console.log("a")
+        
         let res_fil = c.filter((item) => item.d == i);
         tamp = tamp.concat(res_fil);
       }
@@ -193,6 +247,7 @@ function customSort(arr) {
             return a.p - b.p;
         }
     });
+    
     return arr;
 }
 
@@ -205,62 +260,58 @@ function displayContent() {
 
     // Define spiral_calculation function before it's used
     function spiral_calculation(data) {
-           
-      let length_inner_line = function(sp_d, sp_p) { 
+    let length_inner_line = function(sp_d, sp_p) { 
         return Math.sqrt(Math.pow(Math.PI * sp_d, 2) + Math.pow(sp_p, 2));
-      };
-      
-      let hight_shtrips = function(sp_dd, sp_d) {
+    };
+    
+    let hight_shtrips = function(sp_dd, sp_d) {
         return (sp_dd - sp_d) / 2;
-      };
-      
-      let count_segment_on_m = function(sp_p) {
-          return 1000 / sp_p;
-      };
-      
-      let leangrth_shtrp_on_m = function(length_inner_line, count_segment_on_m) {
-          return length_inner_line * count_segment_on_m * 1.3;
-      };
-      
-      let mass_m_spirall = function(sp_s, hight_shtrips, leangrth_shtrp_on_m ) {
-          return (sp_s * hight_shtrips * leangrth_shtrp_on_m  * 0.00786) / 1000;
-      };
-      
-      let price_rozdr = function(mass_m_spirall) {
-          return Math.round((mass_m_spirall * 1.1 * 55 * 6 / 3)) / 3;
-      };
-      
-      let price_opt = function(mass_m_spirall) {
-          return Math.round((mass_m_spirall * 1.1 * 55 * 5 / 3)) / 3;
-      };
+    };
+    
+    let count_segment_on_m = function(sp_p) {
+        return 1000 / sp_p;
+    };
+    
+    let leangrth_shtrp_on_m = function(length_inner_line, count_segment_on_m) {
+        return length_inner_line * count_segment_on_m * 1.3;
+    };
+    
+    let mass_m_spirall = function(sp_s, hight_shtrips, leangrth_shtrp_on_m ) {
+        return (sp_s * hight_shtrips * leangrth_shtrp_on_m  * 0.00786) / 1000;
+    };
+    
+    let price_rozdr = function(mass_m_spirall) {
+        return Math.round((mass_m_spirall * 1.1 * 55 * 6) / 3) * 3;
+    };
+    
+    let price_opt = function(mass_m_spirall) {
+        return Math.round((mass_m_spirall * 1.1 * 55 * 5) / 3) * 3;
+    };
 
-      let resultArray = []; // Corrected typo
+    let resultArray = []; // Corrected typo
 
-      data.forEach((item) => {
-          let sp_dd = item.dd;  //F12
-          let sp_d = item.d;   //G12
-          let sp_p = item.p;   //H12
-          let sp_s = item.s;   //I12
-          
-          console.log(`dd ${sp_dd}`);
-          console.log(`d ${sp_d}`);
-          console.log(`p ${sp_p}`);
-          console.log(`s ${sp_s}`);
-          
-          resultArray.push( {
-
-          length_inner_line: length_inner_line(sp_d, sp_p),
-          hight_shtrips: hight_shtrips(sp_dd, sp_d),
-          count_segment_on_m: count_segment_on_m(sp_p),
-          leangrth_shtrp_on_m: leangrth_shtrp_on_m(length_inner_line(sp_d, sp_p), count_segment_on_m(sp_p)),
-          mass_m_spirall: mass_m_spirall(sp_s, hight_shtrips(sp_dd, sp_d), leangrth_shtrp_on_m(length_inner_line(sp_d, sp_p), count_segment_on_m(sp_p))),
-          price_rozdr: price_rozdr(mass_m_spirall(sp_s, hight_shtrips(sp_dd, sp_d), leangrth_shtrp_on_m(length_inner_line(sp_d, sp_p), count_segment_on_m(sp_p)))),
-          price_opt: price_opt(mass_m_spirall(sp_s, hight_shtrips(sp_dd, sp_d), leangrth_shtrp_on_m(length_inner_line(sp_d, sp_p), count_segment_on_m(sp_p))))
+    data.forEach((item, index) => {
+        let sp_dd = item.dd;  //F12
+        let sp_d = item.d;   //G12
+        let sp_p = item.p;   //H12
+        let sp_s = item.s;   //I12
+        
+        resultArray.push( {
+            length_inner_line: length_inner_line(sp_d, sp_p),
+            hight_shtrips: hight_shtrips(sp_dd, sp_d),
+            count_segment_on_m: count_segment_on_m(sp_p),
+            leangrth_shtrp_on_m: leangrth_shtrp_on_m(length_inner_line(sp_d, sp_p), count_segment_on_m(sp_p)),
+            mass_m_spirall: mass_m_spirall(sp_s, hight_shtrips(sp_dd, sp_d), leangrth_shtrp_on_m(length_inner_line(sp_d, sp_p), count_segment_on_m(sp_p))),
+            price_rozdr: price_rozdr(mass_m_spirall(sp_s, hight_shtrips(sp_dd, sp_d), leangrth_shtrp_on_m(length_inner_line(sp_d, sp_p), count_segment_on_m(sp_p)))),
+            price_opt: price_opt(mass_m_spirall(sp_s, hight_shtrips(sp_dd, sp_d), leangrth_shtrp_on_m(length_inner_line(sp_d, sp_p), count_segment_on_m(sp_p))))
         });
-      });
+        
+    });
 
-      return resultArray;
-    }
+  
+    return resultArray; // Return the resultArray
+}
+
 
     let spiral_paramm = spiral_calculation(result);
 
@@ -314,12 +365,6 @@ function displayContent() {
     }
 }
 
-
-
-
-
-
-///////////////// other scripts
 
 </script>
 </body>
