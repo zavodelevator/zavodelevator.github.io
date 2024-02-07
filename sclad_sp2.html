@@ -60,32 +60,59 @@
     </form>
 
     <br>
-    <hr>
-<!-- 
+  
     <form class="form-inline">
-      <div class="form-group mr-2">
-        <input type="text" class="form-control" id="dd2" placeholder="D">
+
+      <div class="row">  
+        <div class="form-group mr-3">
+          <input type="text" class="form-control" id="dd2" placeholder="D">
+        </div>
+
+        <div style="width: 10px; height: 50px;"></div>
+
+        <div class="form-group mr-3">
+          <input type="text" class="form-control" id="d" placeholder="d">
+        </div>
+
+        <div style="width: 10px; height: 50px;"></div>
+
+        <div class="form-group mr-3">
+          <input type="text" class="form-control" id="p" placeholder="p">
+        </div>
+
+        <div style="width: 10px; height: 50px;"></div>
+
+        <div class="form-group mr-3">
+          <input type="text" class="form-control" id="s" placeholder="S">
+        </div>
       </div>
+      
+      <div class="row">  
+        <div class="form-group mr-3">
+          <input type="text" class="form-control" id="dd2" placeholder="D">
+        </div>
 
-      <div style="width: 10px; height: 50px;"></div>
+        <div style="width: 10px; height: 50px;"></div>
 
-      <div class="form-group mr-2">
-        <input type="text" class="form-control" id="d" placeholder="d">
+        <div class="form-group mr-3">
+          <input type="text" class="form-control" id="d" placeholder="d">
+        </div>
+
+        <div style="width: 10px; height: 50px;"></div>
+
+        <div class="form-group mr-3">
+          <input type="text" class="form-control" id="p" placeholder="p">
+        </div>
+
+        <div style="width: 10px; height: 50px;"></div>
+
+        <div class="form-group mr-3">
+          <input type="text" class="form-control" id="s" placeholder="S">
+        </div>
       </div>
+  
 
-      <div style="width: 10px; height: 50px;"></div>
 
-      <div class="form-group mr-2">
-        <input type="text" class="form-control" id="p" placeholder="p">
-      </div>
-
-      <div style="width: 10px; height: 50px;"></div>
-
-      <div class="form-group mr-2">
-        <input type="text" class="form-control" id="s" placeholder="S">
-      </div>
-
-      <div style="width: 10px; height: 50px;"></div>
 
       <div class="btn-group btn-group-toggle" data-toggle="buttons">
         <label class="btn btn-outline-primary active">
@@ -96,6 +123,7 @@
         </label>  
       </div>
   
+      <div style="width: 15px; height: 50px;"></div>
 
       <div class="btn-group btn-group-toggle" data-toggle="buttons">
         <label class="btn btn-outline-primary active">
@@ -110,7 +138,7 @@
        
       <button type="button" class="btn btn-info" onclick="">Розрахувати</button>
       
-    </form> -->
+    </form>
 
   </div>
 
@@ -120,252 +148,40 @@
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<!-- C:\Users\MIsha\Documents\GitHub\zavodelevator.github.io\src_sklad_sp\js\filterByDd.js -->
 <script>
-$(document).ready(function(){
+  let url ="https://script.google.com/macros/s/AKfycby1pO_94xtHo1m6LhtMEB8RlsBt6XkIq3FNSgTktGHn0xHmTrPjuJiNLy0CminF7t-YtQ/exec";
+  let table_name ="sclad_sp_json";
+</script>
+<script src="src_sklad_sp/js/get_g_table.js"></script>
+<script src="src_sklad_sp/js/filterByDd.js"></script>
+<script src="src_sklad_sp/js/delate_dublicate.js"></script>
+<script src="src_sklad_sp/js/displayContent.js"></script>
 
-  $(document).ready(function() {//перемикання кнопок
-    $(".btn-group-toggle label").click(function() {
-      $(this).siblings().removeClass('active');
-      $(this).addClass('active');
-    });
-  });
-          
-    $.ajax({
-      url: "https://script.google.com/macros/s/AKfycby1pO_94xtHo1m6LhtMEB8RlsBt6XkIq3FNSgTktGHn0xHmTrPjuJiNLy0CminF7t-YtQ/exec",
-      dataType: "json",
-      success: function(data) {
-        localStorage.setItem('sclad_sp_json', JSON.stringify(data)); 
-      },
-      error: function(xhr, status, error) {            
-        console.error("Error fetching data:", error);
-      }
-    });
-  
-  });
+<script>
 
-  function filterAndMapArray(inputArray) {//видалення та сумування дублікатів
-    // Сортуємо масив за параметром "dd"
-    inputArray.sort((a, b) => a.dd - b.dd);
-    
-    // Створюємо новий масив для результатів
-    let resultArray = [];
-    
-    // Обхід по вхідному масиву
-    for (let i = 0; i < inputArray.length; i++) {
-        let currentElement = inputArray[i];
-        let found = false;
-        
-        // Пошук елемента в результативному масиві
-        for (let j = 0; j < resultArray.length; j++) {
-            let resultElement = resultArray[j];
-            
-            // Перевірка на співпадіння параметрів
-            if (currentElement.dd === resultElement.dd &&
-                currentElement.d === resultElement.d &&
-                currentElement.p === resultElement.p &&
-                currentElement.s === resultElement.s &&
-                currentElement.l_r === resultElement.l_r) {
-                
-                // Якщо знайдено співпадіння, додаємо "saldo_m" та виходимо з циклу
-                resultElement.saldo_m = parseInt(resultElement.saldo_m) + parseInt(currentElement.saldo_m);
-                found = true;
-                break;
-            }
-        }
-        
-        // Якщо співпадіння не знайдено, додаємо елемент в результативний масив
-        if (!found) {
-            resultArray.push({
-                dd: currentElement.dd,
-                d: currentElement.d,
-                p: currentElement.p,
-                s: currentElement.s,
-                saldo_m: currentElement.saldo_m,
-                l_r: currentElement.l_r
-            });
-        }
-    }
-    
-    return resultArray;
-}
 
-  
-  function filterByDd(dd) {//фільтрація
-    let a = JSON.parse(localStorage.getItem('sclad_sp_json')) || [];
-    let b = customSort(a);
-    let c = filterAndMapArray(b);
-    
-    if (dd === "") {
-      return c.slice(1);
-    }
-
-    if (dd[0] === "*" && dd.includes("-")) {
-      let ddd = dd.slice(1);
-      let tamp = [];
-      let range_arrey = ddd.split("-").map(Number);
-      
-      for (let i = range_arrey[0]; i <= range_arrey[1]; i++) {
-        
-        let res_fil = c.filter((item) => item.d == i);
-        tamp = tamp.concat(res_fil);
-      }
-      return tamp;
-    }
-    
-    if (dd[0] === "*") {
-      let ddd = dd.slice(1);
-      let res_fil = c.filter((item) => item.d == ddd);       
-      return res_fil;
-    }
-  
-    if (dd.includes("-")) {
-      let tamp = [];
-      let range_arrey = dd.split("-").map(Number);
-        
-      for (let i = range_arrey[0]; i <= range_arrey[1]; i++) {
-        let res_fil = c.filter((item) => item.dd == i);
-        tamp = tamp.concat(res_fil);
-      }
-      return tamp;
-    }
-  
-    return c.filter((item) => item.dd === dd);
-  }
-  
   function roundToDecimal(number) {
     return Math.round(number * 10) / 10;
   }
       
 
-function customSort(arr) {
-    arr.sort((a, b) => {
-        if (a.dd !== b.dd) {
-            return a.dd - b.dd;
-        } else if (a.d !== b.d) {
-            return a.d - b.d;
-        } else {
-            return a.p - b.p;
-        }
-    });
-    
-    return arr;
-}
-
-function displayContent() {
-    $(".product-container").empty();
-    const dd = document.getElementById('dd').value;
-    const result = filterByDd(dd);
-    const productContainer = document.querySelector('.product-container');
-    const option1 = document.getElementById('option1');
-
-    // Define spiral_calculation function before it's used
-    function spiral_calculation(data) {
-    let length_inner_line = function(sp_d, sp_p) { 
-        return Math.sqrt(Math.pow(Math.PI * sp_d, 2) + Math.pow(sp_p, 2));
-    };
-    
-    let hight_shtrips = function(sp_dd, sp_d) {
-        return (sp_dd - sp_d) / 2;
-    };
-    
-    let count_segment_on_m = function(sp_p) {
-        return 1000 / sp_p;
-    };
-    
-    let leangrth_shtrp_on_m = function(length_inner_line, count_segment_on_m) {
-        return length_inner_line * count_segment_on_m * 1.3;
-    };
-    
-    let mass_m_spirall = function(sp_s, hight_shtrips, leangrth_shtrp_on_m ) {
-        return (sp_s * hight_shtrips * leangrth_shtrp_on_m  * 0.00786) / 1000;
-    };
-    
-    let price_rozdr = function(mass_m_spirall) {
-        return Math.round((mass_m_spirall * 1.1 * 55 * 6) / 3) * 3;
-    };
-    
-    let price_opt = function(mass_m_spirall) {
-        return Math.round((mass_m_spirall * 1.1 * 55 * 5) / 3) * 3;
-    };
-
-    let resultArray = []; // Corrected typo
-
-    data.forEach((item, index) => {
-        let sp_dd = item.dd;  //F12
-        let sp_d = item.d;   //G12
-        let sp_p = item.p;   //H12
-        let sp_s = item.s;   //I12
-        
-        resultArray.push( {
-            length_inner_line: length_inner_line(sp_d, sp_p),
-            hight_shtrips: hight_shtrips(sp_dd, sp_d),
-            count_segment_on_m: count_segment_on_m(sp_p),
-            leangrth_shtrp_on_m: leangrth_shtrp_on_m(length_inner_line(sp_d, sp_p), count_segment_on_m(sp_p)),
-            mass_m_spirall: mass_m_spirall(sp_s, hight_shtrips(sp_dd, sp_d), leangrth_shtrp_on_m(length_inner_line(sp_d, sp_p), count_segment_on_m(sp_p))),
-            price_rozdr: price_rozdr(mass_m_spirall(sp_s, hight_shtrips(sp_dd, sp_d), leangrth_shtrp_on_m(length_inner_line(sp_d, sp_p), count_segment_on_m(sp_p)))),
-            price_opt: price_opt(mass_m_spirall(sp_s, hight_shtrips(sp_dd, sp_d), leangrth_shtrp_on_m(length_inner_line(sp_d, sp_p), count_segment_on_m(sp_p))))
-        });
-        
-    });
-
-  
-    return resultArray; // Return the resultArray
-}
-
-
-    let spiral_paramm = spiral_calculation(result);
-
-    if (!option1.checked) {
-        result.forEach((item, index) => {
-            const productBlock = document.createElement('div');
-            productBlock.classList.add('product-block');
-            productBlock.innerHTML =
-                `<h4>${item.dd}/${item.d}/${item.p}/${item.l_r === "Права" ? "R" : "L"} S-${item.s}мм.</h4>
-                <p>${roundToDecimal(item.saldo_m)}.м</p>
-                <p>${spiral_paramm[index].price_rozdr}</p>
-                <p>${spiral_paramm[index].price_opt}</p>`;
-            productContainer.appendChild(productBlock);
-        });
-    } else {
-        const productBlock = document.createElement('div');
-        productBlock.classList.add('product-block');
-        productBlock.innerHTML =
-            `<div class="table-responsive">
-                <table class="table" id="table_resault">
-                    <thead>
-                        <tr>
-                            <th>Парам</th>
-                            <th>Залиш</th>
-                            <th>Роздр</th>
-                            <th>Опт</th>
-                        </tr>
-                    </thead>
-                    <tbody class="table_resault">
-                        
-                    </tbody>
-                </table>
-            </div>`;
-        productContainer.appendChild(productBlock);
-        const resultDiv = productBlock.querySelector('.table_resault');
-
-        result.forEach((item, index) => { // Added index parameter
-            const itemRow = document.createElement('tr');
-            itemRow.innerHTML =
-                `<td>
-                    ${item.dd}/${item.d}/${item.p}/${item.l_r === "Права" ? "R" : "L"} S-${item.s}мм.
-                </td>
-                <td>
-                    ${roundToDecimal(item.saldo_m)}.м
-                </td>
-
-                <td>${spiral_paramm[index].price_rozdr}</td>
-                <td>${spiral_paramm[index].price_opt}</td>`;
-            resultDiv.appendChild(itemRow);
-        });
-    }
-}
-
+  function customSort(arr) {
+      arr.sort((a, b) => {
+          if (a.dd !== b.dd) {
+              return a.dd - b.dd;
+          } else if (a.d !== b.d) {
+              return a.d - b.d;
+          } else {
+              return a.p - b.p;
+          }
+      });
+      
+      return arr;
+  }
 
 </script>
+
 </body>
 </html>
