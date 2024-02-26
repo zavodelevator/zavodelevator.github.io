@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Спіраль цільнокатана</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <style>
+    .product-block {
+      border: 1px solid #000;
+      padding: 10px;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<!-- C:\Users\MIsha\Documents\GitHub\zavodelevator.github.io\src_sklad_sp\js\filterByDd.js -->
+<script>
+  let url ="https://script.google.com/macros/s/AKfycbwkXbdDC1JJ22ZWlsVEVOtjSk37LvcaLwAIpQCCTxOKRMyCEAePTohnOLPlKtirKZ5-/exec";
+  let table_name ="kalk_nkz";
+</script>
+<script src="src_sklad_sp/js/get_g_table.js"></script>
+<script src="src_sklad_sp/js/filterByDd.js"></script>
+<script src="src_sklad_sp/js/delate_dublicate.js"></script>
+<script src="src_sklad_sp/js/displayContent.js"></script>
+
+<script>
+
+$(document).ready(function(){
+
+
+        
+  $.ajax({
+    url: url,
+    dataType: "json",
+    success: function(data) {
+      localStorage.setItem(table_name, JSON.stringify(data)); 
+    },
+    error: function(xhr, status, error) {            
+      console.error("Error fetching data:", error);
+    }
+  });
+
+});
+
+let aaaa = JSON.parse(localStorage.getItem(table_name)) || [];
+console.log(aaaa);
+
+</script>
+
+</body>
+</html>
