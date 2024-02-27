@@ -15,11 +15,56 @@
 </head>
 
 
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+<a class="navbar-brand" href="https://agrohelix.com.ua/">Agrohelix</a>
+<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+  <span class="navbar-toggler-icon"></span>
+</button>
+<div class="collapse navbar-collapse" id="navbarNav">
+  <ul class="navbar-nav">
+    <li class="nav-item active">
+      <a class="nav-link" href="https://zavodelevator.github.io/calc_sh_t2.html">Шнековий транспортер<span class="sr-only">(current)</span></a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="https://zavodelevator.github.io/sclad_sp2.html">Цільнокатана спіраль</a>
+    </li>
+
+  </ul>
+</div>
+</nav>
+    
+    <div class="container">
+  
+      <div class="card">
+        <div class="card-header">
+              Норія
+        </div>
+        <div class="card-body">
+          <div class="row">
+
+            <div class="col-sm">
+              <div class="card mb-3">
+                <img class="card-img-top" src="/img/nkz/Screenshot_1.png" alt="Card image cap">
+            
+              </div>
+            </div>
+              <div class="form-group mr-2">
+                <input type="text" class="form-control" id="S_pіpe" placeholder="S труби">
+              </div>
+            <div class="col-sm">
+            
+            </div>            
+
+          </div>    
+        </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <!-- C:\Users\MIsha\Documents\GitHub\zavodelevator.github.io\src_sklad_sp\js\filterByDd.js -->
 <script>
-  let url ="https://script.google.com/macros/s/AKfycbwkXbdDC1JJ22ZWlsVEVOtjSk37LvcaLwAIpQCCTxOKRMyCEAePTohnOLPlKtirKZ5-/exec";
+  let url ="https://script.google.com/macros/s/AKfycbwojMMSGKFdfMJptHyk80bnhPYtNpkWE-XylaaaF5hzORoBx49Fn55P7kou0MtNo16x/exec";
   let table_name ="kalk_nkz";
 </script>
 <script src="src_sklad_sp/js/get_g_table.js"></script>
@@ -30,9 +75,7 @@
 <script>
 
 $(document).ready(function(){
-
-
-        
+       
   $.ajax({
     url: url,
     dataType: "json",
