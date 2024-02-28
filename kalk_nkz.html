@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <title>Спіраль цільнокатана</title>
+  <title>Норія</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -25,11 +25,14 @@
 </button>
 <div class="collapse navbar-collapse" id="navbarNav">
   <ul class="navbar-nav">
-    <li class="nav-item active">
-      <a class="nav-link" href="https://zavodelevator.github.io/calc_sh_t2.html">Шнековий транспортер<span class="sr-only">(current)</span></a>
+    <li class="nav-item">
+      <a class="nav-link" href="https://zavodelevator.github.io/calc_sh_t2.html">Шнековий транспортер</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="https://zavodelevator.github.io/sclad_sp2.html">Цільнокатана спіраль</a>
+    </li>
+    <li class="nav-item active">
+      <a class="nav-link" href="https://zavodelevator.github.io/kalk_nkz.html">Норія</a>
     </li>
 
   </ul>
@@ -46,20 +49,60 @@
           <div class="row">
 
             <div class="col-sm">
+            
               <div class="card mb-3">
                 <img class="card-img-top" src="/img/nkz/Screenshot_1.png" alt="Card image cap">
             
               </div>
-            </div>
-              <div class="form-group mr-2">
-                <input type="text" class="form-control" id="S_pіpe" placeholder="S труби">
-              </div>
-            <div class="col-sm">
             
-            </div>            
+            </div>
+  
+            <div class="col-sm">
+          
+              <div class="row">
+              
+                  <label for="params_trans">Noria</label>
+                  <div style="width: 10px; height: 50px;"></div>
+                  <div class="mr-2">
+                    <select class="form-control" id="nkz_type">
+                      <option value="prod-1-1-1">НК 5</option> 
+                      <option value="prod-1-2-1">НК 10</option> 
+                      <option value="prod-1-2-2">НК 10 ланцюгова</option> 
+                    </select>
+                  </div>
 
+
+            
+                  <label for="S_pіpe">Висота норії</label>
+                  <div style="width: 10px; height: 50px;"></div>
+                  <div class="form-group mr-2">
+                    <select class="form-control" id="nkz_type">
+                      <option value="prod-1-1-1">5</option> 
+                      <option value="prod-1-2-1">6</option> 
+                      <option value="prod-1-2-2">7</option> 
+                    </select>
+                  </div>
+                              
+              </div>
+
+              <div class="row">
+              
+                <div class="form-group mr-2">
+                  <input type="text" class="form-control" id="S_pіpe" placeholder="S труби">
+                </div>
+          
+                <div class="form-group mr-2">
+                  <input type="text" class="form-control" id="S_pіpe" placeholder="S труби">
+                </div>
+                            
+              </div>
+
+            </div>            
+            
           </div>    
         </div>
+      </div>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <!-- C:\Users\MIsha\Documents\GitHub\zavodelevator.github.io\src_sklad_sp\js\filterByDd.js -->
@@ -91,6 +134,8 @@ $(document).ready(function(){
 
 let aaaa = JSON.parse(localStorage.getItem(table_name)) || [];
 console.log(aaaa);
+
+
 
 </script>
 
