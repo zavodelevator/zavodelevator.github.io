@@ -63,23 +63,19 @@
               
                   <label for="params_trans">Noria</label>
                   <div style="width: 10px; height: 50px;"></div>
-                  <div class="mr-2">
+                  <div class="mr-2" id="app-4">
                     <select class="form-control" id="nkz_type">
-                      <option value="prod-1-1-1">НК 5</option> 
-                      <option value="prod-1-2-1">НК 10</option> 
-                      <option value="prod-1-2-2">НК 10 ланцюгова</option> 
+                      <option v-for="todo in todos" v-bind:href="todo.full_n">
+                        {{ todo.full_name }}
+                      </option>                       
                     </select>
                   </div>
-
-
             
                   <label for="S_pіpe">Висота норії</label>
                   <div style="width: 10px; height: 50px;"></div>
                   <div class="form-group mr-2">
                     <select class="form-control" id="nkz_type">
-                      <option value="prod-1-1-1">5</option> 
-                      <option value="prod-1-2-1">6</option> 
-                      <option value="prod-1-2-2">7</option> 
+
                     </select>
                   </div>
                               
@@ -107,7 +103,7 @@
 
 <!-- C:\Users\MIsha\Documents\GitHub\zavodelevator.github.io\src_sklad_sp\js\filterByDd.js -->
 <script>
-  let url ="https://script.google.com/macros/s/AKfycbwojMMSGKFdfMJptHyk80bnhPYtNpkWE-XylaaaF5hzORoBx49Fn55P7kou0MtNo16x/exec";
+  let url ="https://script.google.com/macros/s/AKfycbyo4zcWNcLB-y5BhCMT4LK9_lGWy_TLYR9wdtvWdZgt5h0AF7q1j4LlUSUr1DJAR3ln/exec";
   let table_name ="kalk_nkz";
 </script>
 <script src="src_sklad_sp/js/get_g_table.js"></script>
@@ -116,28 +112,38 @@
 <script src="src_sklad_sp/js/displayContent.js"></script>
 
 <script>
+  
+  $(document).ready(function(){
+        
+    $.ajax({
+      url: url,
+      dataType: "json",
+      success: function(data) {
+        localStorage.setItem(table_name, JSON.stringify(data)); 
+      },
+      error: function(xhr, status, error) {            
+        console.error("Error fetching data:", error);
+      }
+    });
 
-$(document).ready(function(){
-       
-  $.ajax({
-    url: url,
-    dataType: "json",
-    success: function(data) {
-      localStorage.setItem(table_name, JSON.stringify(data)); 
-    },
-    error: function(xhr, status, error) {            
-      console.error("Error fetching data:", error);
-    }
   });
 
-});
-
-let aaaa = JSON.parse(localStorage.getItem(table_name)) || [];
-console.log(aaaa);
-
-
-
+  let aaaa = JSON.parse(localStorage.getItem(table_name)) || [];
+  console.log(aaaa);
+  
 </script>
+  
+                    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  
+  
+                    <script>
+                      var app4 = new Vue({
+                        el: '#app-4',
+                        data: {
+                          todos: aaaa.prod
+                        }
+                      })
+                    </script>
 
 </body>
 </html>
