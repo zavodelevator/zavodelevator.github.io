@@ -61,15 +61,13 @@
           
               <div class="row">
               
+                <div id="app-4">
                   <label for="params_trans">Noria</label>
                   <div style="width: 10px; height: 50px;"></div>
-                  <div class="mr-2" id="app-4">
-                    <select class="form-control" id="nkz_type">
-                      <option v-for="todo in todos" v-bind:href="todo.full_n">
-                        {{ todo.full_name }}
-                      </option>                       
-                    </select>
-                  </div>
+                  <select class="form-control" id="nkz_type" @change="nkzSelectChange($event)">
+                    <option v-for="todo in todos" :key="todo.id">{{ todo.full_name }}</option>
+                  </select>
+                </div>
             
                   <label for="S_pіpe">Висота норії</label>
                   <div style="width: 10px; height: 50px;"></div>
@@ -141,6 +139,12 @@
                         el: '#app-4',
                         data: {
                           todos: aaaa.prod
+                        },
+                        methods: {
+                          nkzSelectChange(event) {
+                            let selectedValue = event.target.value;
+                            console.log(selectedValue);
+                          }
                         }
                       })
                     </script>
