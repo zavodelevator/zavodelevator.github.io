@@ -19,25 +19,25 @@
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-<a class="navbar-brand" href="https://agrohelix.com.ua/">Agrohelix</a>
-<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-  <span class="navbar-toggler-icon"></span>
-</button>
-<div class="collapse navbar-collapse" id="navbarNav">
-  <ul class="navbar-nav">
-    <li class="nav-item">
-      <a class="nav-link" href="https://zavodelevator.github.io/calc_sh_t2.html">Шнековий транспортер</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="https://zavodelevator.github.io/sclad_sp2.html">Цільнокатана спіраль</a>
-    </li>
-    <li class="nav-item active">
-      <a class="nav-link" href="https://zavodelevator.github.io/kalk_nkz.html">Норія</a>
-    </li>
+      <a class="navbar-brand" href="https://agrohelix.com.ua/">Agrohelix</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="https://zavodelevator.github.io/calc_sh_t2.html">Шнековий транспортер</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://zavodelevator.github.io/sclad_sp2.html">Цільнокатана спіраль</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="https://zavodelevator.github.io/kalk_nkz.html">Норія</a>
+          </li>
 
-  </ul>
-</div>
-</nav>
+        </ul>
+      </div>
+    </nav>
     
     <div class="container">
   
@@ -59,26 +59,31 @@
   
             <div class="col-sm">
           
-              <div class="row">
-                                                            
-                <div id="app-4">
-                  <label for="params_trans">Noria</label>
-                  <div style="width: 10px; height: 50px;"></div>
-                  <select class="form-control" id="nkz_type" @change="nkzSelectChange($event)">
-                    <option v-for="todo in todos" :key="todo.id">{{ todo.full_name }}</option>
-                  </select>
-                </div>
+              
+              <div id="app-4">
                 
-                <label for="nkz_l">Висота норії</label>
-                <div style="width: 10px; height: 50px;"></div>
-                <div class="form-group mr-2">
-                  <select class="form-control" id="nkz_l">
-                    <option v-for="item in arr" :key="item">{{ item }}</option>
-                  </select>
-                </div>
-                            
-              </div>
+                <div class="row">
+                
+                  <div class="col-sm">
+                    <label for="nkz_type">Noria</label>
+                      <select class="form-control" id="nkz_type" @change="nkzSelectChange($event)">
+                        <option v-for="todo in todos" :key="todo.id">{{ todo.full_name }}</option>
+                      </select>
+                  </div>
 
+                  <div style="width: 10px; height: 30px;"></div>
+                  
+                  <div class="col-sm">
+                    <label for="nkz_l">Висота норії</label>
+                      <select class="form-control" id="nkz_l">
+                        <option></option>
+                      </select>                    
+                  </div>
+                  
+                </div>                
+              
+              </div>  
+            
             </div>            
             
           </div>    
@@ -119,31 +124,39 @@
   
 </script>
   
-                    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
-  
-  
-                    <script>
-                      var app4 = new Vue({
-                        el: '#app-4',
-                        data: {
-                          todos: aaaa.prod, // Убедитесь, что aaaa.prod определено и имеет корректное значение
-                          selectedValue: ""
-                        },
-                        mounted() {
-                          this.selectedValue = this.todos[0].full_name; // Установка начального значения
-                          this.nkzSelectChange({ target: { value: this.selectedValue } }); // Вызов метода с начальным значением
-                        },
-                        methods: {
-                          nkzSelectChange(event) {
-                            this.selectedValue = event.target.value;
-                            console.log(this.selectedValue);
-                          },
-                          nkzLeangth() {
-                            
-                          }
-                        }
-                      })
-                    </script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+
+<script>
+  var app4 = new Vue({
+    el: '#app-4',
+    data: {
+      todos: aaaa.prod, // Убедитесь, что aaaa.prod определено и имеет корректное значение
+      selectedValue: "",
+      index_nkz: ""
+    },
+    mounted() {
+      this.selectedValue = this.todos[0].full_name; // Установка начального значения
+      this.nkzSelectChange({ target: { value: this.selectedValue } }); // Вызов метода с начальным значением
+    },
+    methods: {
+      nkzSelectChange(event) {
+        this.selectedValue = event.target.value;
+        this.nkzLeangth();
+        console.log(this.index_nkz);
+        console.log("333333333333");
+      },
+      nkzLeangth() {
+        for (let i = 0; i < aaaa.prod.length; i++) {
+          const prod = aaaa.prod[i];
+          if (prod.full_name === this.selectedValue) {
+              this.index_nkz = prod.full_n;
+              break;
+          }
+        }
+      }
+    }
+  })
+</script>
 
 </body>
 </html>
