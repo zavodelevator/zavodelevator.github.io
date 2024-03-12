@@ -79,8 +79,16 @@
                         <option></option>
                       </select>                    
                   </div>
+                 
+                </div>
+              
+                <div style="width: 10px; height: 30px;"></div>
                   
-                </div>                
+                <div class="row">
+                                 
+                  <button type="button" class="btn btn-dark" @click="nkzCalck">Розрахувати</button>
+                  
+                </div>    
               
               </div>  
             
@@ -141,11 +149,10 @@
     methods: {
       nkzSelectChange(event) {
         this.selectedValue = event.target.value;
-        this.nkzLeangth();
+        this.nkzIndex();
         console.log(this.index_nkz);
-        console.log("333333333333");
       },
-      nkzLeangth() {
+      nkzIndex() {
         for (let i = 0; i < aaaa.prod.length; i++) {
           const prod = aaaa.prod[i];
           if (prod.full_name === this.selectedValue) {
@@ -153,6 +160,10 @@
               break;
           }
         }
+      },
+      nkzCalck() {
+        // Ваш код для розрахунку
+        console.log(aaaa.noria[0].set_on);
       }
     }
   })
