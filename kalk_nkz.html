@@ -140,7 +140,10 @@
     data: {
       todos: aaaa.prod, // Убедитесь, что aaaa.prod определено и имеет корректное значение
       selectedValue: "",
-      index_nkz: ""
+      index_nkz: "", 
+
+      bashmack: [],
+      golovka: []
     },
     mounted() {
       this.selectedValue = this.todos[0].full_name; // Установка начального значения
@@ -150,8 +153,9 @@
       nkzSelectChange(event) {
         this.selectedValue = event.target.value;
         this.nkzIndex();
-        console.log(this.index_nkz);
+        // console.log(aaaa);
       },
+
       nkzIndex() {
         for (let i = 0; i < aaaa.prod.length; i++) {
           const prod = aaaa.prod[i];
@@ -161,9 +165,23 @@
           }
         }
       },
+
+      filter_parts_nkz(name_parts) {
+        this.bashmack = aaaa.noria.filter(obj =>
+          obj.name_1 === name_parts && obj.set_on.includes(this.index_nkz)
+        );
+
+
+      },
+
       nkzCalck() {
-        // Ваш код для розрахунку
-        console.log(aaaa.noria[0].set_on);
+        // Башмак норії
+        this.filter_parts_nkz("Башмак в зборі");
+        // console.log(this.bashmack[0].full_name)   //приклад звеннення до обєкта
+
+
+
+
       }
     }
   })
