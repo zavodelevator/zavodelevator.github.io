@@ -98,6 +98,7 @@
         </div>
       </div>
 
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <!-- C:\Users\MIsha\Documents\GitHub\zavodelevator.github.io\src_sklad_sp\js\filterByDd.js -->
@@ -105,14 +106,11 @@
   let url ="https://script.google.com/macros/s/AKfycbyo4zcWNcLB-y5BhCMT4LK9_lGWy_TLYR9wdtvWdZgt5h0AF7q1j4LlUSUr1DJAR3ln/exec";
   let table_name ="kalk_nkz";
 </script>
-<script src="src_sklad_sp/js/get_g_table.js"></script>
-<script src="src_sklad_sp/js/filterByDd.js"></script>
-<script src="src_sklad_sp/js/delate_dublicate.js"></script>
-<script src="src_sklad_sp/js/displayContent.js"></script>
+
 
 <script>
   
-  $(document).ready(function(){
+  $(document).ready(function(){//get data from google shirts
         
     $.ajax({
       url: url,
@@ -138,54 +136,92 @@
   var app4 = new Vue({
     el: '#app-4',
     data: {
-      todos: aaaa.prod, // Убедитесь, что aaaa.prod определено и имеет корректное значение
+      todos: [],
       selectedValue: "",
       index_nkz: "", 
 
       bashmack: [],
-      golovka: []
+        // Вал башмака
+        // Корпус башмака
+        // Шибер  прийомного бункера
+        // Прийомний бункер
+        // Корпус-підшипник	UCF
+        
+      golovka: []// ,
+      //   Підредукторна секція
+      //   Вал верхньої головки
+      //   Корпус верхньої головки
+      //   Футування кришки головки
+      //   Корпус-підшипник	UCP
+        
+      // Барабан ланцюговий 
+      // Барабан
+      // Футування барабану
+      // Контерпривід
+      // Рамка шахти 
+      // Шахта оглядова
+      // Шахта пирвідна
+      // Шахта 1м.
+      // Шахта ланцюгова 1м.
+
+      // Срічка конвеєрна
+      // Ланцюг
+      // Ківш
+
+      // Муфта зєднувальна
+      // Обгонна муфта
+      // Датчик сходу стрічки
+      // Датчик обертів
+      // Датчик підпору
+
+      // Двигун
+      // Мотор редуктор
+
     },
     mounted() {
-      this.selectedValue = this.todos[0].full_name; // Установка начального значения
-      this.nkzSelectChange({ target: { value: this.selectedValue } }); // Вызов метода с начальным значением
+      // This assumes table_name is defined elsewhere in your code
+      let aaaa = JSON.parse(localStorage.getItem(table_name)) || [];
+      this.todos = aaaa.prod;
+      if (this.todos.length > 0) {
+        this.selectedValue = this.todos[0].full_name;
+        this.nkzSelectChange({ target: { value: this.selectedValue } });
+      }
     },
     methods: {
-      nkzSelectChange(event) {
-        this.selectedValue = event.target.value;
-        this.nkzIndex();
-        // console.log(aaaa);
-      },
-
-      nkzIndex() {
-        for (let i = 0; i < aaaa.prod.length; i++) {
-          const prod = aaaa.prod[i];
-          if (prod.full_name === this.selectedValue) {
-              this.index_nkz = prod.full_n;
-              break;
-          }
-        }
-      },
-
-      filter_parts_nkz(name_parts) {
-        this.bashmack = aaaa.noria.filter(obj =>
-          obj.name_1 === name_parts && obj.set_on.includes(this.index_nkz)
-        );
-
-
-      },
-
-      nkzCalck() {
-        // Башмак норії
-        this.filter_parts_nkz("Башмак в зборі");
-        // console.log(this.bashmack[0].full_name)   //приклад звеннення до обєкта
-
-
-
-
+  nkzSelectChange(event) {
+    this.selectedValue = event.target.value;
+    this.nkzIndex();
+  },
+  nkzIndex() {
+    for (let i = 0; i < this.todos.length; i++) {
+      const prod = this.todos[i];
+      if (prod.full_name === this.selectedValue) {
+        this.index_nkz = prod.full_n;
+        break;
       }
     }
-  })
-</script>
+  },
+  filter_parts_nkz(name_parts, name_table, name_column) {
+    // console.log("name_parts:", name_parts);
+    // console.log("name_table:", name_table);
+    // console.log("name_column:", name_column);
+    // console.log("index_nkz:", this.index_nkz);
 
+    return aaaa[name_table].filter(obj =>
+      obj[name_column] === name_parts && obj.set_on.includes(this.index_nkz)
+    );
+  },
+  nkzCalck() {
+    this.bashmack = this.filter_parts_nkz("Башмак в зборі", "noria", "name_1");
+    // console.log("Filtered Results:", this.bashmack[0].full_name);
+    this.golovka = this.filter_parts_nkz("Головка в зборі", "noria", "name_1");
+
+
+
+  }
+}
+  });
+  </script>
+  
 </body>
 </html>
