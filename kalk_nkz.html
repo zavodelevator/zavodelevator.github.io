@@ -140,44 +140,47 @@
       selectedValue: "",
       index_nkz: "", 
 
-      bashmack: [],
-        // Вал башмака
-        // Корпус башмака
-        // Шибер  прийомного бункера
-        // Прийомний бункер
-        // Корпус-підшипник	UCF
+      nkz_params: { 
+        bashmack: [["Башмак в зборі", "noria", "name_1"]],
+          val_bashmaka: [["Вал башмака", "noria", "name_1"]],            // Вал башмака
+          korpus_bashmaka: [["Корпус башмака", "noria", "name_1"]],      // Корпус башмака
+          shiber_bumkera: [["Вал башмака", "noria", "name_1"]],          // Шибер  прийомного бункера
+          priyom_bunker: [["Вал башмака", "noria", "name_1"]],           // Прийомний бункер
+          korpus_pidship_bash: [["Вал башмака", "noria", "name_1"]],     // Корпус-підшипник	UCF
         
-      golovka: []// ,
-      //   Підредукторна секція
-      //   Вал верхньої головки
-      //   Корпус верхньої головки
-      //   Футування кришки головки
-      //   Корпус-підшипник	UCP
+        golovka: [["Вал башмака", "noria", "name_1"]],
+          pidreduct_section: [["Вал башмака", "noria", "name_1"]],       // Підредукторна секція
+          val_privod: [["Вал башмака", "noria", "name_1"]],              // Вал верхньої головки
+          korpus_golovki: [["Вал башмака", "noria", "name_1"]],          // Корпус верхньої головки
+          futuv_krish_golovki: [["Вал башмака", "noria", "name_1"]],     // Футування кришки головки
+          korpus_pidship_golov: [["Вал башмака", "noria", "name_1"]],    // Корпус-підшипник	UCP
         
-      // Барабан ланцюговий 
-      // Барабан
-      // Футування барабану
-      // Контерпривід
-      // Рамка шахти 
-      // Шахта оглядова
-      // Шахта пирвідна
-      // Шахта 1м.
-      // Шахта ланцюгова 1м.
+        baraban_lanc: [["Вал башмака", "noria", "name_1"]],              // Барабан ланцюговий       
+        baraban: [["Вал башмака", "noria", "name_1"]],                   // Барабан
+        futuv_baraban: [["Вал башмака", "noria", "name_1"]],             // Футування барабану
+        konter_pruvid: [["Вал башмака", "noria", "name_1"]],             // Контерпривід
+        ramka_shaht: [["Вал башмака", "noria", "name_1"]],               // Рамка шахти 
+        shahta_ogliad: [["Вал башмака", "noria", "name_1"]],             // Шахта оглядова
+        shahta_pruvid: [["Вал башмака", "noria", "name_1"]],             // Шахта пирвідна
+        shahta: [["Вал башмака", "noria", "name_1"]],                    // Шахта 1м.
+        shahta_lanc: [["Вал башмака", "noria", "name_1"]],               // Шахта ланцюгова 1м.
 
-      // Срічка конвеєрна
-      // Ланцюг
-      // Ківш
+        strich_conv: [["Вал башмака", "noria", "name_1"]],               // Срічка конвеєрна
+        lancug: [["Вал башмака", "noria", "name_1"]],                    // Ланцюг
+        kivsh: [["Вал башмака", "noria", "name_1"]],                     // Ківш
 
-      // Муфта зєднувальна
-      // Обгонна муфта
-      // Датчик сходу стрічки
-      // Датчик обертів
-      // Датчик підпору
+        mufta_ziedn: [["Вал башмака", "noria", "name_1"]],               // Муфта зєднувальна
+        obgon_muft: [["Вал башмака", "noria", "name_1"]],                // Обгонна муфта
+        datch_strich: [["Вал башмака", "noria", "name_1"]],              // Датчик сходу стрічки
+        datch_ob: [["Вал башмака", "noria", "name_1"]],                  // Датчик обертів
+        datch_pidpor:[["Вал башмака", "noria", "name_1"]],               // Датчик підпору
 
-      // Двигун
-      // Мотор редуктор
+        engyn: [["Вал башмака", "noria", "name_1"]],                     // Двигун
+        mr_engyn: [["Вал башмака", "noria", "name_1"]]                   // Мотор редуктор
+      }      
 
     },
+
     mounted() {
       // This assumes table_name is defined elsewhere in your code
       let aaaa = JSON.parse(localStorage.getItem(table_name)) || [];
@@ -211,13 +214,30 @@
       obj[name_column] === name_parts && obj.set_on.includes(this.index_nkz)
     );
   },
+  
   nkzCalck() {
-    this.bashmack = this.filter_parts_nkz("Башмак в зборі", "noria", "name_1");
+
+    for (let key in this.nkz_params) {
+        this.nkz_params[key].forEach(function(subArray) {
+            console.log(subArray[0]);
+        });
+    }
+    
+    // for (let key in this.nkz_params) {
+    //   this.nkz_params[key].forEach(function(subArray) {
+          // if (subArray[0] === "Башмак в зборі") {
+          //     subArray.push(true);
+          // }s
+          // console.log(subArray[0])
+      // });
+    // }
+
+
+    // this.bashmack = this.filter_parts_nkz("Башмак в зборі", "noria", "name_1");
     // console.log("Filtered Results:", this.bashmack[0].full_name);
-    this.golovka = this.filter_parts_nkz("Головка в зборі", "noria", "name_1");
-
-
-
+   
+    // this.val_bashmaka = this.filter_parts_nkz("Вал башмака", "noria", "name_1");            // Вал башмака
+  
   }
 }
   });
