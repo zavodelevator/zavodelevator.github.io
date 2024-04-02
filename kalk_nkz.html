@@ -177,7 +177,8 @@
 
         // engyn: [["Двигун", "motor", "name_1"]],                       // Двигун
         // mr_engyn: [["Мотор редуктор", "g_motor", "name_1"]]           // Мотор редуктор
-      }      
+      },
+      nkz_params_2 :{}
     },
 
     mounted() {
@@ -194,7 +195,8 @@
     this.selectedValue = event.target.value;
     this.nkzIndex();
   },
-  nkzIndex() {
+
+  nkzIndex() { //нахуя ця функція
     for (let i = 0; i < this.todos.length; i++) {
       const prod = this.todos[i];
       if (prod.full_name === this.selectedValue) {
@@ -204,10 +206,6 @@
     }
   },
   filter_parts_nkz(name_parts, name_table, name_column) {
-    // console.log("name_parts:", name_parts);
-    // console.log("name_table:", name_table);
-    // console.log("name_column:", name_column);
-    // console.log("index_nkz:", this.index_nkz);
 
     return aaaa[name_table].filter(obj =>
       obj[name_column] === name_parts && obj.set_on.includes(this.index_nkz)
@@ -216,27 +214,25 @@
   
   nkzCalck() {
 
-    for (let key in this.nkz_params) {
-        this.nkz_params[key].forEach(function(subArray) {
-            console.log(subArray[0]);
-        });
-    }
     
-    // for (let key in this.nkz_params) {
-    //   this.nkz_params[key].forEach(function(subArray) {
-          // if (subArray[0] === "Башмак в зборі") {
-          //     subArray.push(true);
-          // }s
-          // console.log(subArray[0])
-      // });
+    // try {
+    //   // Код, который может вызывать ошибку
+    // } catch (error) {
+    //   // Код, который обрабатывает ошибку
     // }
 
 
-    // this.bashmack = this.filter_parts_nkz("Башмак в зборі", "noria", "name_1");
-    // console.log("Filtered Results:", this.bashmack[0].full_name);
+    // for (let key in this.nkz_params) {
+    //     this.nkz_params[key].forEach(function(subArray) {
+
+
+    //         console.log(subArray);
+    //     });
+    // }
+     
+    // console.log(this.filter_parts_nkz(this.nkz_params.bashmack[0], this.nkz_params.bashmack[1], this.nkz_params.bashmack[2])) 
    
-    // this.val_bashmaka = this.filter_parts_nkz("Вал башмака", "noria", "name_1");            // Вал башмака
-  
+    
   }
 }
   });
