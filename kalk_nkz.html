@@ -126,7 +126,7 @@
   });
 
   let aaaa = JSON.parse(localStorage.getItem(table_name)) || [];
-  console.log(aaaa);
+  // console.log(aaaa);
   
 </script>
   
@@ -196,7 +196,7 @@
     this.nkzIndex();
   },
 
-  nkzIndex() { //нахуя ця функція
+  nkzIndex() {
     for (let i = 0; i < this.todos.length; i++) {
       const prod = this.todos[i];
       if (prod.full_name === this.selectedValue) {
@@ -205,38 +205,40 @@
       }
     }
   },
+
   filter_parts_nkz(name_parts, name_table, name_column) {
-
-    return aaaa[name_table].filter(obj =>
-      obj[name_column] === name_parts && obj.set_on.includes(this.index_nkz)
-    );
+    try {
+      return aaaa[name_table].filter(obj =>
+        obj[name_column] === name_parts && obj.set_on.includes(this.index_nkz)
+      );
+    } catch (error) {
+      console.error("Error in filter_parts_nkz:", error);
+      return [];
+    }
   },
-  
+
   nkzCalck() {
+  this.nkz_params_2 = {}; // Reset nkz_params_2 before updating
 
-    
-    // try {
-    //   // Код, который может вызывать ошибку
-    // } catch (error) {
-    //   // Код, который обрабатывает ошибку
-    // }
-
-
-    // for (let key in this.nkz_params) {
-    //     this.nkz_params[key].forEach(function(subArray) {
-
-
-    //         console.log(subArray);
-    //     });
-    // }
-     
-    // console.log(this.filter_parts_nkz(this.nkz_params.bashmack[0], this.nkz_params.bashmack[1], this.nkz_params.bashmack[2])) 
-   
-    
+  for (let key in this.nkz_params) {
+    this.nkz_params_2[key] = this.nkz_params[key].map(subArray => {
+      try {
+        return this.filter_parts_nkz(subArray[0], subArray[1], subArray[2]);
+      } catch (error) {
+        console.error("Error in nkzCalck:", error);
+        return [];
+      }
+    });
   }
+
+  console.log(this.nkz_params_2); // Log updated nkz_params_2 for debugging
 }
+
+}
+
   });
   </script>
   
 </body>
 </html>
+
