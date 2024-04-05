@@ -75,9 +75,12 @@
                   
                   <div class="col-sm">
                     <label for="nkz_l">Висота норії</label>
-                      <select class="form-control" id="nkz_l">
-                        <option></option>
-                      </select>                    
+                        <select v-model="selectedValue_2" @change="handleSelectChange_l" class="form-control" id="nkz_l">
+                          <option v-for="number in l_numbers" :key="number" :value="number">
+                            {{ number }}
+                          </option>
+                        </select>
+                        <!-- <p>Selected value: {{ selectedValue_2 }}</p>    -->
                   </div>
                  
                 </div>
@@ -138,7 +141,10 @@
     data: {
       todos: [],
       selectedValue: "",
-      index_nkz: "", 
+      selectedValue_2: "",
+      index_nkz: "",
+      l_numbers: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27],
+  
 
       nkz_params: { 
         bashmack: [["Башмак в зборі", "noria", "name_1"]],
@@ -196,6 +202,10 @@
     this.nkzIndex();
   },
 
+  handleSelectChange_l: function(event) {
+    this.selectedValue = event.target.value;
+  },
+
   nkzIndex() {
     for (let i = 0; i < this.todos.length; i++) {
       const prod = this.todos[i];
@@ -232,6 +242,9 @@
   }
 
   console.log(this.nkz_params_2); // Log updated nkz_params_2 for debugging
+
+
+
 }
 
 }
