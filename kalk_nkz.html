@@ -75,14 +75,16 @@
                   
                   <div class="col-sm">
                     <label for="nkz_l">Висота норії</label>
-                        <select v-model="selectedValue_2" @change="handleSelectChange_l" class="form-control" id="nkz_l">
-                          <option v-for="number in l_numbers" :key="number" :value="number">
-                            {{ number }}
-                          </option>
-                        </select>
-                        <!-- <p>Selected value: {{ selectedValue_2 }}</p>    -->
+                    <select v-model="selectedValue_2" @change="handleSelectChange_l" class="form-control" id="nkz_l">
+                      <option v-for="number in l_numbers" :key="number" :value="number">
+                        {{ number  }}
+                      </option>
+                    </select>
+                    <p>Selected value: {{ selectedValue_2 }}</p>
+
+
                   </div>
-                 
+                  
                 </div>
               
                 <div style="width: 10px; height: 30px;"></div>
@@ -140,11 +142,10 @@
     el: '#app-4',
     data: {
       todos: [],
-      selectedValue: "",
-      selectedValue_2: "",
       index_nkz: "",
-      l_numbers: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27],
-  
+      selectedValue: "",
+      selectedValue_2: 2,
+      l_numbers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27],
 
       nkz_params: { 
         bashmack: [["Башмак в зборі", "noria", "name_1"]],
@@ -242,6 +243,11 @@
   }
 
   console.log(this.nkz_params_2); // Log updated nkz_params_2 for debugging
+  console.log(this.nkz_params_2.shahta_ogliad[0][0].height); // Log updated nkz_params_2 for debugging
+  console.log(this.nkz_params_2.shahta[0][0].height); // Log updated nkz_params_2 for debugging
+  console.log(this.nkz_params_2.golovka[0][0].height); // Log updated nkz_params_2 for debugging
+  console.log(this.nkz_params_2.bashmack[0][0].height); // Log updated nkz_params_2 for debugging
+  console.log(this.nkz_params_2.golovka[0][0].height); // Log updated nkz_params_2 for debugging
 
 
 
