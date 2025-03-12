@@ -19,6 +19,21 @@
 
 </script>
 
+<style>
+  .btn-group {
+    margin: 5px;
+    display: flex;
+    flex-direction: column;
+  }
+  .label-title {
+    color: gray;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+  }
+</style>
+
+
+
     </head>
   <body>
 
@@ -81,53 +96,65 @@
 <br>
 
 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-  <label class="btn btn-warning active">
-    <input type="radio" name="options" id="" checked> М-80
-  </label>
-  <label class="btn btn-warning">
-    <input type="radio" name="options" id=""> ТРД-38
-  </label>
+  <span class="label-title">*ланцюг</span>
+  <div>
+    <label class="btn btn-warning active">
+      <input type="radio" name="chain" checked> М-80
+    </label>
+    <label class="btn btn-warning">
+      <input type="radio" name="chain"> ТРД-38
+    </label>
+  </div>
 </div>
 
 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-  <label class="btn btn-success active">
-    <input type="radio" name="options" id="" checked> ПЄ-500
-  </label>
-  <label class="btn btn-success">
-    <input type="radio" name="options" id=""> Резина
-  </label>
+  <span class="label-title">*тип шкребка</span>
+  <div>
+    <label class="btn btn-success active">
+      <input type="radio" name="scraper" checked> ПЄ-500
+    </label>
+    <label class="btn btn-success">
+      <input type="radio" name="scraper"> Резина
+    </label>
+  </div>
 </div>
 
 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-  <label class="btn btn-secondary active">
-    <input type="radio" name="options" id="" checked> Розбірний
-  </label>
-  <label class="btn btn-secondary">
-    <input type="radio" name="options" id=""> Зварний
-  </label>
+  <span class="label-title">*тип короба</span>
+  <div>
+    <label class="btn btn-secondary active">
+      <input type="radio" name="box" checked> Розбірний
+    </label>
+    <label class="btn btn-secondary">
+      <input type="radio" name="box"> Зварний
+    </label>
+  </div>
 </div>
 
 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-  <label class="btn  btn-danger active">
-    <input type="radio" name="options" id="" checked> Емаль
-  </label>
-  <label class="btn  btn-danger">
-    <input type="radio" name="options" id=""> Порошкова фарба
-  </label>
-  <label class="btn  btn-danger">
-    <input type="radio" name="options" id=""> Оцинкований
-  </label>
+  <span class="label-title">*покриття</span>
+  <div>
+    <label class="btn btn-danger active">
+      <input type="radio" name="coating" checked> Емаль
+    </label>
+    <label class="btn btn-danger">
+      <input type="radio" name="coating"> Порошкова фарба
+    </label>
+    <label class="btn btn-danger">
+      <input type="radio" name="coating"> Оцинкований
+    </label>
+  </div>
+</div>
 
+<div class="form-check form-switch">
+  <input class="form-check-input radio_boonker" type="checkbox" id="flexSwitchCheckChecked_1">
+  <label class="form-check-label" for="flexSwitchCheckChecked_1">Розподільний механізм</label>
 </div>
 
 
 <br><br><br><br><br><br>
 
-                  <div class="form-check form-switch">
-                    <input class="form-check-input radio_boonker" type="checkbox" id="flexSwitchCheckChecked_1">
-                    <label class="form-check-label" for="flexSwitchCheckChecked_1">Розподільний механізм</label>
-                  </div>
-
+                 
                   <div class="form-check form-switch">
                     <input class="form-check-input radio_pidstavka" type="checkbox" id="flexSwitchCheckChecked_2">
                     <label class="form-check-label" for="flexSwitchCheckChecked_2">Підставка</label>
