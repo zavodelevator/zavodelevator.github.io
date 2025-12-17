@@ -208,7 +208,9 @@ function customSort(arr) {
                     ${item.sclad}*${item.stilaj}*${item.place_on_sclad}
                 </td>
                 <td>${item.n_p}</td>
-                <td>Вміст</td>`;
+                <td>
+                  <button class="btn btn-sm btn-outline-secondary" onclick="openMiniForm('${item.n_p}', ${item.saldo_m})">Рух спіралі</button>
+                </td>`;
             resultDiv.appendChild(itemRow);
         });
     }
