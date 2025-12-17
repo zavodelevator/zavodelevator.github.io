@@ -54,13 +54,14 @@
 
   </form>
 
+  <div class="MiniForm" style="display: none;">
+
+  </div>
+
   <div class="product-container">
                     
   </div>
 
-  <div class="MiniForm" style="display: none;">
-
-  </div>
 
 </div>
 
@@ -231,7 +232,7 @@ function openMiniForm(n_p) {
     return;
   }
   const l_r = item.l_r === "Права" ? "R" : "L";
-  const text = `${item.n_p}) ${item.dd}/${item.d}/${item.p}/${l_r} S-${item.s}мм.`;
+  const text = `${item.n_p}) ${item.dd}/${item.d}/${item.p}/${l_r} S-${item.s}мм. ${item.saldo_prc}шт.   ${item.sclad}*${item.stilaj}*${item.place_on_sclad}`;
   miniForm.innerHTML = `
     <div class="card mt-3">
       <div class="card-body">
@@ -241,9 +242,21 @@ function openMiniForm(n_p) {
         </div>
         <p>${text}</p>
         <div class="form-group">
+          <div class="form-group">
+            <label>Тип операції</label><br>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+              <label class="btn btn-outline-success active">
+                <input type="radio" name="debetCredit" value="debet" checked> Дебет
+              </label>
+              <label class="btn btn-outline-danger">
+                <input type="radio" name="debetCredit" value="credit"> Кредит
+              </label>
+            </div>
+          </div>
           <label>Параметр</label>
-          <input type="text" class="form-control" id="miniFormParam" value="${text}">
+          <input type="text" class="form-control" id="miniFormParam" value="">
         </div>
+        <button type="button" class="btn btn-sm btn-success" onclick="saveMiniForm()">Записати</button>
       </div>
     </div>
   `;
