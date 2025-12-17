@@ -67,13 +67,14 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
-$(document).ready(function(){
+  $(document).ready(function(){
 
   $(document).ready(function() {
-    $(".btn-group-toggle label").click(function() {
-      $(this).siblings().removeClass('active');
+    $(document).on('click', '.btn-group-toggle label', function() {
+      const group = $(this).closest('.btn-group-toggle');
+      group.find('label').removeClass('active');
       $(this).addClass('active');
-      $(this).siblings().find('input[type=radio]').prop('checked', false);
+      group.find('input[type=radio]').prop('checked', false);
       $(this).find('input[type=radio]').prop('checked', true);
     });
   });
@@ -234,7 +235,7 @@ function openMiniForm(n_p) {
     return;
   }
   const l_r = item.l_r === "Права" ? "R" : "L";
-  const text = `${item.n_p}) ${item.dd}/${item.d}/${item.p}/${l_r} S-${item.s}мм. ${item.saldo_prc}шт.   ${item.sclad}*${item.stilaj}*${item.place_on_sclad}`;
+  const text = `${item.n_p}) ${item.dd}/${item.d}/${item.p}/${l_r} S-${item.s}мм. ${item.saldo_m}шт.   ${item.sclad}*${item.stilaj}*${item.place_on_sclad}`;
   miniForm.innerHTML = `
     <div class="card mt-3">
       <div class="card-body">
