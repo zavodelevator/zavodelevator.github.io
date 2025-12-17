@@ -58,8 +58,8 @@
                     
   </div>
 
-  <div class="MiniForm" >
-           <p>${item.n_p}) ${item.dd}/${item.d}/${item.p}/${item.l_r === "Права" ? "R" : "L"} S-${item.s}мм.</p>
+  <div class="MiniForm" style="display: none;">
+
   </div>
 
 </div>
@@ -214,11 +214,45 @@ function customSort(arr) {
                 </td>
                 <td>${item.n_p}</td>
                 <td>
-                  <button class="btn btn-sm btn-outline-secondary" onclick="openMiniForm('${item.n_p}', ${item.saldo_m})">Рух спіралі</button>
+                  <button class="btn btn-sm btn-outline-secondary" onclick="openMiniForm('${item.n_p}')">Рух спіралі</button>
                 </td>`;
             resultDiv.appendChild(itemRow);
         });
     }
+}
+
+function openMiniForm(n_p) {
+  const a = JSON.parse(localStorage.getItem('sclad_sp_json')) || [];
+  const item = a.find(x => String(x.n_p) === String(n_p));
+  const miniForm = document.querySelector('.MiniForm');
+  miniForm.style.display = 'block';
+  if (!item) {
+    miniForm.innerHTML = `<div class="card mt-3"><div class="card-body"><p>Не знайдено: ${n_p}</p><button class="btn btn-sm btn-secondary" onclick="closeMiniForm()">Закрити</button></div></div>`;
+    return;
+  }
+  const l_r = item.l_r === "Права" ? "R" : "L";
+  const text = `${item.n_p}) ${item.dd}/${item.d}/${item.p}/${l_r} S-${item.s}мм.`;
+  miniForm.innerHTML = `
+    <div class="card mt-3">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+          <h5 class="card-title">Рух спіралі</h5>
+          <button type="button" class="close" onclick="closeMiniForm()">&times;</button>
+        </div>
+        <p>${text}</p>
+        <div class="form-group">
+          <label>Параметр</label>
+          <input type="text" class="form-control" id="miniFormParam" value="${text}">
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function closeMiniForm() {
+  const miniForm = document.querySelector('.MiniForm');
+  miniForm.style.display = 'none';
+  miniForm.innerHTML = '';
 }
 
 
