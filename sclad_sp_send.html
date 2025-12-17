@@ -235,7 +235,7 @@ function openMiniForm(n_p) {
     return;
   }
   const l_r = item.l_r === "Права" ? "R" : "L";
-  const text = `${item.n_p}) ${item.dd}/${item.d}/${item.p}/${l_r} S-${item.s}мм. ${item.saldo_m}шт.   ${item.sclad}*${item.stilaj}*${item.place_on_sclad}`;
+  const text = `${item.n_p}) ${item.dd}/${item.d}/${item.p}/${l_r} S-${item.s}мм. ${item.saldo_m}м.   ${item.sclad}*${item.stilaj}*${item.place_on_sclad}`;
   miniForm.innerHTML = `
     <div class="card mt-3">
       <div class="card-body">
@@ -258,6 +258,7 @@ function openMiniForm(n_p) {
           </div>
           <label>Параметр</label>
           <input type="text" class="form-control" id="miniFormParam" value="">
+          <input type="hidden" id="miniFormN_p" value="${item.n_p}">
         </div>
         <button type="button" class="btn btn-sm btn-success" onclick="saveMiniForm()">Записати</button>
       </div>
@@ -269,6 +270,40 @@ function closeMiniForm() {
   const miniForm = document.querySelector('.MiniForm');
   miniForm.style.display = 'none';
   miniForm.innerHTML = '';
+}
+
+const GAS_WRITE_URL = "https://script.google.com/macros/s/AKfycby1pO_94xtHo1m6LhtMEB8RlsBt6XkIq3FNSgTktGHn0xHmTrPjuJiNLy0CminF7t-YtQ/exec";
+
+function saveMiniForm() {
+  const n_p = document.getElementById('miniFormN_p').value;
+  const a = JSON.parse(localStorage.getItem('sclad_sp_json')) || [];
+  const item = a.find(x => String(x.n_p) === String(n_p));
+  const operation = document.querySelector('input[name="debetCredit"]:checked').value;
+  const param = document.getElementById('miniFormParam').value;
+  if (!item) return;
+  const payload = {
+    n_p: item.n_p,
+    dd: item.dd,
+    d: item.d,
+    p: item.p,
+    l_r: item.l_r,
+    s: item.s,
+    saldo_prc: item.saldo_prc,
+    saldo_m: item.saldo_m,
+    sclad: item.sclad,
+    stilaj: item.stilaj,
+    place_on_sclad: item.place_on_sclad,
+    operation: operation,
+    param: param
+  };
+  fetch(GAS_WRITE_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+  .then(r => r.text())
+  .then(() => { closeMiniForm(); })
+  .catch(() => { closeMiniForm(); });
 }
 
 
