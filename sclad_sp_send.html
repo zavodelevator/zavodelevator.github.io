@@ -69,10 +69,12 @@
 <script>
 $(document).ready(function(){
 
-  $(document).ready(function() {//перемикання кнопок
+  $(document).ready(function() {
     $(".btn-group-toggle label").click(function() {
       $(this).siblings().removeClass('active');
       $(this).addClass('active');
+      $(this).siblings().find('input[type=radio]').prop('checked', false);
+      $(this).find('input[type=radio]').prop('checked', true);
     });
   });
           
@@ -245,11 +247,11 @@ function openMiniForm(n_p) {
           <div class="form-group">
             <label>Тип операції</label><br>
             <div class="btn-group btn-group-toggle" data-toggle="buttons">
-              <label class="btn btn-outline-success active">
-                <input type="radio" name="debetCredit" value="debet" checked> Дебет
+              <label class="btn btn-outline-danger active">
+                <input type="radio" name="debetCredit" value="credit" checked> Кредит
               </label>
-              <label class="btn btn-outline-danger">
-                <input type="radio" name="debetCredit" value="credit"> Кредит
+              <label class="btn btn-outline-success">
+                <input type="radio" name="debetCredit" value="debet"> Дебет
               </label>
             </div>
           </div>
