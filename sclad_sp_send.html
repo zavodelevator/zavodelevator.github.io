@@ -14,11 +14,14 @@
   </style>
 </head>
 <body>
+<!-- Опис: Сторінка складу спіралей. Фільтрація результатів і MiniForm для оформлення руху. -->
 
 
 <div class="container">
+  <!-- Основний контейнер сторінки -->
   <form class="form-inline">
     <div class="form-group mr-2">
+      <!-- Поле фільтрації за параметром (dd або діапазони) -->
       <input type="text" class="form-control" id="dd" placeholder="Введіть параметр">
     </div>
 
@@ -50,15 +53,18 @@
     <div style="width: 15px; height: 50px;"></div>
     
 
+    <!-- Кнопка запуску фільтрації -->
     <button type="button" class="btn btn-info" onclick="displayContent()">Фільтрувати</button>
 
   </form>
 
   <div class="MiniForm" style="display: none;">
+    <!-- MiniForm: оверлей для операцій руху спіралі -->
 
   </div>
 
   <div class="product-container">
+    <!-- Контейнер виводу відфільтрованих результатів -->
                     
   </div>
 
@@ -67,9 +73,11 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
+  // Ініціалізація: перемикачі, Enter, завантаження даних
   $(document).ready(function(){
 
   $(document).ready(function() {
+    // Перемикання кнопок-груп: керує класом active і станом checked
     $(document).on('click', '.btn-group-toggle label', function() {
       const group = $(this).closest('.btn-group-toggle');
       group.find('label').removeClass('active');
@@ -79,6 +87,7 @@
     });
   });
           
+    // Завантаження даних із Google Apps Script у localStorage
     $.ajax({
       url: "https://script.google.com/macros/s/AKfycby1pO_94xtHo1m6LhtMEB8RlsBt6XkIq3FNSgTktGHn0xHmTrPjuJiNLy0CminF7t-YtQ/exec",
       dataType: "json",
@@ -92,7 +101,8 @@
   
   });
   
-  function filterByDd(dd) {//фільтрація
+  // Фільтрація: підтримує '', '*d', '*d1-d2', 'dd1-dd2', точне 'dd'
+  function filterByDd(dd) {
     let a = JSON.parse(localStorage.getItem('sclad_sp_json')) || [];
     customSort(a);
     console.log(a);
@@ -134,11 +144,13 @@
     return a.filter((item) => item.dd === dd);
   }
   
+  // Округлення до десятої (0.1)
   function roundToDecimal(number) {
     return Math.round(number * 10) / 10;
   }
       
 
+// Сортування записів: спочатку dd, потім d, потім p
 function customSort(arr) {
     arr.sort((a, b) => {
         if (a.dd !== b.dd) {
@@ -152,6 +164,7 @@ function customSort(arr) {
     return arr;
 }
 
+  // Рендер відфільтрованого контенту у вигляді блоків або таблиці
   function displayContent() {
     $(".product-container").empty();
     const dd = document.getElementById('dd').value;
@@ -225,6 +238,7 @@ function customSort(arr) {
     }
 }
 
+// MiniForm: показ оверлею праворуч угорі для операції руху
 function openMiniForm(ev, n_p) {
   if (ev && ev.preventDefault) { ev.preventDefault(); ev.stopPropagation(); }
   const a = JSON.parse(localStorage.getItem('sclad_sp_json')) || [];
@@ -265,6 +279,7 @@ function openMiniForm(ev, n_p) {
               </label>
             </div>
           </div>
+          <!-- Поля вводу для кредиту/дебету з перемиканням видимості -->
           <div id="creditBlock">
             <label>Кредит (мінус із залишку)</label>
             <input type="number" id="creditParam" class="form-control" min="0" max="${item.saldo_m}" step="0.1" placeholder="Кт">
@@ -274,14 +289,17 @@ function openMiniForm(ev, n_p) {
             <input type="number" id="debetParam" class="form-control" min="0" step="0.1" placeholder="Дт">
           </div>
 
+          <!-- Приховані службові дані для MiniForm -->
           <input type="hidden" id="miniFormN_p" value="${item.n_p}">
           <input type="hidden" id="miniFormDataText" value="${text}">
           <input  id="miniFormData" value="${itemDataStr}">
         </div>
+        <!-- Кнопка запису операції -->
         <button type="button" class="btn btn-sm btn-success" onclick="saveMiniForm()">Записати</button>
       </div>
     </div>
   `;
+  // Перемикання видимості полів вводу залежно від вибраного типу операції
   const toggleOpInputs = () => {
     const op = document.querySelector('input[name="debetCredit"]:checked')?.value || 'credit';
     const credit = document.getElementById('creditBlock');
@@ -301,6 +319,7 @@ function openMiniForm(ev, n_p) {
   document.querySelectorAll('.btn-group.btn-group-toggle label').forEach(l => {
     l.addEventListener('click', toggleOpInputs);
   });
+  // Enter у числових полях MiniForm виконує збереження
   const addEnterSubmit = (el) => {
     if (!el) return;
     el.addEventListener('keydown', (e) => {
@@ -314,6 +333,7 @@ function openMiniForm(ev, n_p) {
   addEnterSubmit(document.getElementById('debetParam'));
 }
 
+// Закриття MiniForm і очищення вмісту
 function closeMiniForm() {
   const miniForm = document.querySelector('.MiniForm');
   miniForm.style.display = 'none';
