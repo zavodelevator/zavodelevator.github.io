@@ -274,9 +274,9 @@ function openMiniForm(ev, n_p) {
             <input type="number" id="debetParam" class="form-control" min="0" step="0.1" placeholder="Дт">
           </div>
 
-          <input type="hidden" id="miniFormN_p" value="${item.n_p}">
-          <input type="hidden" id="miniFormDataText" value="${text}">
-          <input type="hidden" id="miniFormData" value="${itemDataStr}">
+          <input id="miniFormN_p" value="${item.n_p}">
+          <input id="miniFormDataText" value="${text}">
+          <input id="miniFormData" value="${itemDataStr}">
         </div>
         <button type="button" class="btn btn-sm btn-success" onclick="saveMiniForm()">Записати</button>
       </div>
