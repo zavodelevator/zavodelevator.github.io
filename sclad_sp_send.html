@@ -236,6 +236,7 @@ function openMiniForm(n_p) {
   }
   const l_r = item.l_r === "Права" ? "R" : "L";
   const text = `${item.n_p}) ${item.dd}/${item.d}/${item.p}/${l_r} S-${item.s}мм. ${item.saldo_m}м.   ${item.sclad}*${item.stilaj}*${item.place_on_sclad}`;
+  const itemDataStr = encodeURIComponent(JSON.stringify(item));
   miniForm.innerHTML = `
     <div class="card mt-3">
       <div class="card-body">
@@ -256,14 +257,42 @@ function openMiniForm(n_p) {
               </label>
             </div>
           </div>
-          <label>Параметр</label>
-          <input type="text" class="form-control" id="miniFormParam" value="">
+          <div id="creditBlock">
+            <label>Кредит (мінус із залишку)</label>
+            <input type="number" id="creditParam" class="form-control" min="0" max="${item.saldo_m}" step="0.1" placeholder="Введіть значення">
+          </div>
+          <div id="debetBlock" style="display:none">
+            <label>Дебет (плюс до залишку)</label>
+            <input type="number" id="debetParam" class="form-control" min="0" step="0.1" placeholder="Введіть значення">
+          </div>
+
           <input type="hidden" id="miniFormN_p" value="${item.n_p}">
+          <input type="hidden" id="miniFormDataText" value="${text}">
+          <input type="hidden" id="miniFormData" value="${itemDataStr}">
         </div>
         <button type="button" class="btn btn-sm btn-success" onclick="saveMiniForm()">Записати</button>
       </div>
     </div>
   `;
+  const toggleOpInputs = () => {
+    const op = document.querySelector('input[name="debetCredit"]:checked')?.value || 'credit';
+    const credit = document.getElementById('creditBlock');
+    const debet = document.getElementById('debetBlock');
+    if (op === 'debet') {
+      debet.style.display = '';
+      credit.style.display = 'none';
+    } else {
+      credit.style.display = '';
+      debet.style.display = 'none';
+    }
+  };
+  toggleOpInputs();
+  document.querySelectorAll('.btn-group.btn-group-toggle input[name="debetCredit"]').forEach(r => {
+    r.addEventListener('change', toggleOpInputs);
+  });
+  document.querySelectorAll('.btn-group.btn-group-toggle label').forEach(l => {
+    l.addEventListener('click', toggleOpInputs);
+  });
 }
 
 function closeMiniForm() {
@@ -279,7 +308,9 @@ function saveMiniForm() {
   const a = JSON.parse(localStorage.getItem('sclad_sp_json')) || [];
   const item = a.find(x => String(x.n_p) === String(n_p));
   const operation = document.querySelector('input[name="debetCredit"]:checked').value;
-  const param = document.getElementById('miniFormParam').value;
+  const param = operation === 'debet'
+    ? document.getElementById('debetParam').value
+    : document.getElementById('creditParam').value;
   if (!item) return;
   const payload = {
     n_p: item.n_p,
