@@ -301,45 +301,6 @@ function closeMiniForm() {
   miniForm.innerHTML = '';
 }
 
-const GAS_WRITE_URL = "https://script.google.com/macros/s/AKfycby1pO_94xtHo1m6LhtMEB8RlsBt6XkIq3FNSgTktGHn0xHmTrPjuJiNLy0CminF7t-YtQ/exec";
-
-function saveMiniForm() {
-  const n_p = document.getElementById('miniFormN_p').value;
-  const a = JSON.parse(localStorage.getItem('sclad_sp_json')) || [];
-  const item = a.find(x => String(x.n_p) === String(n_p));
-  const operation = document.querySelector('input[name="debetCredit"]:checked').value;
-  const param = operation === 'debet'
-    ? document.getElementById('debetParam').value
-    : document.getElementById('creditParam').value;
-  if (!item) return;
-  const payload = {
-    n_p: item.n_p,
-    dd: item.dd,
-    d: item.d,
-    p: item.p,
-    l_r: item.l_r,
-    s: item.s,
-    saldo_prc: item.saldo_prc,
-    saldo_m: item.saldo_m,
-    sclad: item.sclad,
-    stilaj: item.stilaj,
-    place_on_sclad: item.place_on_sclad,
-    operation: operation,
-    param: param
-  };
-  fetch(GAS_WRITE_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  })
-  .then(r => r.text())
-  .then(() => { closeMiniForm(); })
-  .catch(() => { closeMiniForm(); });
-}
-
-
-
-
 </script>
 </body>
 </html>
