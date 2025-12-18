@@ -67,7 +67,6 @@
     <!-- Контейнер виводу відфільтрованих результатів -->
                     
   </div>
-<p>,hhssss</p>
 
 </div>
 
@@ -85,6 +84,8 @@
       group.find('input[type=radio]').prop('checked', false);
       $(this).find('input[type=radio]').prop('checked', true);
     });
+    $('form').on('submit', function(e){ e.preventDefault(); displayContent(); });
+    $('#dd').on('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); displayContent(); }});
   });
           
     // Завантаження даних із Google Apps Script у localStorage
@@ -258,7 +259,7 @@ function openMiniForm(ev, n_p) {
   }
   const l_r = item.l_r === "Права" ? "R" : "L";
   const text = `${item.n_p}) ${item.dd}/${item.d}/${item.p}/${l_r} S-${item.s}мм. ${item.saldo_m}м.   ${item.sclad}*${item.stilaj}*${item.place_on_sclad}`;
-  const itemDataStr = encodeURIComponent(JSON.stringify(item));
+  const itemDataStr = JSON.stringify(item);
   miniForm.innerHTML = `
     <div class="card mt-3">
       <div class="card-body">
@@ -292,7 +293,7 @@ function openMiniForm(ev, n_p) {
           <!-- Приховані службові дані для MiniForm -->
           <input type="hidden" id="miniFormN_p" value="${item.n_p}">
           <input type="hidden" id="miniFormDataText" value="${text}">
-          <input  id="miniFormData" value="${itemDataStr}">
+          <input type="hidden" id="miniFormData" value='${itemDataStr}'>
         </div>
         <!-- Кнопка запису операції -->
         <button type="button" class="btn btn-sm btn-success" onclick="saveMiniForm()">Записати</button>
