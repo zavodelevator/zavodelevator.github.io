@@ -274,9 +274,9 @@ function openMiniForm(ev, n_p) {
             <input type="number" id="debetParam" class="form-control" min="0" step="0.1" placeholder="Дт">
           </div>
 
-          <input id="miniFormN_p" value="${item.n_p}">
-          <input id="miniFormDataText" value="${text}">
-          <input id="miniFormData" value="${itemDataStr}">
+          <input type="hidden" id="miniFormN_p" value="${item.n_p}">
+          <input type="hidden" id="miniFormDataText" value="${text}">
+          <input  id="miniFormData" value="${itemDataStr}">
         </div>
         <button type="button" class="btn btn-sm btn-success" onclick="saveMiniForm()">Записати</button>
       </div>
@@ -301,6 +301,17 @@ function openMiniForm(ev, n_p) {
   document.querySelectorAll('.btn-group.btn-group-toggle label').forEach(l => {
     l.addEventListener('click', toggleOpInputs);
   });
+  const addEnterSubmit = (el) => {
+    if (!el) return;
+    el.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        saveMiniForm();
+      }
+    });
+  };
+  addEnterSubmit(document.getElementById('creditParam'));
+  addEnterSubmit(document.getElementById('debetParam'));
 }
 
 function closeMiniForm() {
