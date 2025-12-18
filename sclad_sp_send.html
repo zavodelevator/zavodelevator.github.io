@@ -259,11 +259,11 @@ function openMiniForm(n_p) {
           </div>
           <div id="creditBlock">
             <label>Кредит (мінус із залишку)</label>
-            <input type="number" id="creditParam" class="form-control" min="0" max="${item.saldo_m}" step="0.1" placeholder="Введіть значення">
+            <input type="number" id="creditParam" class="form-control" min="0" max="${item.saldo_m}" step="0.1" placeholder="Кт">
           </div>
           <div id="debetBlock" style="display:none">
             <label>Дебет (плюс до залишку)</label>
-            <input type="number" id="debetParam" class="form-control" min="0" step="0.1" placeholder="Введіть значення">
+            <input type="number" id="debetParam" class="form-control" min="0" step="0.1" placeholder="Дт">
           </div>
 
           <input type="hidden" id="miniFormN_p" value="${item.n_p}">
