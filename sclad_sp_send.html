@@ -218,18 +218,26 @@ function customSort(arr) {
                 </td>
                 <td>${item.n_p}</td>
                 <td>
-                  <button class="btn btn-sm btn-outline-secondary" onclick="openMiniForm('${item.n_p}')">Рух спіралі</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary" onclick="openMiniForm(event, '${item.n_p}')">Рух спіралі</button>
                 </td>`;
             resultDiv.appendChild(itemRow);
         });
     }
 }
 
-function openMiniForm(n_p) {
+function openMiniForm(ev, n_p) {
+  if (ev && ev.preventDefault) { ev.preventDefault(); ev.stopPropagation(); }
   const a = JSON.parse(localStorage.getItem('sclad_sp_json')) || [];
   const item = a.find(x => String(x.n_p) === String(n_p));
   const miniForm = document.querySelector('.MiniForm');
   miniForm.style.display = 'block';
+  miniForm.style.position = 'fixed';
+  miniForm.style.top = '16px';
+  miniForm.style.right = '16px';
+  miniForm.style.zIndex = '1050';
+  miniForm.style.width = 'min(420px, 95vw)';
+  miniForm.style.maxHeight = '80vh';
+  miniForm.style.overflowY = 'auto';
   if (!item) {
     miniForm.innerHTML = `<div class="card mt-3"><div class="card-body"><p>Не знайдено: ${n_p}</p><button class="btn btn-sm btn-secondary" onclick="closeMiniForm()">Закрити</button></div></div>`;
     return;
