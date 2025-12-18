@@ -293,7 +293,7 @@ function openMiniForm(ev, n_p) {
           <!-- Приховані службові дані для MiniForm -->
           <input type="hidden" id="miniFormN_p" value="${item.n_p}">
           <input type="hidden" id="miniFormDataText" value="${text}">
-          <input type="hidden" id="miniFormData" value='${itemDataStr}'>
+          <input id="miniFormData" value="${itemDataStr}">
         </div>
         <!-- Кнопка запису операції -->
         <button type="button" class="btn btn-sm btn-success" onclick="saveMiniForm()">Записати</button>
@@ -332,6 +332,12 @@ function openMiniForm(ev, n_p) {
   };
   addEnterSubmit(document.getElementById('creditParam'));
   addEnterSubmit(document.getElementById('debetParam'));
+  miniForm.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      saveMiniForm();
+    }
+  });
 }
 
 // Закриття MiniForm і очищення вмісту
