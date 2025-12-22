@@ -261,45 +261,65 @@ function openMiniForm(ev, n_p) {
   const text = `${item.n_p}) ${item.dd}/${item.d}/${item.p}/${l_r} S-${item.s}мм. ${item.saldo_m}м.   ${item.sclad}*${item.stilaj}*${item.place_on_sclad}`;
   const itemDataStr = JSON.stringify(item);
   miniForm.innerHTML = `
-    <div class="card mt-3">
-      <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center">
-          <h5 class="card-title">Рух спіралі</h5>
-          <button type="button" class="close" onclick="closeMiniForm()">&times;</button>
-        </div>
-        <p>${text}</p>
-        <div class="form-group">
+    <form action="#" id="miniForm" class="needs-validation" novalidate>
+      <div class="card mt-3">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title">Рух спіралі</h5>
+            <button type="button" class="close" onclick="closeMiniForm()">&times;</button>
+          </div>
+          <p>${text}</p>
           <div class="form-group">
-            <label>Тип операції</label><br>
-            <div class="btn-group btn-group-toggle" data-toggle="buttons">
-              <label class="btn btn-outline-danger active">
-                <input type="radio" name="debetCredit" value="credit" checked> Кредит
-              </label>
-              <label class="btn btn-outline-success">
-                <input type="radio" name="debetCredit" value="debet"> Дебет
-              </label>
+            <div class="form-group">
+              <label>Тип операції</label><br>
+              <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-outline-danger active">
+                  <input type="radio" name="debetCredit" value="credit" checked> Кредит
+                </label>
+                <label class="btn btn-outline-success">
+                  <input type="radio" name="debetCredit" value="debet"> Дебет
+                </label>
+              </div>
             </div>
-          </div>
-          <!-- Поля вводу для кредиту/дебету з перемиканням видимості -->
-          <div id="creditBlock">
-            <label>Кредит (мінус із залишку)</label>
-            <input type="number" id="creditParam" class="form-control" min="0" max="${item.saldo_m}" step="0.1" placeholder="Кт">
-          </div>
-          <div id="debetBlock" style="display:none">
-            <label>Дебет (плюс до залишку)</label>
-            <input type="number" id="debetParam" class="form-control" min="0" step="0.1" placeholder="Дт">
-          </div>
+            <!-- Поля вводу для кредиту/дебету з перемиканням видимості -->
+            <div id="creditBlock">
+              <label>Кредит (мінус із залишку)</label>
+              <input name="creditParam" type="number" id="creditParam" class="form-control" min="0" max="${item.saldo_m}" step="0.1" placeholder="Кт">
+            </div>
+            <div id="debetBlock" style="display:none">
+              <label>Дебет (плюс до залишку)</label>
+              <input name="debetParam" type="number" id="debetParam" class="form-control" min="0" step="0.1" placeholder="Дт">
+            </div>
 
-          <!-- Приховані службові дані для MiniForm -->
-          <input type="hidden" id="miniFormN_p" value="${item.n_p}">
-          <input type="hidden" id="miniFormDataText" value="${text}">
-          <input type="hidden" id="miniFormData" value="${encodeURIComponent(itemDataStr)}">
+            <div id="note_data">
+              <label>Нотатки</label>
+              <input name="note" type="text" id="note" class="form-control" placeholder="Нотатки">
+            </div>
+
+
+            <!-- Приховані службові дані для MiniForm -->
+            <input type="hidden" id="miniFormN_p" value="${item.n_p}">
+            <input type="hidden" id="miniFormDataText" value="${text}">
+            <input type="hidden" id="miniFormData" value="${encodeURIComponent(itemDataStr)}">
+          </div>
+          <!-- Кнопка запису операції -->
+          <button type="button" class="btn btn-sm btn-success" onclick="saveMiniForm()">Записати</button>
         </div>
-        <!-- Кнопка запису операції -->
-        <button type="button" class="btn btn-sm btn-success" onclick="saveMiniForm()">Записати</button>
       </div>
-    </div>
+    </form>
   `;
+
+ 
+  const scriptURL = '<SCRIPT URL>'
+  const form = document.forms['submit-to-google-sheet']
+
+  form.addEventListener('submit', e => {
+    e.preventDefault()
+    fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+      .then(response => console.log('Success!', response))
+      .catch(error => console.error('Error!', error.message))
+  })
+
   // Перемикання видимості полів вводу залежно від вибраного типу операції
   const toggleOpInputs = () => {
     const op = document.querySelector('input[name="debetCredit"]:checked')?.value || 'credit';
