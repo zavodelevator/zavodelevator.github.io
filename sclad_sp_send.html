@@ -309,16 +309,7 @@ function openMiniForm(ev, n_p) {
     </form>
   `;
 
- 
-  const scriptURL = '<SCRIPT URL>'
-  const form = document.forms['submit-to-google-sheet']
 
-  form.addEventListener('submit', e => {
-    e.preventDefault()
-    fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-      .then(response => console.log('Success!', response))
-      .catch(error => console.error('Error!', error.message))
-  })
 
   // Перемикання видимості полів вводу залежно від вибраного типу операції
   const toggleOpInputs = () => {
@@ -367,6 +358,19 @@ function closeMiniForm() {
   miniForm.innerHTML = '';
 }
 
+
+
+
+
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbxitVPkElsXFU19qbN09FCT2kHYDoTYpfG05z84ltlzUf7XpILyiaUAktt9Eyb7v1KzLg/exec'
+  const form = document.forms['submit-to-google-sheet']
+
+  form.addEventListener('submit', e => {
+    e.preventDefault()
+    fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+      .then(response => console.log('Success!', response))
+      .catch(error => console.error('Error!', error.message))
+  })
 </script>
 </body>
 </html>
