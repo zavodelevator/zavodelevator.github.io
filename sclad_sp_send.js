@@ -1,4 +1,4 @@
-alert("Hello30");
+alert("Hello31");
 // Ініціалізація: перемикачі, Enter, завантаження даних
   $(document).ready(function(){
 
@@ -13,9 +13,6 @@ alert("Hello30");
     });
     $('form').on('submit', function(e){ e.preventDefault(); displayContent(); });
     $('#dd').on('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); displayContent(); }});
-    
-    // Ініціалізуємо перемикачі для історії рухів
-    initializeMovementHistoryToggle();
   });
           
     // Завантаження даних із Google Apps Script у localStorage
@@ -216,10 +213,10 @@ function customSort(arr) {
                     resultDiv.appendChild(historyRow);
                 }
         });
-        
-        // Ініціалізуємо перемикачі для новостворених елементів
-        initializeMovementHistoryToggle();
     }
+    
+    // Ініціалізуємо перемикачі для новостворених елементів після рендерингу
+    initializeMovementHistoryToggle();
 }
 
 // MiniForm: показ оверлею праворуч угорі для операції руху
@@ -358,10 +355,10 @@ function generateMovementHistory(n_p) {
   
   let historyHTML = `
     <div class="movement-history-compact">
-      <button class="btn btn-sm btn-link p-0 mb-2" type="button" data-toggle="collapse" data-target="#movementHistory_${n_p}" aria-expanded="false" style="text-decoration: none; font-size: 0.85rem;">
+      <button class="movement-toggle-btn btn btn-sm btn-link p-0 mb-2" type="button" data-target="#movementHistory_${n_p}" aria-expanded="false" style="text-decoration: none; font-size: 0.85rem; border: none; background: none; cursor: pointer;">
         <span class="arrow-icon">▼</span> Історія рухів (${movements.length})
       </button>
-      <div class="collapse" id="movementHistory_${n_p}" style="display: none;">
+      <div class="movement-content" id="movementHistory_${n_p}" style="display: none;">
         <div class="movement-list small">`;
   
   movements.forEach(move => {
@@ -409,7 +406,7 @@ const movementHistoryStyles = `
     background-color: #f8f9fa;
   }
   
-  .movement-history-compact .btn-link {
+  .movement-history-compact .movement-toggle-btn {
     color: #6c757d;
     font-size: 0.8rem;
     padding: 0.25rem 0;
@@ -418,12 +415,12 @@ const movementHistoryStyles = `
     background: none;
   }
   
-  .movement-history-compact .btn-link:hover {
+  .movement-history-compact .movement-toggle-btn:hover {
     color: #495057;
     text-decoration: none;
   }
   
-  .movement-history-compact .btn-link[aria-expanded="true"] .arrow-icon {
+  .movement-history-compact .movement-toggle-btn[aria-expanded="true"] .arrow-icon {
     transform: rotate(180deg);
     display: inline-block;
     transition: transform 0.2s ease;
@@ -475,17 +472,24 @@ if (!document.getElementById('movementHistoryStyles')) {
 
 // Функція для ініціалізації розкривання блоків історії рухів
 function initializeMovementHistoryToggle() {
+  console.log('Initializing movement history toggle...');
+  
   // Використовуємо jQuery для делегування подій
-  $(document).on('click', '.movement-history-compact .btn-link', function(e) {
+  $(document).off('click', '.movement-toggle-btn').on('click', '.movement-toggle-btn', function(e) {
     e.preventDefault();
+    console.log('Movement toggle clicked');
     
     const button = this;
     const targetId = button.getAttribute('data-target');
     const targetElement = $(targetId);
     const arrowIcon = $(button).find('.arrow-icon');
     
+    console.log('Target ID:', targetId);
+    console.log('Target element found:', targetElement.length > 0);
+    
     if (targetElement.length) {
       const isExpanded = button.getAttribute('aria-expanded') === 'true';
+      console.log('Is expanded:', isExpanded);
       
       if (isExpanded) {
         // Закриваємо
