@@ -70,6 +70,17 @@
 
 </div>
 
+<!-- Форма для відправки даних до Google Sheets -->
+<form name="submit-to-google-sheet" style="display: none;" method="post">
+  <input name="timestamp" type="hidden">
+  <input name="id" type="hidden">
+  <input name="note" type="hidden">
+  <input name="dt" type="hidden">
+  <input name="kt" type="hidden">
+  <input name="email" type="email" placeholder="Email" required>
+  <button type="submit">Send</button>
+</form>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
   // Ініціалізація: перемикачі, Enter, завантаження даних
@@ -301,7 +312,7 @@ function openMiniForm(ev, n_p) {
             <!-- Приховані службові дані для MiniForm -->
             <input type="hidden" id="miniFormN_p" value="${item.n_p}">
             <input type="hidden" id="miniFormDataText" value="${text}">
-            <input type="hidden" id="miniFormData" value="${encodeURIComponent(itemDataStr)}">
+
           </div>
           <!-- Кнопка запису операції -->
           <button type="button" class="btn btn-sm btn-success" onclick="saveMiniForm()">Записати</button>
@@ -359,6 +370,29 @@ function closeMiniForm() {
   miniForm.innerHTML = '';
 }
 
+// Функція для збереження даних з MiniForm та відправки до Google Sheets
+function saveMiniForm() {
+  const n_p = document.getElementById('miniFormN_p').value;
+  const operationType = document.querySelector('input[name="debetCredit"]:checked')?.value || 'credit';
+  const creditValue = document.getElementById('creditParam')?.value || '';
+  const debetValue = document.getElementById('debetParam')?.value || '';
+  const noteValue = document.getElementById('note')?.value || '';
+  
+  // Заповнюємо приховані поля форми
+  const form = document.forms['submit-to-google-sheet'];
+  form.timestamp.value = new Date().toISOString();
+  form.id.value = n_p;
+  form.note.value = noteValue;
+  form.dt.value = operationType === 'debet' ? (debetValue || '0') : '0';
+  form.kt.value = operationType === 'credit' ? (creditValue || '0') : '0';
+  
+  // Відправляємо форму до Google Sheets
+  form.dispatchEvent(new Event('submit'));
+  
+  // Закриваємо міні-форму
+  closeMiniForm();
+}
+
 
 
 
@@ -369,8 +403,17 @@ function closeMiniForm() {
   form.addEventListener('submit', e => {
     e.preventDefault()
     fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-      .then(response => console.log('Success!', response))
-      .catch(error => console.error('Error!', error.message))
+      .then(response => {
+        console.log('Success!', response)
+        // Очищаємо форму після успішної відправки
+        form.reset()
+        // Показуємо повідомлення про успіх (можна додати візуальне сповіщення)
+        alert('Дані успішно відправлено до Google Sheets!')
+      })
+      .catch(error => {
+        console.error('Error!', error.message)
+        alert('Помилка при відправці даних: ' + error.message)
+      })
   })
 </script>
 </body>
