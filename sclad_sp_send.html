@@ -258,7 +258,8 @@ function openMiniForm(ev, n_p) {
     return;
   }
   const l_r = item.l_r === "Права" ? "R" : "L";
-  const text = `${item.n_p}) ${item.dd}/${item.d}/${item.p}/${l_r} S-${item.s}мм. ${item.saldo_m}м.   ${item.sclad}*${item.stilaj}*${item.place_on_sclad}`;
+  const l_r_text = l_r === "R" ? "Права" : "Ліва";
+  const text = `${item.n_p}) ${item.dd}/${item.d}/${item.p}/${l_r_text} S-${item.s}мм. Заг.довж ${item.saldo_m}м. Кільк-${item.saldo_prc}шт.по ${item.l}м. = ${item.sclad}*${item.stilaj}*${item.place_on_sclad}`;
   const itemDataStr = JSON.stringify(item);
   miniForm.innerHTML = `
     <form action="#" id="miniForm" class="needs-validation" novalidate>
@@ -268,7 +269,7 @@ function openMiniForm(ev, n_p) {
             <h5 class="card-title">Рух спіралі</h5>
             <button type="button" class="close" onclick="closeMiniForm()">&times;</button>
           </div>
-          <p>${text} 4444</p>
+          <p>${text}</p>
           <div class="form-group">
             <div class="form-group">
               <label>Тип операції</label><br>
