@@ -110,6 +110,19 @@
         console.error("Error fetching data:", error);
       }
     });
+
+        $.ajax({
+      url: "https://script.google.com/macros/s/AKfycbyWDKmixxIOMG-ci3evfbLorrkXX41_bP6qmAWqR24Y_36HAZ6bnfYJ7OZwKjs_Dwi9Zw/exec",
+      dataType: "json",
+      success: function(data) {
+        localStorage.setItem('move_sp_json', JSON.stringify(data)); 
+      },
+      error: function(xhr, status, error) {            
+        console.error("Error fetching data:", error);
+      }
+    });
+    console.log("move_sp_json:");
+    console.log(JSON.parse(localStorage.getItem('move_sp_json')));
   
   });
   
