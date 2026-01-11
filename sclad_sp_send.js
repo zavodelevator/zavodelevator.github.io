@@ -1,4 +1,7 @@
-alert("Hello31");
+alert("Hello32");
+// Глобальна змінна для відстеження стану відображення історії руху
+let showMovementHistory = false;
+
 // Ініціалізація: перемикачі, Enter, завантаження даних
   $(document).ready(function(){
 
@@ -10,7 +13,16 @@ alert("Hello31");
       $(this).addClass('active');
       group.find('input[type=radio]').prop('checked', false);
       $(this).find('input[type=radio]').prop('checked', true);
+      
+      // Обробка зміни стану радіо кнопок історії руху
+      if ($(this).find('input[type=radio]').attr('name') === 'movementHistoryToggle') {
+        showMovementHistory = $(this).find('input[type=radio]').val() === 'on';
+        console.log('Movement history display:', showMovementHistory);
+        // Оновити відображення при зміні стану
+        displayContent();
+      }
     });
+    
     $('form').on('submit', function(e){ e.preventDefault(); displayContent(); });
     $('#dd').on('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); displayContent(); }});
   });
@@ -201,16 +213,18 @@ function customSort(arr) {
                 
                 resultDiv.appendChild(itemRow);
                 
-                // Додаємо рядок з історією рухів, якщо вона є
-                if (movementHistoryHTML) {
-                    const historyRow = document.createElement('tr');
-                    historyRow.className = 'movement-history-row';
-                    historyRow.innerHTML = `
-                        <td colspan="7" class="p-0 border-0">
-                            ${movementHistoryHTML}
-                        </td>
-                    `;
-                    resultDiv.appendChild(historyRow);
+                // Додаємо рядок з історією рухів, якщо увімкнено відображення історії
+                if (showMovementHistory) {
+                    if (movementHistoryHTML) {
+                        const historyRow = document.createElement('tr');
+                        historyRow.className = 'movement-history-row';
+                        historyRow.innerHTML = `
+                            <td colspan="7" class="p-0 border-0">
+                                ${movementHistoryHTML}
+                            </td>
+                        `;
+                        resultDiv.appendChild(historyRow);
+                    }
                 }
         });
     }
