@@ -1,4 +1,4 @@
-alert("Hello32");
+alert("Hello33");
 // Глобальна змінна для відстеження стану відображення історії руху
 let showMovementHistory = false;
 
