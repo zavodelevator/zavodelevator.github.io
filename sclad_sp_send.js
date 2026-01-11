@@ -1,4 +1,4 @@
-alert("Hello25");
+alert("Hello27");
 
   // Ініціалізація: перемикачі, Enter, завантаження даних
   $(document).ready(function(){
@@ -197,7 +197,9 @@ function customSort(arr) {
                 <td>
                   <button type="button" class="btn btn-sm btn-outline-secondary" onclick="openMiniForm(event, '${item.n_p}')">Рух спіралі</button>
                 </td>`;
-            resultDiv.appendChild(itemRow);
+
+                
+                resultDiv.appendChild(itemRow);
         });
     }
 }
@@ -225,6 +227,8 @@ function openMiniForm(ev, n_p) {
   const adjustedSaldoPrc = calculateAdjustedSaldoPrc(item);
   const text = `${item.n_p}) ${item.dd}/${item.d}/${item.p}/${l_r_text} S-${item.s}мм. Заг.довж ${item.saldo_m}м. (${adjustedSaldoPrc}шт. по ${item.l}м.) ${item.sclad}*${item.stilaj}*${item.place_on_sclad}`;
   const itemDataStr = JSON.stringify(item);
+  const movementHistoryHTML = generateMovementHistory(item.n_p);
+  
   miniForm.innerHTML = `
     <form action="#" id="miniForm" class="needs-validation" novalidate>
       <div class="card mt-3">
@@ -271,8 +275,8 @@ function openMiniForm(ev, n_p) {
           <button type="button" class="btn btn-sm btn-success" onclick="saveMiniForm()">Записати</button>
         </div>
       </div>
-    </form>
-  `;
+      ${movementHistoryHTML}
+    </form>`;
 
 
 
@@ -314,6 +318,66 @@ function openMiniForm(ev, n_p) {
       saveMiniForm();
     }
   });
+}
+
+// Функція для генерації таблиці історії рухів
+function generateMovementHistory(n_p) {
+  const moveData = JSON.parse(localStorage.getItem('move_sp_json')) || [];
+  const movements = moveData.filter(move => String(move.id) === String(n_p));
+  
+  if (movements.length === 0) {
+    return ''; // Повертаємо порожній рядок, якщо немає рухів
+  }
+  
+  // Сортуємо за датою (новіші зверху)
+  movements.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+  
+  let tableHTML = `
+    <div class="card mt-3">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+          <h6 class="card-title mb-0">Історія рухів</h6>
+          <button class="btn btn-sm btn-outline-secondary" type="button" data-toggle="collapse" data-target="#movementHistory" aria-expanded="false" aria-controls="movementHistory">
+            Показати/Приховати
+          </button>
+        </div>
+        <div class="collapse" id="movementHistory">
+          <div class="table-responsive mt-2">
+            <table class="table table-sm table-striped">
+              <thead>
+                <tr>
+                  <th>Дата</th>
+                  <th>Операція</th>
+                  <th>Кількість</th>
+                  <th>Нотатки</th>
+                </tr>
+              </thead>
+              <tbody>`;
+  
+  movements.forEach(move => {
+    const date = new Date(move.timestamp).toLocaleDateString('uk-UA');
+    const operation = parseFloat(move.kt) > 0 ? 'Кредит' : 'Дебет';
+    const amount = parseFloat(move.kt) > 0 ? move.kt : move.dt;
+    const note = move.note || '-';
+    
+    tableHTML += `
+                <tr>
+                  <td>${date}</td>
+                  <td>${operation}</td>
+                  <td>${amount}</td>
+                  <td>${note}</td>
+                </tr>`;
+  });
+  
+  tableHTML += `
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  
+  return tableHTML;
 }
 
 // Закриття MiniForm і очищення вмісту
