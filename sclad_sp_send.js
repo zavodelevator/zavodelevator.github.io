@@ -1,7 +1,9 @@
-alert("Hello28");
+alert("Hello29");
 
   // Ініціалізація: перемикачі, Enter, завантаження даних
   $(document).ready(function(){
+    // Ініціалізуємо перемикачі для історії рухів
+    initializeMovementHistoryToggle();
 
   $(document).ready(function() {
     // Перемикання кнопок-груп: керує класом active і станом checked
@@ -215,6 +217,9 @@ function customSort(arr) {
                     resultDiv.appendChild(historyRow);
                 }
         });
+        
+        // Ініціалізуємо перемикачі для новостворених елементів
+        initializeMovementHistoryToggle();
     }
 }
 
@@ -401,6 +406,9 @@ const movementHistoryStyles = `
     color: #6c757d;
     font-size: 0.8rem;
     padding: 0.25rem 0;
+    cursor: pointer;
+    border: none;
+    background: none;
   }
   
   .movement-history-compact .btn-link:hover {
@@ -456,6 +464,40 @@ if (!document.getElementById('movementHistoryStyles')) {
   styleElement.id = 'movementHistoryStyles';
   styleElement.textContent = movementHistoryStyles;
   document.head.appendChild(styleElement);
+}
+
+// Функція для ініціалізації розкривання блоків історії рухів
+function initializeMovementHistoryToggle() {
+  // Делегування подій для кнопок розкривання
+  document.addEventListener('click', function(e) {
+    const button = e.target.closest('.movement-history-compact .btn-link');
+    if (button) {
+      e.preventDefault();
+      const targetId = button.getAttribute('data-target');
+      const targetElement = document.querySelector(targetId);
+      const arrowIcon = button.querySelector('.arrow-icon');
+      
+      if (targetElement) {
+        const isExpanded = button.getAttribute('aria-expanded') === 'true';
+        
+        if (isExpanded) {
+          // Закриваємо
+          targetElement.style.display = 'none';
+          button.setAttribute('aria-expanded', 'false');
+          if (arrowIcon) {
+            arrowIcon.style.transform = 'rotate(0deg)';
+          }
+        } else {
+          // Відкриваємо
+          targetElement.style.display = 'block';
+          button.setAttribute('aria-expanded', 'true');
+          if (arrowIcon) {
+            arrowIcon.style.transform = 'rotate(180deg)';
+          }
+        }
+      }
+    }
+  });
 }
 
 // Функція для збереження даних з MiniForm та відправки до Google Sheets
