@@ -1,4 +1,4 @@
-alert("Hello22");
+alert("Hello23");
 
   // Ініціалізація: перемикачі, Enter, завантаження даних
   $(document).ready(function(){
@@ -91,6 +91,25 @@ alert("Hello22");
   function roundToDecimal(number) {
     return Math.round(number * 10) / 10;
   }
+
+  // Функція для розрахунку скоригованого saldo_prc з урахуванням рухів
+  function calculateAdjustedSaldoPrc(item) {
+    const moveData = JSON.parse(localStorage.getItem('move_sp_json')) || [];
+    const movements = moveData.filter(move => String(move.id) === String(item.n_p));
+    
+    let adjustedSaldoPrc = parseFloat(item.saldo_prc) || 0;
+    
+    movements.forEach(move => {
+      const kt = parseFloat(move.kt) || 0;
+      const dt = parseFloat(move.dt) || 0;
+      
+      // Віднімаємо кредит (kt) та додаємо дебет (dt)
+      adjustedSaldoPrc -= kt;
+      adjustedSaldoPrc += dt;
+    });
+    
+    return Math.max(0, adjustedSaldoPrc); // Не даємо значенню бути менше 0
+  }
       
 
 // Сортування записів: спочатку dd, потім d, потім p
@@ -117,12 +136,13 @@ function customSort(arr) {
 
     if (option1.checked) {
         result.forEach((item) => {
+            const adjustedSaldoPrc = calculateAdjustedSaldoPrc(item);
             const productBlock = document.createElement('div');
             productBlock.classList.add('product-block');
             productBlock.innerHTML =
                 `<h4>${item.dd}/${item.d}/${item.p}/${item.l_r === "Права" ? "R" : "L"} S-${item.s}мм.</h4>
                 <p>L-${item.l}м.</p>
-                <p>${item.saldo_prc}шт.</p>
+                <p>${adjustedSaldoPrc}шт.</p>
                 <p>${roundToDecimal(item.saldo_m)}.м</p>
                 <p>${item.sclad}*${item.stilaj}*${item.place_on_sclad}</p>
                 <p>Вміст</p>
@@ -155,6 +175,7 @@ function customSort(arr) {
         const resultDiv = productBlock.querySelector('.table_resault');
 
         result.forEach((item) => {
+            const adjustedSaldoPrc = calculateAdjustedSaldoPrc(item);
             const itemRow = document.createElement('tr');
             itemRow.innerHTML =
                 `<td>
@@ -164,7 +185,7 @@ function customSort(arr) {
                     L-${item.l}м.
                 </td>
                 <td>
-                    ${item.saldo_prc}шт.
+                    ${adjustedSaldoPrc}шт.
                 </td>
                 <td>
                     ${roundToDecimal(item.saldo_m)}.м
@@ -201,7 +222,8 @@ function openMiniForm(ev, n_p) {
   }
   const l_r = item.l_r === "Права" ? "R" : "L";
   const l_r_text = l_r === "R" ? "Права" : "Ліва";
-  const text = `${item.n_p}) ${item.dd}/${item.d}/${item.p}/${l_r_text} S-${item.s}мм. Заг.довж ${item.saldo_m}м. (${item.saldo_prc}шт. по ${item.l}м.) ${item.sclad}*${item.stilaj}*${item.place_on_sclad}`;
+  const adjustedSaldoPrc = calculateAdjustedSaldoPrc(item);
+  const text = `${item.n_p}) ${item.dd}/${item.d}/${item.p}/${l_r_text} S-${item.s}мм. Заг.довж ${item.saldo_m}м. (${adjustedSaldoPrc}шт. по ${item.l}м.) ${item.sclad}*${item.stilaj}*${item.place_on_sclad}`;
   const itemDataStr = JSON.stringify(item);
   miniForm.innerHTML = `
     <form action="#" id="miniForm" class="needs-validation" novalidate>
@@ -227,7 +249,7 @@ function openMiniForm(ev, n_p) {
             <!-- Поля вводу для кредиту/дебету з перемиканням видимості -->
             <div id="creditBlock">
               <label>Кредит (мінус із залишку)</label>
-              <input name="creditParam" type="number" id="creditParam" class="form-control" min="0" max="${item.saldo_m}" step="0.1" placeholder="Кт">
+              <input name="creditParam" type="number" id="creditParam" class="form-control" min="0" max="${adjustedSaldoPrc}" step="0.1" placeholder="Кт">
             </div>
             <div id="debetBlock" style="display:none">
               <label>Дебет (плюс до залишку)</label>
