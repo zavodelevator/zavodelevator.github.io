@@ -1,9 +1,6 @@
-alert("Hello29");
-
-  // Ініціалізація: перемикачі, Enter, завантаження даних
+alert("Hello30");
+// Ініціалізація: перемикачі, Enter, завантаження даних
   $(document).ready(function(){
-    // Ініціалізуємо перемикачі для історії рухів
-    initializeMovementHistoryToggle();
 
   $(document).ready(function() {
     // Перемикання кнопок-груп: керує класом active і станом checked
@@ -16,6 +13,9 @@ alert("Hello29");
     });
     $('form').on('submit', function(e){ e.preventDefault(); displayContent(); });
     $('#dd').on('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); displayContent(); }});
+    
+    // Ініціалізуємо перемикачі для історії рухів
+    initializeMovementHistoryToggle();
   });
           
     // Завантаження даних із Google Apps Script у localStorage
@@ -35,13 +35,12 @@ alert("Hello29");
       dataType: "json",
       success: function(data) {
         localStorage.setItem('move_sp_json', JSON.stringify(data)); 
+        console.log("Movement data loaded successfully:", data.length, "records");
       },
       error: function(xhr, status, error) {            
-        console.error("Error fetching data:", error);
+        console.error("Error fetching movement data:", error);
       }
     });
-    console.log("move_sp_json:");
-    console.log(JSON.parse(localStorage.getItem('move_sp_json')));
   
     
   });
@@ -340,7 +339,15 @@ function openMiniForm(ev, n_p) {
 // Функція для генерації компактної історії рухів
 function generateMovementHistory(n_p) {
   const moveData = JSON.parse(localStorage.getItem('move_sp_json')) || [];
-  const movements = moveData.filter(move => String(move.id) === String(n_p));
+  console.log("Searching movements for n_p:", n_p, "in data:", moveData.length, "records");
+  
+  const movements = moveData.filter(move => {
+    const match = String(move.id) === String(n_p);
+    console.log("Comparing move.id:", move.id, "with n_p:", n_p, "match:", match);
+    return match;
+  });
+  
+  console.log("Found movements:", movements.length);
   
   if (movements.length === 0) {
     return ''; // Повертаємо порожній рядок, якщо немає рухів
@@ -354,7 +361,7 @@ function generateMovementHistory(n_p) {
       <button class="btn btn-sm btn-link p-0 mb-2" type="button" data-toggle="collapse" data-target="#movementHistory_${n_p}" aria-expanded="false" style="text-decoration: none; font-size: 0.85rem;">
         <span class="arrow-icon">▼</span> Історія рухів (${movements.length})
       </button>
-      <div class="collapse" id="movementHistory_${n_p}">
+      <div class="collapse" id="movementHistory_${n_p}" style="display: none;">
         <div class="movement-list small">`;
   
   movements.forEach(move => {
@@ -468,33 +475,28 @@ if (!document.getElementById('movementHistoryStyles')) {
 
 // Функція для ініціалізації розкривання блоків історії рухів
 function initializeMovementHistoryToggle() {
-  // Делегування подій для кнопок розкривання
-  document.addEventListener('click', function(e) {
-    const button = e.target.closest('.movement-history-compact .btn-link');
-    if (button) {
-      e.preventDefault();
-      const targetId = button.getAttribute('data-target');
-      const targetElement = document.querySelector(targetId);
-      const arrowIcon = button.querySelector('.arrow-icon');
+  // Використовуємо jQuery для делегування подій
+  $(document).on('click', '.movement-history-compact .btn-link', function(e) {
+    e.preventDefault();
+    
+    const button = this;
+    const targetId = button.getAttribute('data-target');
+    const targetElement = $(targetId);
+    const arrowIcon = $(button).find('.arrow-icon');
+    
+    if (targetElement.length) {
+      const isExpanded = button.getAttribute('aria-expanded') === 'true';
       
-      if (targetElement) {
-        const isExpanded = button.getAttribute('aria-expanded') === 'true';
-        
-        if (isExpanded) {
-          // Закриваємо
-          targetElement.style.display = 'none';
-          button.setAttribute('aria-expanded', 'false');
-          if (arrowIcon) {
-            arrowIcon.style.transform = 'rotate(0deg)';
-          }
-        } else {
-          // Відкриваємо
-          targetElement.style.display = 'block';
-          button.setAttribute('aria-expanded', 'true');
-          if (arrowIcon) {
-            arrowIcon.style.transform = 'rotate(180deg)';
-          }
-        }
+      if (isExpanded) {
+        // Закриваємо
+        targetElement.hide();
+        button.setAttribute('aria-expanded', 'false');
+        arrowIcon.css('transform', 'rotate(0deg)');
+      } else {
+        // Відкриваємо
+        targetElement.show();
+        button.setAttribute('aria-expanded', 'true');
+        arrowIcon.css('transform', 'rotate(180deg)');
       }
     }
   });
