@@ -1,4 +1,4 @@
-alert("Hello23");
+alert("Hello25");
 
   // Ініціалізація: перемикачі, Enter, завантаження даних
   $(document).ready(function(){
