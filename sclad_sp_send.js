@@ -1,4 +1,4 @@
-alert("Hello 1");
+alert("Hello22");
 
   // Ініціалізація: перемикачі, Enter, завантаження даних
   $(document).ready(function(){
@@ -51,7 +51,7 @@ alert("Hello 1");
     console.log(a);
     
     if (dd === "") {
-      return a.slice(1);
+      return a;
     }
 
     if (dd[0] === "*" && dd.includes("-")) {
