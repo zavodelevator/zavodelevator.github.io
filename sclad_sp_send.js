@@ -1,4 +1,4 @@
-alert("Hello 35");
+alert("Hello 36");
 // Глобальна змінна для відстеження стану відображення історії руху
 let showMovementHistory = false;
 
@@ -292,7 +292,10 @@ function openMiniForm(ev, n_p) {
   const l_r = item.l_r === "Права" ? "R" : "L";
   const l_r_text = l_r === "R" ? "Права" : "Ліва";
   const adjustedSaldoPrc = calculateAdjustedSaldoPrc(item);
-  const text = `${item.n_p}) ${item.dd}/${item.d}/${item.p}/${l_r_text} S-${item.s}мм. Заг.довж ${item.saldo_m}м. (${adjustedSaldoPrc}шт. по ${item.l}м.) ${item.sclad}*${item.stilaj}*${item.place_on_sclad}`;
+  const adjustedSaldoM = adjustedSaldoPrc * parseFloat(item.l);
+  const text = `${item.n_p}) ${item.dd}/${item.d}/${item.p}/${l_r_text} S-${item.s}мм. Заг.довж ${roundToDecimal(adjustedSaldoM)}м. (${adjustedSaldoPrc}шт. по ${item.l}м.) ${item.sclad}*${item.stilaj}*${item.place_on_sclad}`;
+  // Екрануємо лапки для безпечної вставки в HTML атрибут value
+  const safeText = text.replace(/"/g, '&quot;');
   const itemDataStr = JSON.stringify(item);
   
   miniForm.innerHTML = `
@@ -585,8 +588,8 @@ function saveMiniForm() {
   }
   
   form.id.value = n_p;
-  form.note.value = noteValue;
   form.description.value = descriptionValue;
+  form.note.value = noteValue;
   form.dt.value = operationType === 'debet' ? (debetValue || '0') : '0';
   form.kt.value = operationType === 'credit' ? (creditValue || '0') : '0';
   
