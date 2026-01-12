@@ -1,4 +1,4 @@
-alert("Hello 34");
+alert("Hello 35");
 // Глобальна змінна для відстеження стану відображення історії руху
 let showMovementHistory = false;
 
@@ -209,7 +209,7 @@ function customSort(arr) {
                             <th>Залиш</th>
                             <th>Склад</th>
                             <th>N_p</th>
-                            <th>Опт</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody class="table_resault">
@@ -586,6 +586,7 @@ function saveMiniForm() {
   
   form.id.value = n_p;
   form.note.value = noteValue;
+  form.description.value = descriptionValue;
   form.dt.value = operationType === 'debet' ? (debetValue || '0') : '0';
   form.kt.value = operationType === 'credit' ? (creditValue || '0') : '0';
   
