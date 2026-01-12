@@ -127,7 +127,16 @@ let showMovementHistory = false;
   // Функція для розрахунку скоригованого saldo_prc з урахуванням руху
   function calculateAdjustedSaldoPrc(item) {
     const moveData = JSON.parse(localStorage.getItem('move_sp_json')) || [];
-    const movements = moveData.filter(move => String(move.id) === String(item.n_p));
+    
+    // Нормалізація ID для порівняння (прибираємо пробіли, приводимо до рядка)
+    const normalize = (val) => String(val).trim();
+    const itemId = normalize(item.n_p);
+    
+    const movements = moveData.filter(move => {
+      // Перевіряємо різні варіанти назви поля ID в об'єкті move
+      const moveId = move.id || move.ID || move.n_p;
+      return normalize(moveId) === itemId;
+    });
     
     let adjustedSaldoPrc = parseFloat(item.saldo_prc) || 0;
     
@@ -173,13 +182,14 @@ function customSort(arr) {
     if (option1.checked) {
         result.forEach((item) => {
             const adjustedSaldoPrc = calculateAdjustedSaldoPrc(item);
+            const adjustedSaldoM = adjustedSaldoPrc * parseFloat(item.l);
             const productBlock = document.createElement('div');
             productBlock.classList.add('product-block');
             productBlock.innerHTML =
                 `<h4>${item.dd}/${item.d}/${item.p}/${item.l_r === "Права" ? "R" : "L"} S-${item.s}мм.</h4>
                 <p>L-${item.l}м.</p>
                 <p>${adjustedSaldoPrc}шт.</p>
-                <p>${roundToDecimal(item.saldo_m)}.м</p>
+                <p>${roundToDecimal(adjustedSaldoM)}.м</p>
                 <p>${item.sclad}*${item.stilaj}*${item.place_on_sclad}</p>
                 <button type="button" class="btn btn-sm btn-outline-secondary" onclick="openMiniForm(event, '${item.n_p}')">Рух спіралі</button>`;
             productContainer.appendChild(productBlock);
@@ -570,6 +580,7 @@ function initializeMovementHistoryToggle() {
 // Функція для збереження даних з MiniForm та відправки до Google Sheets
 function saveMiniForm() {
   const n_p = document.getElementById('miniFormN_p').value;
+  const descriptionValue = document.getElementById('miniFormDataText')?.value || '';
   const operationType = document.querySelector('input[name="debetCredit"]:checked')?.value || 'credit';
   const creditValue = document.getElementById('creditParam')?.value || '';
   const debetValue = document.getElementById('debetParam')?.value || '';
