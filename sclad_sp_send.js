@@ -181,8 +181,7 @@ function customSort(arr) {
                 <p>${adjustedSaldoPrc}шт.</p>
                 <p>${roundToDecimal(item.saldo_m)}.м</p>
                 <p>${item.sclad}*${item.stilaj}*${item.place_on_sclad}</p>
-                <p>Вміст</p>
-                <p>Вміст</p>`;
+                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="openMiniForm(event, '${item.n_p}')">Рух спіралі</button>`;
             productContainer.appendChild(productBlock);
 
             // Додаємо блок історії руху у режимі "block", якщо чекбокс увімкнено
