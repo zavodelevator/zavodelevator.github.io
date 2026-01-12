@@ -6,21 +6,24 @@ let showMovementHistory = false;
   $(document).ready(function(){
 
   $(document).ready(function() {
-    // Перемикання кнопок-груп: керує класом active і станом checked
+    // Перемикання кнопок-груп: керує класом active і станом checked (тільки для радіо кнопок)
     $(document).on('click', '.btn-group-toggle label', function() {
-      const group = $(this).closest('.btn-group-toggle');
-      group.find('label').removeClass('active');
-      $(this).addClass('active');
-      group.find('input[type=radio]').prop('checked', false);
-      $(this).find('input[type=radio]').prop('checked', true);
-      
-      // Обробка зміни стану радіо кнопок історії руху
-      if ($(this).find('input[type=radio]').attr('name') === 'movementHistoryToggle') {
-        showMovementHistory = $(this).find('input[type=radio]').val() === 'on';
-        console.log('Movement history display:', showMovementHistory);
-        // Оновити відображення при зміні стану
-        displayContent();
+      const input = $(this).find('input');
+      // Застосовуємо логіку перемикання тільки для радіо кнопок
+      if (input.attr('type') === 'radio') {
+        const group = $(this).closest('.btn-group-toggle');
+        group.find('label').removeClass('active');
+        $(this).addClass('active');
+        group.find('input[type=radio]').prop('checked', false);
+        input.prop('checked', true);
       }
+    });
+
+    // Обробка зміни стану чекбокса історії руху
+    $(document).on('change', '#movementHistoryCheckbox', function() {
+      showMovementHistory = $(this).is(':checked');
+      console.log('Movement history display:', showMovementHistory);
+      displayContent();
     });
     
     $('form').on('submit', function(e){ e.preventDefault(); displayContent(); });
