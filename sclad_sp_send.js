@@ -6,6 +6,14 @@ let showMovementHistory = false;
   $(document).ready(function(){
 
   $(document).ready(function() {
+    // Перевірка ширини екрану та автоматичне перемикання на 'block'
+    if ($(window).width() < 800) {
+      $('#option1').prop('checked', true).trigger('change');
+      $('#option2').prop('checked', false);
+      $('.btn-group-toggle label').removeClass('active');
+      $('#option1').closest('label').addClass('active');
+    }
+
     // Перемикання кнопок-груп: керує класом active і станом checked (тільки для радіо кнопок)
     $(document).on('click', '.btn-group-toggle label', function() {
       const input = $(this).find('input');
