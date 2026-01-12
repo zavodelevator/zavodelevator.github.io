@@ -1,4 +1,4 @@
-alert("Hello 36");
+alert("Hello 37");
 // Глобальна змінна для відстеження стану відображення історії руху
 let showMovementHistory = false;
 
