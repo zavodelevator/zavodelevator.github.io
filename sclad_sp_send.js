@@ -15,7 +15,7 @@ let showMovementHistory = false;
         group.find('label').removeClass('active');
         $(this).addClass('active');
         group.find('input[type=radio]').prop('checked', false);
-        input.prop('checked', true);
+        input.prop('checked', true).trigger('change');
       }
     });
 
@@ -26,6 +26,11 @@ let showMovementHistory = false;
        console.log('Movement history display:', showMovementHistory);
        displayContent();
      });
+    
+    // Зміна вигляду блок/таблиця тригерить ререндер
+    $(document).on('change', 'input[name="options"]', function() {
+      displayContent();
+    });
      
      $('form').on('submit', function(e){ e.preventDefault(); displayContent(); });
      $('#dd').on('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); displayContent(); }});
