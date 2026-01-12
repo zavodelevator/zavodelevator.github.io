@@ -1,4 +1,4 @@
-alert("Hello33");
+alert("Hello 33");
 // Глобальна змінна для відстеження стану відображення історії руху
 let showMovementHistory = false;
 
@@ -6,12 +6,17 @@ let showMovementHistory = false;
   $(document).ready(function(){
 
   $(document).ready(function() {
-    // Перевірка ширини екрану та автоматичне перемикання на 'block'
+    // Перевірка ширини екрану та автоматичне перемикання
     if ($(window).width() < 800) {
       $('#option1').prop('checked', true).trigger('change');
       $('#option2').prop('checked', false);
-      $('.btn-group-toggle label').removeClass('active');
+      $('#option1').closest('.btn-group-toggle').find('label').removeClass('active');
       $('#option1').closest('label').addClass('active');
+    } else {
+      $('#option2').prop('checked', true).trigger('change');
+      $('#option1').prop('checked', false);
+      $('#option2').closest('.btn-group-toggle').find('label').removeClass('active');
+      $('#option2').closest('label').addClass('active');
     }
 
     // Перемикання кнопок-груп: керує класом active і станом checked (тільки для радіо кнопок)
