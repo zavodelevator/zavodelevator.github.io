@@ -1,9 +1,73 @@
-alert("Hello 38");
+// alert("Hello 38");
 
 // Ініціалізація: перемикачі, Enter, завантаження даних
+  // Функція для оновлення положення та вмісту липкого заголовка
+  function updateStickyHeader() {
+    const originalTable = document.getElementById('table_resault');
+    if (!originalTable) {
+        $('#sticky-header-container').hide();
+        return;
+    }
+    
+    const tableRect = originalTable.getBoundingClientRect();
+    const thead = originalTable.querySelector('thead');
+    const theadRect = thead.getBoundingClientRect();
+    
+    // Показуємо липкий заголовок, коли оригінальний заголовок виходить за межі екрану зверху,
+    // але таблиця все ще видима
+    if (tableRect.top < 0 && tableRect.bottom > theadRect.height) {
+        let stickyContainer = $('#sticky-header-container');
+        if (stickyContainer.length === 0) {
+            stickyContainer = $('<div id="sticky-header-container"><table class="table mb-0" style="background:white; table-layout: fixed;"><thead></thead></table></div>');
+            stickyContainer.css({
+                'position': 'fixed',
+                'top': '0',
+                'z-index': '1000',
+                'background': 'white',
+                'box-shadow': '0 2px 5px rgba(0,0,0,0.1)',
+                'overflow': 'hidden'
+            });
+            $('body').append(stickyContainer);
+        }
+        
+        const stickyTable = stickyContainer.find('table');
+        const stickyThead = stickyTable.find('thead');
+        
+        // Синхронізуємо вміст заголовка (тільки якщо змінився або порожній)
+        // Для простоти можна оновлювати завжди або перевіряти html
+        stickyThead.html($(thead).html());
+        
+        // Синхронізуємо ширину колонок
+        const originalThs = $(thead).find('th');
+        const stickyThs = stickyThead.find('th');
+        originalThs.each(function(index) {
+            const w = $(this)[0].getBoundingClientRect().width;
+            stickyThs.eq(index).css({
+                'width': w + 'px',
+                'min-width': w + 'px',
+                'max-width': w + 'px',
+                'box-sizing': 'border-box'
+            });
+        });
+        
+        // Синхронізуємо позицію контейнера
+        stickyContainer.css({
+            'display': 'block',
+            'left': tableRect.left + 'px',
+            'width': tableRect.width + 'px'
+        });
+        
+    } else {
+        $('#sticky-header-container').hide();
+    }
+  }
+
   $(document).ready(function(){
 
   $(document).ready(function() {
+    // Слухачі подій для липкого заголовка
+    $(window).on('scroll resize', updateStickyHeader);
+
     // Перевірка ширини екрану та автоматичне перемикання
     if ($(window).width() < 800) {
       $('#option1').prop('checked', true).trigger('change');
@@ -262,6 +326,12 @@ function customSort(arr) {
             </div>`;
         productContainer.appendChild(productBlock);
         const resultDiv = productBlock.querySelector('.table_resault');
+
+        // Додаємо слухач скролу для горизонтального прокручування
+        const tableResponsive = productBlock.querySelector('.table-responsive');
+        if(tableResponsive) {
+            $(tableResponsive).on('scroll', updateStickyHeader);
+        }
 
         result.forEach((item, index) => {
             const adjustedSaldoPrc = calculateAdjustedSaldoPrc(item);
