@@ -1,4 +1,4 @@
-alert(" 33 Hello");
+alert("Hello 34");
 // Глобальна змінна для відстеження стану відображення історії руху
 let showMovementHistory = false;
 
@@ -222,6 +222,7 @@ function customSort(arr) {
 
         result.forEach((item) => {
             const adjustedSaldoPrc = calculateAdjustedSaldoPrc(item);
+            const adjustedSaldoM = adjustedSaldoPrc * parseFloat(item.l);
             const movementHistoryHTML = generateMovementHistory(item.n_p);
 
             const itemRow = document.createElement('tr');
@@ -236,7 +237,7 @@ function customSort(arr) {
                     ${adjustedSaldoPrc}шт.
                 </td>
                 <td>
-                    ${roundToDecimal(item.saldo_m)}.м
+                    ${roundToDecimal(adjustedSaldoM)}.м
                 </td>
                 <td>
                     ${item.sclad}*${item.stilaj}*${item.place_on_sclad}
