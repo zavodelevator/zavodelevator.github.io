@@ -19,15 +19,16 @@ let showMovementHistory = false;
       }
     });
 
-    // Обробка зміни стану чекбокса історії руху
-    $(document).on('change', '#movementHistoryCheckbox', function() {
-      showMovementHistory = $(this).is(':checked');
-      console.log('Movement history display:', showMovementHistory);
-      displayContent();
-    });
-    
-    $('form').on('submit', function(e){ e.preventDefault(); displayContent(); });
-    $('#dd').on('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); displayContent(); }});
+     // Обробка зміни стану чекбокса історії руху
+     $(document).on('change', '#movementHistoryCheckbox', function() {
+       showMovementHistory = $(this).is(':checked');
+       $(this).closest('label').toggleClass('active', showMovementHistory);
+       console.log('Movement history display:', showMovementHistory);
+       displayContent();
+     });
+     
+     $('form').on('submit', function(e){ e.preventDefault(); displayContent(); });
+     $('#dd').on('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); displayContent(); }});
   });
           
     // Завантаження даних із Google Apps Script у localStorage
@@ -140,8 +141,14 @@ function customSort(arr) {
 }
 
   // Рендер відфільтрованого контенту у вигляді блоків або таблиці
-  function displayContent() {
+function displayContent() {
     $(".product-container").empty();
+    const historyCheckbox = document.getElementById('movementHistoryCheckbox');
+    if (historyCheckbox) {
+      showMovementHistory = historyCheckbox.checked;
+      const label = historyCheckbox.closest('label');
+      if (label) label.classList.toggle('active', showMovementHistory);
+    }
     const dd = document.getElementById('dd').value;
     const result = filterByDd(dd);
     const productContainer = document.querySelector('.product-container');
@@ -161,6 +168,17 @@ function customSort(arr) {
                 <p>Вміст</p>
                 <p>Вміст</p>`;
             productContainer.appendChild(productBlock);
+
+            // Додаємо блок історії рухів у режимі "block", якщо чекбокс увімкнено
+            if (showMovementHistory) {
+              const movementHistoryHTML = generateMovementHistory(item.n_p, /* expanded */ true);
+              if (movementHistoryHTML) {
+                const historyContainer = document.createElement('div');
+                historyContainer.className = 'movement-history-row';
+                historyContainer.innerHTML = movementHistoryHTML;
+                productBlock.appendChild(historyContainer);
+              }
+            }
         });
     } else {
         const productBlock = document.createElement('div');
@@ -190,7 +208,7 @@ function customSort(arr) {
         result.forEach((item) => {
             const adjustedSaldoPrc = calculateAdjustedSaldoPrc(item);
             const movementHistoryHTML = generateMovementHistory(item.n_p);
-            
+
             const itemRow = document.createElement('tr');
             itemRow.innerHTML =
                 `<td>
@@ -218,12 +236,13 @@ function customSort(arr) {
                 
                 // Додаємо рядок з історією рухів, якщо увімкнено відображення історії
                 if (showMovementHistory) {
-                    if (movementHistoryHTML) {
+                    const movementHistoryHTMLExpanded = generateMovementHistory(item.n_p, /* expanded */ true);
+                    if (movementHistoryHTMLExpanded) {
                         const historyRow = document.createElement('tr');
                         historyRow.className = 'movement-history-row';
                         historyRow.innerHTML = `
                             <td colspan="7" class="p-0 border-0">
-                                ${movementHistoryHTML}
+                                ${movementHistoryHTMLExpanded}
                             </td>
                         `;
                         resultDiv.appendChild(historyRow);
@@ -351,7 +370,7 @@ function openMiniForm(ev, n_p) {
 }
 
 // Функція для генерації компактної історії рухів
-function generateMovementHistory(n_p) {
+function generateMovementHistory(n_p, expanded = false) {
   const moveData = JSON.parse(localStorage.getItem('move_sp_json')) || [];
   console.log("Searching movements for n_p:", n_p, "in data:", moveData.length, "records");
   
@@ -372,10 +391,10 @@ function generateMovementHistory(n_p) {
   
   let historyHTML = `
     <div class="movement-history-compact">
-      <button class="movement-toggle-btn btn btn-sm btn-link p-0 mb-2" type="button" data-target="#movementHistory_${n_p}" aria-expanded="false" style="text-decoration: none; font-size: 0.85rem; border: none; background: none; cursor: pointer;">
+      <button class="movement-toggle-btn btn btn-sm btn-link p-0 mb-2" type="button" data-target="#movementHistory_${n_p}" aria-expanded="${expanded ? 'true' : 'false'}" style="text-decoration: none; font-size: 0.85rem; border: none; background: none; cursor: pointer;">
         <span class="arrow-icon">▼</span> Історія рухів (${movements.length})
       </button>
-      <div class="movement-content" id="movementHistory_${n_p}" style="display: none;">
+      <div class="movement-content" id="movementHistory_${n_p}" style="${expanded ? '' : 'display: none;'}">
         <div class="movement-list small">`;
   
   movements.forEach(move => {
