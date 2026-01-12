@@ -106,7 +106,7 @@ let showMovementHistory = false;
     return Math.round(number * 10) / 10;
   }
 
-  // Функція для розрахунку скоригованого saldo_prc з урахуванням рухів
+  // Функція для розрахунку скоригованого saldo_prc з урахуванням руху
   function calculateAdjustedSaldoPrc(item) {
     const moveData = JSON.parse(localStorage.getItem('move_sp_json')) || [];
     const movements = moveData.filter(move => String(move.id) === String(item.n_p));
@@ -169,7 +169,7 @@ function displayContent() {
                 <p>Вміст</p>`;
             productContainer.appendChild(productBlock);
 
-            // Додаємо блок історії рухів у режимі "block", якщо чекбокс увімкнено
+            // Додаємо блок історії руху у режимі "block", якщо чекбокс увімкнено
             if (showMovementHistory) {
               const movementHistoryHTML = generateMovementHistory(item.n_p, /* expanded */ true);
               if (movementHistoryHTML) {
@@ -234,7 +234,7 @@ function displayContent() {
                 
                 resultDiv.appendChild(itemRow);
                 
-                // Додаємо рядок з історією рухів, якщо увімкнено відображення історії
+                // Додаємо рядок з історією руху, якщо увімкнено відображення історії
                 if (showMovementHistory) {
                     const movementHistoryHTMLExpanded = generateMovementHistory(item.n_p, /* expanded */ true);
                     if (movementHistoryHTMLExpanded) {
@@ -315,6 +315,12 @@ function openMiniForm(ev, n_p) {
               <input name="note" type="text" id="note" class="form-control" placeholder="Нотатки">
             </div>
 
+            <div id="date_data">
+              <label>Дата</label>
+              <input name="customDate" type="date" id="customDate" class="form-control">
+            </div>
+
+            
 
             <!-- Приховані службові дані для MiniForm -->
             <input type="hidden" id="miniFormN_p" value="${item.n_p}">
@@ -369,7 +375,7 @@ function openMiniForm(ev, n_p) {
   });
 }
 
-// Функція для генерації компактної історії рухів
+// Функція для генерації компактної історії руху
 function generateMovementHistory(n_p, expanded = false) {
   const moveData = JSON.parse(localStorage.getItem('move_sp_json')) || [];
   console.log("Searching movements for n_p:", n_p, "in data:", moveData.length, "records");
@@ -383,7 +389,7 @@ function generateMovementHistory(n_p, expanded = false) {
   console.log("Found movements:", movements.length);
   
   if (movements.length === 0) {
-    return ''; // Повертаємо порожній рядок, якщо немає рухів
+    return ''; // Повертаємо порожній рядок, якщо немає руху
   }
   
   // Сортуємо за датою (новіші зверху)
@@ -392,7 +398,7 @@ function generateMovementHistory(n_p, expanded = false) {
   let historyHTML = `
     <div class="movement-history-compact">
       <button class="movement-toggle-btn btn btn-sm btn-link p-0 mb-2" type="button" data-target="#movementHistory_${n_p}" aria-expanded="${expanded ? 'true' : 'false'}" style="text-decoration: none; font-size: 0.85rem; border: none; background: none; cursor: pointer;">
-        <span class="arrow-icon">▼</span> Історія рухів (${movements.length})
+        <span class="arrow-icon">▼</span> Історія руху (${movements.length})
       </button>
       <div class="movement-content" id="movementHistory_${n_p}" style="${expanded ? '' : 'display: none;'}">
         <div class="movement-list small">`;
@@ -435,7 +441,7 @@ function closeMiniForm() {
   miniForm.innerHTML = '';
 }
 
-// Додаємо CSS стилі для компактної історії рухів
+// Додаємо CSS стилі для компактної історії руху
 const movementHistoryStyles = `
   .movement-history-compact {
     padding: 0.5rem;
@@ -506,7 +512,7 @@ if (!document.getElementById('movementHistoryStyles')) {
   document.head.appendChild(styleElement);
 }
 
-// Функція для ініціалізації розкривання блоків історії рухів
+// Функція для ініціалізації розкривання блоків історії руху
 function initializeMovementHistoryToggle() {
   console.log('Initializing movement history toggle...');
   
@@ -549,10 +555,19 @@ function saveMiniForm() {
   const creditValue = document.getElementById('creditParam')?.value || '';
   const debetValue = document.getElementById('debetParam')?.value || '';
   const noteValue = document.getElementById('note')?.value || '';
+  const customDateValue = document.getElementById('customDate')?.value;
   
   // Заповнюємо приховані поля форми
   const form = document.forms['submit-to-google-sheet'];
-  form.timestamp.value = new Date().toISOString();
+  
+  if (customDateValue) {
+    // Якщо дата вибрана, використовуємо її (час 00:00)
+    form.timestamp.value = new Date(customDateValue).toISOString();
+  } else {
+    // Якщо ні - поточна дата і час
+    form.timestamp.value = new Date().toISOString();
+  }
+  
   form.id.value = n_p;
   form.note.value = noteValue;
   form.dt.value = operationType === 'debet' ? (debetValue || '0') : '0';
