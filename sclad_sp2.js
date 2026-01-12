@@ -1,6 +1,4 @@
 alert("Hello 37");
-// Глобальна змінна для відстеження стану відображення історії руху
-let showMovementHistory = false;
 
 // Ініціалізація: перемикачі, Enter, завантаження даних
   $(document).ready(function(){
@@ -32,14 +30,6 @@ let showMovementHistory = false;
       }
     });
 
-     // Обробка зміни стану чекбокса історії руху
-     $(document).on('change', '#movementHistoryCheckbox', function() {
-       showMovementHistory = $(this).is(':checked');
-       // Видаляємо логіку з класом active для Bootstrap кнопок, оскільки тепер використовуємо кастомний чекбокс
-       console.log('Movement history display:', showMovementHistory);
-       displayContent();
-     });
-    
     // Зміна вигляду блок/таблиця тригерить ререндер
     $(document).on('change', 'input[name="options"]', function() {
       displayContent();
@@ -170,10 +160,6 @@ function customSort(arr) {
   // Рендер відфільтрованого контенту у вигляді блоків або таблиці
   function displayContent() {
     $(".product-container").empty();
-    const historyCheckbox = document.getElementById('movementHistoryCheckbox');
-    if (historyCheckbox) {
-      showMovementHistory = historyCheckbox.checked;
-    }
     const dd = document.getElementById('dd').value;
     const result = filterByDd(dd);
     const productContainer = document.querySelector('.product-container');
@@ -190,20 +176,8 @@ function customSort(arr) {
                 <p>L-${item.l}м.</p>
                 <p>${adjustedSaldoPrc}шт.</p>
                 <p>${roundToDecimal(adjustedSaldoM)}.м</p>
-                <p>${item.sclad}*${item.stilaj}*${item.place_on_sclad}</p>
-                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="openMiniForm(event, '${item.n_p}')">Рух спіралі</button>`;
+                <p>${item.sclad}*${item.stilaj}*${item.place_on_sclad}</p>`;
             productContainer.appendChild(productBlock);
-
-            // Додаємо блок історії руху у режимі "block", якщо чекбокс увімкнено
-            if (showMovementHistory) {
-              const movementHistoryHTML = generateMovementHistory(item.n_p, /* expanded */ true);
-              if (movementHistoryHTML) {
-                const historyContainer = document.createElement('div');
-                historyContainer.className = 'movement-history-row';
-                historyContainer.innerHTML = movementHistoryHTML;
-                productBlock.appendChild(historyContainer);
-              }
-            }
         });
     } else {
         const productBlock = document.createElement('div');
@@ -233,7 +207,6 @@ function customSort(arr) {
         result.forEach((item) => {
             const adjustedSaldoPrc = calculateAdjustedSaldoPrc(item);
             const adjustedSaldoM = adjustedSaldoPrc * parseFloat(item.l);
-            const movementHistoryHTML = generateMovementHistory(item.n_p);
 
             const itemRow = document.createElement('tr');
             itemRow.innerHTML =
@@ -254,31 +227,12 @@ function customSort(arr) {
                 </td>
                 <td>${item.n_p}</td>
                 <td>
-                  <button type="button" class="btn btn-sm btn-outline-secondary" onclick="openMiniForm(event, '${item.n_p}')">Рух спіралі</button>
                 </td>`;
 
                 
                 resultDiv.appendChild(itemRow);
-                
-                // Додаємо рядок з історією руху, якщо увімкнено відображення історії
-                if (showMovementHistory) {
-                    const movementHistoryHTMLExpanded = generateMovementHistory(item.n_p, /* expanded */ true);
-                    if (movementHistoryHTMLExpanded) {
-                        const historyRow = document.createElement('tr');
-                        historyRow.className = 'movement-history-row';
-                        historyRow.innerHTML = `
-                            <td colspan="7" class="p-0 border-0">
-                                ${movementHistoryHTMLExpanded}
-                            </td>
-                        `;
-                        resultDiv.appendChild(historyRow);
-                    }
-                }
         });
     }
-    
-    // Ініціалізуємо перемикачі для новостворених елементів після рендерингу
-    initializeMovementHistoryToggle();
 }
 
 // MiniForm: показ оверлею праворуч угорі для операції руху

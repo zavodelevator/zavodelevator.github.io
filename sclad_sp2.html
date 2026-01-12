@@ -11,64 +11,6 @@
       padding: 10px;
       margin: 10px 0;
     }
-
-    /* Custom Round Checkbox Styles */
-    .custom-checkbox-container {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .custom-checkbox-container input {
-      position: absolute;
-      opacity: 0;
-      cursor: pointer;
-      height: 0;
-      width: 0;
-    }
-
-    .checkmark {
-      height: 24px;
-      width: 24px;
-      background-color: #eee;
-      border-radius: 50%;
-      border: 2px solid #ccc;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      margin-right: 8px;
-      transition: all 0.2s ease-in-out;
-    }
-
-    .custom-checkbox-container:hover input ~ .checkmark {
-      background-color: #e2e2e2;
-    }
-
-    .custom-checkbox-container input:checked ~ .checkmark {
-      background-color: #28a745;
-      border-color: #28a745;
-    }
-
-    .checkmark:after {
-      content: "";
-      display: none;
-      width: 6px;
-      height: 12px;
-      border: solid white;
-      border-width: 0 2px 2px 0;
-      transform: rotate(45deg);
-      margin-bottom: 2px;
-    }
-
-    .custom-checkbox-container input:checked ~ .checkmark:after {
-      display: block;
-    }
-    
-    .checkbox-label {
-      font-weight: normal;
-      color: #555;
-    }
   </style>
 </head>
 <body>
@@ -113,21 +55,7 @@
     <!-- Кнопка запуску фільтрації -->
     <button type="button" class="btn btn-info" onclick="displayContent()">Фільтрувати</button>
     
-    <div style="width: 15px; height: 50px;"></div>
-    
-    <!-- Чекбокс кнопка для вмикання/вимикання історії руху -->
-    <label class="custom-checkbox-container">
-      <input type="checkbox" id="movementHistoryCheckbox">
-      <span class="checkmark"></span>
-      <span class="checkbox-label">Історія руху</span>
-    </label>
-
   </form>
-
-  <div class="MiniForm" style="display: none;">
-    <!-- MiniForm: оверлей для операцій руху спіралі -->
-
-  </div>
 
   <div class="product-container">
     <!-- Контейнер виводу відфільтрованих результатів -->
@@ -135,18 +63,6 @@
   </div>
 
 </div>
-
-<!-- Форма для відправки даних до Google Sheets -->
-<form name="submit-to-google-sheet" style="display: none;" method="post">
-  <input name="timestamp" type="hidden">
-  <input name="id" type="hidden">
-  <input name="note" type="hidden">
-  <input name="dt" type="hidden">
-  <input name="kt" type="hidden">
-  <input name="description" type="hidden">
-  <input name="email" type="email" placeholder="Email" required>
-  <button type="submit">Send</button>
-</form>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="sclad_sp2.js"></script>
