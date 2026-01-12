@@ -22,7 +22,7 @@ let showMovementHistory = false;
      // Обробка зміни стану чекбокса історії руху
      $(document).on('change', '#movementHistoryCheckbox', function() {
        showMovementHistory = $(this).is(':checked');
-       $(this).closest('label').toggleClass('active', showMovementHistory);
+       // Видаляємо логіку з класом active для Bootstrap кнопок, оскільки тепер використовуємо кастомний чекбокс
        console.log('Movement history display:', showMovementHistory);
        displayContent();
      });
@@ -141,13 +141,11 @@ function customSort(arr) {
 }
 
   // Рендер відфільтрованого контенту у вигляді блоків або таблиці
-function displayContent() {
+  function displayContent() {
     $(".product-container").empty();
     const historyCheckbox = document.getElementById('movementHistoryCheckbox');
     if (historyCheckbox) {
       showMovementHistory = historyCheckbox.checked;
-      const label = historyCheckbox.closest('label');
-      if (label) label.classList.toggle('active', showMovementHistory);
     }
     const dd = document.getElementById('dd').value;
     const result = filterByDd(dd);
