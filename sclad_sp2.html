@@ -11,202 +11,146 @@
       padding: 10px;
       margin: 10px 0;
     }
+
+    /* Custom Round Checkbox Styles */
+    .custom-checkbox-container {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .custom-checkbox-container input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      height: 0;
+      width: 0;
+    }
+
+    .checkmark {
+      height: 24px;
+      width: 24px;
+      background-color: #eee;
+      border-radius: 50%;
+      border: 2px solid #ccc;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 8px;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .custom-checkbox-container:hover input ~ .checkmark {
+      background-color: #e2e2e2;
+    }
+
+    .custom-checkbox-container input:checked ~ .checkmark {
+      background-color: #28a745;
+      border-color: #28a745;
+    }
+
+    .checkmark:after {
+      content: "";
+      display: none;
+      width: 6px;
+      height: 12px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+      margin-bottom: 2px;
+    }
+
+    .custom-checkbox-container input:checked ~ .checkmark:after {
+      display: block;
+    }
+    
+    .checkbox-label {
+      font-weight: normal;
+      color: #555;
+    }
   </style>
 </head>
 <body>
-
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="https://agrohelix.com.ua/">Agrohelix</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" href="https://zavodelevator.github.io/calc_sh_t2.html">Шнековий транспортер<span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item active">
-        <a class="nav-link" href="https://zavodelevator.github.io/sclad_sp2.html">Цільнокатана спіраль</a>
-      </li>
-
-    </ul>
-  </div>
-</nav>
+<!-- Опис: Сторінка складу спіралей. Фільтрація результатів і MiniForm для оформлення руху. -->
 
 <div class="container">
+  <!-- Основний контейнер сторінки -->
+  <form class="form-inline">
+    <div class="form-group mr-2">
+      <!-- Поле фільтрації за параметром (dd або діапазони) -->
+      <input type="text" class="form-control" id="dd" placeholder="Введіть параметр">
+    </div>
 
-  <div class="question_block">
-
-    <form class="form-inline">
-      <div class="form-group mr-2">
-        <input type="text" class="form-control" id="dd" placeholder="Введіть параметр">
-      </div>
-
-      <div style="width: 10px; height: 50px;"></div>
-
-      <div class="btn-group btn-group-toggle" data-toggle="buttons">
-        <label class="btn btn-outline-primary active">
-          <input type="radio" name="options1" id="option1" value="block" checked>table
-        </label>
-        <label class="btn btn-outline-primary">
-          <input type="radio" name="options2" id="option2" value="table">block
-        </label>
-      </div>
-      
-      <div style="width: 15px; height: 50px;"></div>
-       
-      <button type="button" class="btn btn-info" onclick="displayContent()">Фільтрувати</button>
-      
-    </form>
-
-    <br>
-  
-    <!-- <form class="form-inline">
-
-      <div class="row">  
-        <div class="form-group mr-2">
-          <input type="text" class="form-control" id="dd2" placeholder="D">
-        </div>
-
-        <div style="width: 10px; height: 50px;"></div>
-
-        <div class="form-group mr-2">
-          <input type="text" class="form-control" id="d" placeholder="d">
-        </div>
-
-        <div style="width: 10px; height: 50px;"></div>
-
-        <div class="form-group mr-2">
-          <input type="text" class="form-control" id="p" placeholder="p">
-        </div>
-
-        <div style="width: 10px; height: 50px;"></div>
-
-        <div class="form-group mr-2">
-          <input type="text" class="form-control" id="s" placeholder="S">
-        </div>
-        
-        <div style="width: 10px; height: 50px;"></div>
-
-        <div class="form-group mr-2">
-          <input type="text" class="form-control" id="L_spiral" placeholder="Довжина спіралі">
-        </div>
-
-        <div style="width: 10px; height: 50px;"></div>
-
-        <select class="form-control" id="l_r">
-          <option>Лівий</option>
-          <option>Правий</option>
-        </select>
-
-        <div style="width: 10px; height: 50px;"></div>
-      </div>
-       
+    <div style="width: 10px; height: 50px;"></div>
 
 
-      <div class="row">  
-        <div class="form-group mr-2">
-          <input type="text" class="form-control" id="l_pіpe" placeholder="L труби">
-        </div>
+    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+      <label class="btn btn-outline-primary">
+        <input type="radio" name="options" id="option2" value="table" checked> table
+      </label>
+      <label class="btn btn-outline-primary active">
+        <input type="radio" name="options" id="option1" value="block"> block
+      </label>
+    </div>
+    
+    <div style="width: 10px; height: 50px;"></div>
+    
+    <div class="btn-group btn-group-toggle" data-toggle="buttons" style="display: none;">
+      <label class="btn btn-outline-primary active">
+        <input type="radio" name="options" id="option3" value="of" checked> of
+      </label>
+      <label class="btn btn-outline-primary">
+        <input type="radio" name="options" id="option4" value="Manager"> Manager
+      </label>
+    </div>
+    
+    
 
-        <div style="width: 10px; height: 50px;"></div>
+    <div style="width: 15px; height: 50px;"></div>
+    
 
-        <div class="form-group mr-2">
-          <input type="text" class="form-control" id="S_pіpe" placeholder="S труби">
-        </div>
+    <!-- Кнопка запуску фільтрації -->
+    <button type="button" class="btn btn-info" onclick="displayContent()">Фільтрувати</button>
+    
+    <div style="width: 15px; height: 50px;"></div>
+    
+    <!-- Чекбокс кнопка для вмикання/вимикання історії руху -->
+    <label class="custom-checkbox-container">
+      <input type="checkbox" id="movementHistoryCheckbox">
+      <span class="checkmark"></span>
+      <span class="checkbox-label">Історія руху</span>
+    </label>
 
-        <div style="width: 10px; height: 50px;"></div>
+  </form>
 
-        <div class="form-group mr-3">
-          <input type="text" class="form-control" id="s" placeholder="S">
-        </div>
-
-        
-        <div style="width: 10px; height: 50px;"></div>
-        
-        <div class="form-group mr-3">
-          <input type="text" class="form-control" id="s" placeholder="S">
-        </div>
-       
-        <div style="width: 10px; height: 50px;"></div>
-
-        <select class="form-control" id="l_r">
-          <option>Agrohelix</option>
-          <option>Замовника</option>
-        </select>
-      </div>
-       
-
-
-
-      <div class="btn-group btn-group-toggle" data-toggle="buttons">
-        <label class="btn btn-outline-primary active">
-          <input type="radio" name="options3" id="option3" value="block" checked>Ремонт Шнека
-        </label>
-        <label class="btn btn-outline-primary">
-          <input type="radio" name="options4" id="option4" value="table">Спіраль та сегменти
-        </label>  
-      </div>
-  
-      <div style="width: 15px; height: 50px;"></div>
-
-      <div class="btn-group btn-group-toggle" data-toggle="buttons">
-        <label class="btn btn-outline-primary active">
-          <input type="radio" name="options1" id="option5" value="block" checked>Сегмент
-        </label>
-        <label class="btn btn-outline-primary">
-          <input type="radio" name="options2" id="option6" value="table">Спіраль
-        </label>
-      </div>
-      
-      <div style="width: 15px; height: 50px;"></div>
-       
-      <button type="button" class="btn btn-info" onclick="">Розрахувати</button>
-      
-    </form> -->
+  <div class="MiniForm" style="display: none;">
+    <!-- MiniForm: оверлей для операцій руху спіралі -->
 
   </div>
 
   <div class="product-container">
+    <!-- Контейнер виводу відфільтрованих результатів -->
                     
   </div>
+
 </div>
 
+<!-- Форма для відправки даних до Google Sheets -->
+<form name="submit-to-google-sheet" style="display: none;" method="post">
+  <input name="timestamp" type="hidden">
+  <input name="id" type="hidden">
+  <input name="note" type="hidden">
+  <input name="dt" type="hidden">
+  <input name="kt" type="hidden">
+  <input name="description" type="hidden">
+  <input name="email" type="email" placeholder="Email" required>
+  <button type="submit">Send</button>
+</form>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="sclad_sp2.js"></script>
 
-<!-- C:\Users\MIsha\Documents\GitHub\zavodelevator.github.io\src_sklad_sp\js\filterByDd.js -->
-<script>
-  let url ="https://script.google.com/macros/s/AKfycby1pO_94xtHo1m6LhtMEB8RlsBt6XkIq3FNSgTktGHn0xHmTrPjuJiNLy0CminF7t-YtQ/exec";
-  let table_name ="sclad_sp_json";
-</script>
-<script src="src_sklad_sp/js/get_g_table.js"></script>
-<script src="src_sklad_sp/js/filterByDd.js"></script>
-<script src="src_sklad_sp/js/delate_dublicate.js"></script>
-<script src="src_sklad_sp/js/displayContent.js"></script>
-
-<script>
-
-
-  function roundToDecimal(number) {
-    return Math.round(number * 10) / 10;
-  }
-      
-
-  function customSort(arr) {
-      arr.sort((a, b) => {
-          if (a.dd !== b.dd) {
-              return a.dd - b.dd;
-          } else if (a.d !== b.d) {
-              return a.d - b.d;
-          } else {
-              return a.p - b.p;
-          }
-      });
-      
-      return arr;
-  }
-
-</script>
 
 </body>
 </html>
