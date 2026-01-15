@@ -5,6 +5,8 @@ new Vue({
       distributorLength: null,
       data_shkr: [],
       selectedTsh: "25",
+      tableData: {},
+      selectedMr: null,
       tables: [
         {
           name: "MR",
@@ -27,6 +29,9 @@ new Vue({
         },
         currentTshImage() {
             return 'src/calc_sh_t/src/img/TSH' + this.selectedTsh + '.jpg'
+        },
+        mrOptions() {
+            return this.tableData['MR'] || []
         }
     },
     methods: {
@@ -36,6 +41,7 @@ new Vue({
             url: item.url,
             dataType: "json",
             success: (data) => {
+              this.tableData[item.name] = data;
               this.data_shkr.push(item.name, data);
               console.log('Отримані дані:', this.data_shkr);
             },
@@ -45,6 +51,9 @@ new Vue({
           });
         });
       }
+    },
+    created() {
+      console.log('Конфігурація таблиць:', this.tables);
     },
     mounted() {
       this.processData();
