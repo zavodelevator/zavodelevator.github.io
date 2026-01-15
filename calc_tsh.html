@@ -2,7 +2,7 @@
 <!-- Vue.js додаток для розрахунку параметрів шнекового транспортера -->
 <html lang="uk">
   <head>
-    <title>Шкрельний транспортер</title>
+    <title>Шкребковий транспортер</title>
     <!-- Мета-теги -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -20,7 +20,7 @@
 
 <body>
     <p>
-        <a href="https://agrohelix.com.ua/">Agrohelix227</a>
+        <a href="https://agrohelix.com.ua/">Agrohelix228</a>
     </p>
     <!-- Навігаційне меню -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -122,18 +122,7 @@
                                 
                                   <hr>
                                   
-                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                <span class="label-title">Тип редуктора</span>
-                                <div>
-                                    <label class="btn btn-secondary" :class="{ active: mrBrand === 'Neromotori' }">
-                                        <input type="radio" name="mrBrand" value="Neromotori" v-model="mrBrand"> Neromotori
-                                    </label>
-                                    <label class="btn btn-secondary" :class="{ active: mrBrand === 'IMAK' }">
-                                        <input type="radio" name="mrBrand" value="IMAK" v-model="mrBrand"> IMAK
-                                      </label>
-                                    </div>
-                                  </div>
-                                </div>
+                                
 
                                 <label for="mr">Редуктор</label>
                                 <select class="form-control" id="mr" v-model="selectedMrId">
@@ -142,7 +131,7 @@
                                             {{ mr.name }} — {{ mr.kWt }} кВт / {{ mr.gab }} габарит
                                         </option>
                                     </template>
-                                    <option v-else disabled>Немає даних для вибраного бренду</option>
+                                    <option v-else disabled>Немає даних</option>
                                 </select>
 
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">

@@ -7,7 +7,6 @@ new Vue({
       selectedTsh: "25",
       tableData: {},
       selectedMrId: null,
-      mrBrand: "Neromotori",
       tables: [
         {
           name: "MR",
@@ -48,14 +47,9 @@ new Vue({
                 price: it.price ?? it.Price ?? '',
                 id: it.id ?? it.ID ?? ''
             }))
-            const brand = (this.mrBrand || '').trim().toLowerCase()
             const noDriveName = 'без приводу'
-            const filtered = normalized.filter(it => {
-                const n = (it.name || '').trim().toLowerCase()
-                return n && n !== noDriveName && (!brand || n === brand)
-            })
             const noDrive = normalized.find(it => (it.name || '').trim().toLowerCase() === noDriveName)
-            const base = filtered.length ? filtered : normalized.filter(it => (it.name || '').trim().toLowerCase() !== noDriveName)
+            const base = normalized.filter(it => (it.name || '').trim().toLowerCase() !== noDriveName)
             return noDrive ? [noDrive, ...base] : base
         },
         selectedMr() {
@@ -104,13 +98,5 @@ new Vue({
           }
         }
       }, { immediate: true })
-      this.$watch('mrBrand', () => {
-        const arr = this.mrOptions
-        if (Array.isArray(arr) && arr.length) {
-          this.selectedMrId = arr[0].id
-        } else {
-          this.selectedMrId = null
-        }
-      })
     }
   })
