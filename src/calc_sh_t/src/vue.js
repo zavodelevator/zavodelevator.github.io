@@ -1,3 +1,4 @@
+window.MR_DATA = [];
 new Vue({
     el: '#distributorApp',
     data: {
@@ -52,8 +53,23 @@ new Vue({
             const base = normalized.filter(it => (it.name || '').trim().toLowerCase() !== noDriveName)
             return noDrive ? [noDrive, ...base] : base
         },
+        mrOptionsGlobal() {
+            let raw = window.MR_DATA
+            if (!Array.isArray(raw)) raw = []
+            const normalized = raw.map(it => ({
+                name: it.name ?? it.Name ?? '',
+                kWt: String(it.kWt ?? it.kwt ?? it.kW ?? '').replace(',', '.'),
+                gab: it.gab ?? it.Gab ?? '',
+                price: it.price ?? it.Price ?? '',
+                id: it.id ?? it.ID ?? ''
+            }))
+            const noDriveName = 'без приводу'
+            const noDrive = normalized.find(it => (it.name || '').trim().toLowerCase() === noDriveName)
+            const base = normalized.filter(it => (it.name || '').trim().toLowerCase() !== noDriveName)
+            return noDrive ? [noDrive, ...base] : base
+        },
         selectedMr() {
-            const arr = this.mrOptions
+            const arr = this.mrOptionsGlobal
             if (!Array.isArray(arr)) return null
             const found = arr.find(x => String(x.id) === String(this.selectedMrId))
             return found ? { name: found.name, price: found.price, id: found.id } : null
@@ -71,6 +87,13 @@ new Vue({
               console.log('Отримані дані:', this.data_shkr);
               if (item.name === 'MR') {
                 console.log('MR options loaded:', this.tableData['MR']);
+                let d = data;
+                if (typeof d === 'string') {
+                  try { d = JSON.parse(d) } catch(e) { d = [] }
+                }
+                if (d && Array.isArray(d.data)) d = d.data;
+                window.MR_DATA = Array.isArray(d) ? d : [];
+                console.log('MR_DATA set:', window.MR_DATA);
               }
             },
             error: (xhr, status, error) => {
@@ -91,7 +114,7 @@ new Vue({
           console.log('MR loaded length:', len)
         } catch(e) {}
       }, { deep: true })
-      this.$watch(() => this.mrOptions, (arr) => {
+      this.$watch(() => this.mrOptionsGlobal, (arr) => {
         if (Array.isArray(arr) && arr.length) {
           if (!this.selectedMrId || !arr.some(x => String(x.id) === String(this.selectedMrId))) {
             this.selectedMrId = arr[0].id

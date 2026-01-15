@@ -126,8 +126,8 @@
 
                                 <label for="mr">Редуктор</label>
                                 <select class="form-control" id="mr" v-model="selectedMrId">
-                                    <template v-if="mrOptions.length">
-                                        <option v-for="mr in mrOptions" :key="mr.id" :value="mr.id">
+                                    <template v-if="mrOptionsGlobal.length">
+                                        <option v-for="mr in mrOptionsGlobal" :key="mr.id" :value="mr.id">
                                             {{ mr.name }} — {{ mr.kWt }} кВт / {{ mr.gab }} габарит
                                         </option>
                                     </template>
