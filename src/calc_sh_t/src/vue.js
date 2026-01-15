@@ -4,6 +4,7 @@ new Vue({
       hasDistributor: false,
       distributorLength: null,
       data_shkr: [],
+      selectedTsh: "25",
       tables: [
         {
           name: "MR",
@@ -23,6 +24,9 @@ new Vue({
     computed: {
         currentImage() {
             return this.hasDistributor ? 'src/calc_sh_t/src/img/Scraper_conveyor2.png' : 'src/calc_sh_t/src/img/banner22.jpg'
+        },
+        currentTshImage() {
+            return 'src/calc_sh_t/src/img/TSH' + this.selectedTsh + '.jpg'
         }
     },
     methods: {

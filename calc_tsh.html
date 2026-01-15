@@ -63,8 +63,9 @@
                 <div class="row">
                     <div class="col-sm">
                         <div class="card mb-3" style="max-width: 70%;">
-                          <img class="card-img-top" :src="currentImage" alt="Card image cap" style="width: 100%; height: auto;">
+                          <img class="card-img-top" :src="currentTshImage" alt="Транспортер шкребковий" style="width: 100%; height: auto;">
                         </div>
+                        
                     </div>
                     
                   <div>
@@ -72,7 +73,7 @@
                     <div class="col-sm">
                         <div class="form-group">
                             <label for="params_trans">Продуктивність транспортера</label>
-                            <select class="form-control" id="params_trans">
+                            <select class="form-control" id="params_trans" v-model="selectedTsh">
                                 <option value="25">ТШ 25</option>
                                 <option value="50">ТШ 50</option>
                                 <option value="100">ТШ 100</option>
