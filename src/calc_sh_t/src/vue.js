@@ -31,50 +31,12 @@ new Vue({
         currentTshImage() {
             return 'src/calc_sh_t/src/img/TSH' + this.selectedTsh + '.jpg'
         },
-        mrOptions() {
-            let raw = this.tableData['MR']
-            if (!raw) return []
-            if (typeof raw === 'string') {
-                try { raw = JSON.parse(raw) } catch (e) { return [] }
-            }
-            if (raw && Array.isArray(raw.data)) {
-                raw = raw.data
-            }
-            if (!Array.isArray(raw)) return []
-            const normalized = raw.map(it => ({
-                name: it.name ?? it.Name ?? '',
-                kWt: String(it.kWt ?? it.kwt ?? it.kW ?? '').replace(',', '.'),
-                gab: it.gab ?? it.Gab ?? '',
-                price: it.price ?? it.Price ?? '',
-                id: it.id ?? it.ID ?? ''
-            }))
-            const noDriveName = 'без приводу'
-            const noDrive = normalized.find(it => (it.name || '').trim().toLowerCase() === noDriveName)
-            const base = normalized.filter(it => (it.name || '').trim().toLowerCase() !== noDriveName)
-            return noDrive ? [noDrive, ...base] : base
+        
+
+         
         },
-        mrOptionsGlobal() {
-            let raw = window.MR_DATA
-            if (!Array.isArray(raw)) raw = []
-            const normalized = raw.map(it => ({
-                name: it.name ?? it.Name ?? '',
-                kWt: String(it.kWt ?? it.kwt ?? it.kW ?? '').replace(',', '.'),
-                gab: it.gab ?? it.Gab ?? '',
-                price: it.price ?? it.Price ?? '',
-                id: it.id ?? it.ID ?? ''
-            }))
-            const noDriveName = 'без приводу'
-            const noDrive = normalized.find(it => (it.name || '').trim().toLowerCase() === noDriveName)
-            const base = normalized.filter(it => (it.name || '').trim().toLowerCase() !== noDriveName)
-            return noDrive ? [noDrive, ...base] : base
-        },
-        selectedMr() {
-            const arr = this.mrOptionsGlobal
-            if (!Array.isArray(arr)) return null
-            const found = arr.find(x => String(x.id) === String(this.selectedMrId))
-            return found ? { name: found.name, price: found.price, id: found.id } : null
-        }
-    },
+       
+  
     methods: {
       processData() {
         this.tables.forEach(item => {
@@ -108,18 +70,6 @@ new Vue({
     },
     mounted() {
       this.processData();
-      this.$watch(() => this.tableData['MR'], (val) => {
-        try {
-          const len = Array.isArray(val) ? val.length : (val && Array.isArray(val.data) ? val.data.length : 0)
-          console.log('MR loaded length:', len)
-        } catch(e) {}
-      }, { deep: true })
-      this.$watch(() => this.mrOptionsGlobal, (arr) => {
-        if (Array.isArray(arr) && arr.length) {
-          if (!this.selectedMrId || !arr.some(x => String(x.id) === String(this.selectedMrId))) {
-            this.selectedMrId = arr[0].id
-          }
-        }
-      }, { immediate: true })
+     
     }
   })
