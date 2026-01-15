@@ -31,7 +31,22 @@ new Vue({
             return 'src/calc_sh_t/src/img/TSH' + this.selectedTsh + '.jpg'
         },
         mrOptions() {
-            return this.tableData['MR'] || []
+            let raw = this.tableData['MR']
+            if (!raw) return []
+            if (typeof raw === 'string') {
+                try { raw = JSON.parse(raw) } catch (e) { return [] }
+            }
+            if (raw && Array.isArray(raw.data)) {
+                raw = raw.data
+            }
+            if (!Array.isArray(raw)) return []
+            return raw.map(it => ({
+                name: it.name ?? it.Name ?? '',
+                kWt: String(it.kWt ?? it.kwt ?? it.kW ?? '').replace(',', '.'),
+                gab: it.gab ?? it.Gab ?? '',
+                price: it.price ?? it.Price ?? '',
+                id: it.id ?? it.ID ?? ''
+            }))
         }
     },
     methods: {
