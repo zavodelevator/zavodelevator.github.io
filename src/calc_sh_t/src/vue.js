@@ -6,7 +6,7 @@ new Vue({
       data_shkr: [],
       selectedTsh: "25",
       tableData: {},
-      selectedMr: null,
+      selectedMrId: null,
       mrBrand: "Neromotori",
       tables: [
         {
@@ -54,6 +54,12 @@ new Vue({
                 return n && n !== 'без приводу' && (!brand || n === brand)
             })
             return filtered.length ? filtered : normalized.filter(it => (it.name || '').trim().toLowerCase() !== 'без приводу')
+        },
+        selectedMr() {
+            const arr = this.mrOptions
+            if (!Array.isArray(arr)) return null
+            const found = arr.find(x => String(x.id) === String(this.selectedMrId))
+            return found ? { name: found.name, price: found.price, id: found.id } : null
         }
     },
     methods: {
@@ -88,5 +94,20 @@ new Vue({
           console.log('MR loaded length:', len)
         } catch(e) {}
       }, { deep: true })
+      this.$watch(() => this.mrOptions, (arr) => {
+        if (Array.isArray(arr) && arr.length) {
+          if (!this.selectedMrId || !arr.some(x => String(x.id) === String(this.selectedMrId))) {
+            this.selectedMrId = arr[0].id
+          }
+        }
+      }, { immediate: true })
+      this.$watch('mrBrand', () => {
+        const arr = this.mrOptions
+        if (Array.isArray(arr) && arr.length) {
+          this.selectedMrId = arr[0].id
+        } else {
+          this.selectedMrId = null
+        }
+      })
     }
   })

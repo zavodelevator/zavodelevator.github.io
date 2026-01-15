@@ -20,7 +20,7 @@
 
 <body>
     <p>
-        <a href="https://agrohelix.com.ua/">Agrohelix224</a>
+        <a href="https://agrohelix.com.ua/">Agrohelix225</a>
     </p>
     <!-- Навігаційне меню -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -136,9 +136,9 @@
                                 </div>
 
                                 <label for="mr">Редуктор</label>
-                                <select class="form-control" id="mr" v-model="selectedMr">
+                                <select class="form-control" id="mr" v-model="selectedMrId">
                                     <template v-if="mrOptions.length">
-                                        <option v-for="mr in mrOptions" :key="mr.id" :value="{ name: mr.name, price: mr.price, id: mr.id }">
+                                        <option v-for="mr in mrOptions" :key="mr.id" :value="mr.id">
                                             {{ mr.name }} — {{ mr.kWt }} кВт / {{ mr.gab }} габарит
                                         </option>
                                     </template>
