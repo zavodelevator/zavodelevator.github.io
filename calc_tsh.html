@@ -20,7 +20,7 @@
 
 <body>
     <p>
-        <a href="https://agrohelix.com.ua/">Agrohelix230</a>
+        <a href="https://agrohelix.com.ua/">Agrohelix231</a>
     </p>
     <!-- Навігаційне меню -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -137,8 +137,8 @@
                                   </div>
 
                                 <label for="mr">Редуктор</label>
-                                <select class="form-control" id="mr">
-                                   
+                                <select class="form-control" id="mr" v-model="selectedMrId">
+                                  <option v-for="mr in mrOptions" :key="mr.id || mr.name" :value="mr.id || mr.name">{{ formatMrOption(mr) }}</option>
                                 </select>
 
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">

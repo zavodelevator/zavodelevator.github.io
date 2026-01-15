@@ -8,6 +8,7 @@ new Vue({
       selectedTsh: "25",
       tableData: {},
       selectedMrId: null,
+      mrBrand: "",
       tables: [
         {
           name: "MR",
@@ -31,9 +32,29 @@ new Vue({
         currentTshImage() {
             return 'src/calc_sh_t/src/img/TSH' + this.selectedTsh + '.jpg'
         },
-        
-
-         
+        mrOptions() {
+          let raw = window.MR_DATA || [];
+          if (!Array.isArray(raw)) raw = [];
+          const normalized = raw.map(it => {
+            let name = it.name || it.Name || '';
+            let kWt = it.kWt ?? it.kwt ?? it.kW ?? it.kw ?? '';
+            if (typeof kWt === 'string') kWt = kWt.replace(',', '.');
+            let gab = it.gab ?? it.Gab ?? it.size ?? '';
+            let price = it.price ?? it.Price ?? '';
+            let id = it.id ?? it.ID ?? it.Id ?? null;
+            return { name, kWt, gab, price, id };
+          }).filter(it => it.name || it.id);
+          const brand = String(this.mrBrand || '').trim().toLowerCase();
+          let base = normalized.filter(it => {
+            const n = String(it.name || '').trim().toLowerCase();
+            return n !== 'без приводу' && (!brand || n === brand);
+          });
+          if (!base.length) {
+            base = normalized.filter(it => String(it.name || '').trim().toLowerCase() !== 'без приводу');
+          }
+          const noDrive = normalized.find(it => String(it.name || '').trim().toLowerCase() === 'без приводу') || { name: 'Без приводу', kWt: '', gab: '', price: '', id: 'no_drive' };
+          return [noDrive, ...base];
+        }
         },
        
   
@@ -63,6 +84,14 @@ new Vue({
             }
           });
         });
+      },
+      formatMrOption(mr) {
+        const parts = [];
+        if (mr.name) parts.push(mr.name);
+        if (mr.gab) parts.push(mr.gab);
+        if (mr.kWt) parts.push(mr.kWt + ' кВт');
+        if (mr.price) parts.push(mr.price);
+        return parts.join(' | ');
       }
     },
     created() {
