@@ -49,4 +49,84 @@ body {
     .btn-group {
         flex-direction: column;
     }
-} 
+}
+
+/* ============================================
+   Оформлення елементів сторінки ТШ (calc_tsh)
+   ============================================ */
+
+/* Групи кнопок у формі (вертикальне розміщення, компактні відступи) */
+.btn-group.btn-group-toggle {
+    margin: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Невеликий сіро-колірний заголовок для блоків форми */
+.label-title {
+    color: gray;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+
+/* Фіксована висота зображень у картках, щоб контент знизу не “стрибав” */
+.fixed-img {
+    width: 100%;
+    height: 500px;
+    object-fit: contain;
+}
+
+/* Базова видимість контролів каруселі */
+.carousel-control-prev, .carousel-control-next {
+    opacity: 1;
+}
+
+/* Кастомізація контролів каруселі для блоку #tshCarousel:
+   - Позиціонування по центру висоти
+   - Контрастні круглі кнопки зі стрілками
+   - Ховер-ефект збільшення та затемнення */
+#tshCarousel .carousel-control-prev,
+#tshCarousel .carousel-control-next {
+    width: 64px;
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%);
+    opacity: 1;
+    z-index: 2;
+}
+#tshCarousel .carousel-control-prev { left: 10px; }
+#tshCarousel .carousel-control-next { right: 10px; }
+
+#tshCarousel .carousel-control-prev-icon,
+#tshCarousel .carousel-control-next-icon {
+    background-image: none;
+    background-color: rgba(0,0,0,0.65);
+    border: 1px solid #fff;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#tshCarousel .carousel-control-prev-icon::before {
+    content: '‹';
+    font-size: 28px;
+    color: #fff;
+}
+#tshCarousel .carousel-control-next-icon::before {
+    content: '›';
+    font-size: 28px;
+    color: #fff;
+}
+#tshCarousel .carousel-control-prev:hover .carousel-control-prev-icon,
+#tshCarousel .carousel-control-next:hover .carousel-control-next-icon {
+    background-color: rgba(0,0,0,0.85);
+    transform: scale(1.08);
+}
+#tshCarousel .carousel-control-prev:focus .carousel-control-prev-icon,
+#tshCarousel .carousel-control-next:focus .carousel-control-next-icon {
+    outline: 2px solid #fff;
+    outline-offset: 3px;
+}
