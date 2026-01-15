@@ -19,6 +19,7 @@ new Vue({
       tableData: {}, // відповіді сервера по кожній таблиці
       selectedMrId: null, // id вибраного приводу MR
       mrBrand: "", // фільтр за брендом для списку MR
+      mrData: [],
       tables: [ // конфігурація джерел даних
         {
           name: "MR", // довідник приводів MR
@@ -47,7 +48,7 @@ new Vue({
         },
         // mrOptions — нормалізація та фільтрація списку MR з window.MR_DATA
         mrOptions() {
-          let raw = window.MR_DATA || []; // 1) Беремо глобальні дані або порожній масив
+          let raw = this.mrData || [];
           if (!Array.isArray(raw)) raw = [];
           const normalized = raw.map(it => {
             let name = it.name || it.Name || '';
@@ -62,7 +63,7 @@ new Vue({
           const brand = String(this.mrBrand || '').trim().toLowerCase();
           let base = normalized.filter(it => {
             const n = String(it.name || '').trim().toLowerCase();
-            return n !== 'без приводу' && (!brand || n === brand);
+            return n !== 'без приводу' && (!brand || n.includes(brand));
           });
           // Якщо після фільтру немає результатів — повертаємо всі, окрім "без приводу"
           if (!base.length) {
@@ -95,6 +96,7 @@ new Vue({
                 }
                 if (d && Array.isArray(d.data)) d = d.data; // якщо відповідь у полі data — беремо його
                 window.MR_DATA = Array.isArray(d) ? d : []; // кешуємо масив записів MR
+                this.mrData = Array.isArray(d) ? d : [];
                 console.log('MR_DATA set:', window.MR_DATA);
               }
             },
@@ -111,8 +113,7 @@ new Vue({
         if (mr.gab) parts.push(mr.gab);
         if (mr.kWt) parts.push(mr.kWt + ' кВт');
         if (mr.price) parts.push(mr.price);
-        return parts.join(' | ');
-        console.log('formatMrOption result:', parts.join('----- | '));
+        return parts.join(' | ')
       }
     },
     // created — логування конфігурації джерел даних при ініціалізації
