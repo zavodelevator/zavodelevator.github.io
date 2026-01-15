@@ -18,7 +18,7 @@ new Vue({
       selectedTsh: "25", // вибраний тип TSH для картинки
       tableData: {}, // відповіді сервера по кожній таблиці
       selectedMrId: null, // id вибраного приводу MR
-      mrBrand: "", // фільтр за брендом для списку MR
+      mrBrand: "Neromotori", // фільтр за брендом для списку MR
       mrData: [],
       tables: [ // конфігурація джерел даних
         {
@@ -74,6 +74,14 @@ new Vue({
           return [noDrive, ...base];
         }
         },
+    watch: {
+      mrBrand() {
+        this.$nextTick(() => {
+          const first = this.mrOptions && this.mrOptions[0];
+          this.selectedMrId = first ? (first.id || first.name) : null;
+        });
+      }
+    },
        
   
     // methods: завантаження та форматування даних
@@ -98,6 +106,10 @@ new Vue({
                 window.MR_DATA = Array.isArray(d) ? d : []; // кешуємо масив записів MR
                 this.mrData = Array.isArray(d) ? d : [];
                 console.log('MR_DATA set:', window.MR_DATA);
+                this.$nextTick(() => {
+                  const first = this.mrOptions && this.mrOptions[0];
+                  this.selectedMrId = first ? (first.id || first.name) : null;
+                });
               }
             },
             error: (xhr, status, error) => {
