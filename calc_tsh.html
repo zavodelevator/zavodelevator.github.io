@@ -20,7 +20,7 @@
 
 <body>
     <p>
-        <a href="https://agrohelix.com.ua/">Agrohelix222</a>
+        <a href="https://agrohelix.com.ua/">Agrohelix223</a>
     </p>
     <!-- Навігаційне меню -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -125,11 +125,11 @@
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                 <span class="label-title">Тип редуктора</span>
                                 <div>
-                                    <label class="btn btn-secondary active">
-                                        <input type="radio" name="mr" checked> Neromotori
+                                    <label class="btn btn-secondary" :class="{ active: mrBrand === 'Neromotori' }">
+                                        <input type="radio" name="mrBrand" value="Neromotori" v-model="mrBrand"> Neromotori
                                     </label>
-                                    <label class="btn btn-secondary">
-                                        <input type="radio" name="mr"> IMAK
+                                    <label class="btn btn-secondary" :class="{ active: mrBrand === 'IMAK' }">
+                                        <input type="radio" name="mrBrand" value="IMAK" v-model="mrBrand"> IMAK
                                       </label>
                                     </div>
                                   </div>

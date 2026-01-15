@@ -7,6 +7,7 @@ new Vue({
       selectedTsh: "25",
       tableData: {},
       selectedMr: null,
+      mrBrand: "Neromotori",
       tables: [
         {
           name: "MR",
@@ -40,13 +41,14 @@ new Vue({
                 raw = raw.data
             }
             if (!Array.isArray(raw)) return []
-            return raw.map(it => ({
+            const normalized = raw.map(it => ({
                 name: it.name ?? it.Name ?? '',
                 kWt: String(it.kWt ?? it.kwt ?? it.kW ?? '').replace(',', '.'),
                 gab: it.gab ?? it.Gab ?? '',
                 price: it.price ?? it.Price ?? '',
                 id: it.id ?? it.ID ?? ''
             }))
+            return normalized.filter(it => it.name && it.name !== 'Без приводу' && (!this.mrBrand || it.name === this.mrBrand))
         }
     },
     methods: {
