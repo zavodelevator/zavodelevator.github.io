@@ -135,7 +135,7 @@
                                 <label for="mr">Редуктор</label>
                                 <select class="form-control" id="mr" v-model="selectedMr">
                                     <option v-for="mr in mrOptions" :key="mr.id" :value="{ name: mr.name, price: mr.price, id: mr.id }">
-                                        {{ mr.name }} — {{ mr.kwt }}кВт./{{ mr.gab }}габарит
+                                        {{ mr.name }} — {{ mr.kWt }} кВт / {{ mr.gab }} габарит
                                     </option>
                                 </select>
 

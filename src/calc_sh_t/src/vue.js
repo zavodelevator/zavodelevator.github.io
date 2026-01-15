@@ -44,6 +44,9 @@ new Vue({
               this.tableData[item.name] = data;
               this.data_shkr.push(item.name, data);
               console.log('Отримані дані:', this.data_shkr);
+              if (item.name === 'MR') {
+                console.log('MR options loaded:', this.tableData['MR']);
+              }
             },
             error: (xhr, status, error) => {
               console.error("Помилка при отриманні даних:", status, error);
