@@ -102,3 +102,6 @@ new Vue({
      
     }
   })
+
+
+alert(window.MR_DATA);
