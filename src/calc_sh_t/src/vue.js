@@ -49,11 +49,14 @@ new Vue({
                 id: it.id ?? it.ID ?? ''
             }))
             const brand = (this.mrBrand || '').trim().toLowerCase()
+            const noDriveName = 'без приводу'
             const filtered = normalized.filter(it => {
                 const n = (it.name || '').trim().toLowerCase()
-                return n && n !== 'без приводу' && (!brand || n === brand)
+                return n && n !== noDriveName && (!brand || n === brand)
             })
-            return filtered.length ? filtered : normalized.filter(it => (it.name || '').trim().toLowerCase() !== 'без приводу')
+            const noDrive = normalized.find(it => (it.name || '').trim().toLowerCase() === noDriveName)
+            const base = filtered.length ? filtered : normalized.filter(it => (it.name || '').trim().toLowerCase() !== noDriveName)
+            return noDrive ? [noDrive, ...base] : base
         },
         selectedMr() {
             const arr = this.mrOptions
