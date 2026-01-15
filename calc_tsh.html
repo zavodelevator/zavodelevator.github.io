@@ -20,7 +20,7 @@
 
 <body>
     <p>
-        <a href="https://agrohelix.com.ua/">Agrohelix223</a>
+        <a href="https://agrohelix.com.ua/">Agrohelix224</a>
     </p>
     <!-- Навігаційне меню -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -137,9 +137,12 @@
 
                                 <label for="mr">Редуктор</label>
                                 <select class="form-control" id="mr" v-model="selectedMr">
-                                    <option v-for="mr in mrOptions" :key="mr.id" :value="{ name: mr.name, price: mr.price, id: mr.id }">
-                                        {{ mr.name }} — {{ mr.kWt }} кВт / {{ mr.gab }} габарит
-                                    </option>
+                                    <template v-if="mrOptions.length">
+                                        <option v-for="mr in mrOptions" :key="mr.id" :value="{ name: mr.name, price: mr.price, id: mr.id }">
+                                            {{ mr.name }} — {{ mr.kWt }} кВт / {{ mr.gab }} габарит
+                                        </option>
+                                    </template>
+                                    <option v-else disabled>Немає даних для вибраного бренду</option>
                                 </select>
 
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">

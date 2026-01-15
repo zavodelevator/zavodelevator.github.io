@@ -48,7 +48,12 @@ new Vue({
                 price: it.price ?? it.Price ?? '',
                 id: it.id ?? it.ID ?? ''
             }))
-            return normalized.filter(it => it.name && it.name !== 'Без приводу' && (!this.mrBrand || it.name === this.mrBrand))
+            const brand = (this.mrBrand || '').trim().toLowerCase()
+            const filtered = normalized.filter(it => {
+                const n = (it.name || '').trim().toLowerCase()
+                return n && n !== 'без приводу' && (!brand || n === brand)
+            })
+            return filtered.length ? filtered : normalized.filter(it => (it.name || '').trim().toLowerCase() !== 'без приводу')
         }
     },
     methods: {
@@ -77,5 +82,11 @@ new Vue({
     },
     mounted() {
       this.processData();
+      this.$watch(() => this.tableData['MR'], (val) => {
+        try {
+          const len = Array.isArray(val) ? val.length : (val && Array.isArray(val.data) ? val.data.length : 0)
+          console.log('MR loaded length:', len)
+        } catch(e) {}
+      }, { deep: true })
     }
   })
