@@ -1,0 +1,52 @@
+/* Основні стилі */
+body {
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.card {
+    margin-top: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.btn-group {
+    margin: 10px 0;
+}
+
+/* Стилі для зображень */
+.card-img-top {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+/* Стилі для форм */
+.form-control {
+    margin-bottom: 10px;
+}
+
+/* Стилі для радіо-кнопок */
+.btn-secondary {
+    margin: 2px;
+}
+
+/* Адаптивність */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .btn-group {
+        flex-direction: column;
+    }
+} 

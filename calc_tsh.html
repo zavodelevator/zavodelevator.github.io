@@ -1,241 +1,173 @@
-<!doctype html>
-<html lang="en">
-
-<head>
-  <title>Шнековий транспортер</title>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <link rel="stylesheet" href="calc_sh_t.css">
-
-  <!-- Favicon -->
-  <link rel="icon" href="https://fonts.gstatic.com/s/i/materialiconsoutlined/home/v6/24px.svg">
-
-
-
-
-  <style>
-    .btn-group {
-      margin: 5px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .label-title {
-      color: gray;
-      font-size: 0.9em;
-      margin-bottom: 5px;
-    }
-  </style>
-
-
+<!DOCTYPE html>
+<!-- Vue.js додаток для розрахунку параметрів шнекового транспортера -->
+<html lang="uk">
+  <head>
+    <title>Шнековий транспортер</title>
+    <!-- Мета-теги -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <!-- Підключення стилів -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="src/calc_sh_t/src/calc_sh_t.css">
+    
+    <!-- Іконка сайту -->
+    <link rel="icon" href="https://fonts.gstatic.com/s/i/materialiconsoutlined/home/v6/24px.svg">
+    
+    <!-- Локальні стилі -->
+    <style>
+      .btn-group {
+        margin: 5px;
+        display: flex;
+        flex-direction: column;
+      }
+      
+        .label-title {
+            color: gray;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+    </style>
 
 </head>
 
-  <body>
-
+<body>
+    <!-- Навігаційне меню -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="https://agrohelix.com.ua/">Agrohelix</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item active">
-            <a class="nav-link" href="https://zavodelevator.github.io/calc_sh_t2.html">Шнековий транспортер<span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="https://zavodelevator.github.io/sclad_sp2.html">Цільнокатана спіраль</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" href="https://zavodelevator.github.io/calc_tsh.html">ТШ</a>
-          </li>
-
-        </ul>
-      </div>
+        <a class="navbar-brand" href="https://agrohelix.com.ua/">Agrohelix</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="https://zavodelevator.github.io/calc_sh_t2.html">Шнековий транспортер<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://zavodelevator.github.io/sclad_sp2.html">Цільнокатана спіраль</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://zavodelevator.github.io/calc_tsh.html">ТШ</a>
+                </li>
+            </ul>
+        </div>
     </nav>
 
-    <div class="container">
+    
+    <div class="container" id="distributorApp">
+        <div class="card">
+            <div class="card-header">
+                Транспортер шкребковий
+              </div>
+              <div class="card-body">
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="card mb-3" style="max-width: 70%;">
+                          <img class="card-img-top" :src="currentImage" alt="Card image cap" style="width: 100%; height: auto;">
+                        </div>
+                    </div>
+                    
+                  <div>
 
-      <div class="card">
-        <div class="card-header">
-          Транспортер шкребковий
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <label for="params_trans">Продуктивність транспортера</label>
+                            <select class="form-control" id="params_trans">
+                                <option value="25">ТШ 25</option>
+                                <option value="50">ТШ 50</option>
+                                <option value="100">ТШ 100</option>
+                                <option value="200">ТШ 200</option>
+                            </select>
+
+                            <div class="form-group">
+                                <label for="length_trans">Довжина транспортера, м</label>
+                                <input type="number" class="form-control" id="length_trans" placeholder="Введіть довжину">
+                            </div>
+
+                            <hr>
+
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <span class="label-title">Тип короба</span>
+                                <div>
+                                    <label class="btn btn-secondary active">
+                                        <input type="radio" name="box" checked> Розбірний
+                                    </label>
+                                    <label class="btn btn-secondary">
+                                        <input type="radio" name="box"> Зварний
+                                    </label>
+                                </div>
+                            </div>
+
+                            <hr>
+                            
+                                  <div class="form-check form-switch">
+                                      <input class="form-check-input radio_boonker" type="checkbox" id="flexSwitchCheckChecked_1" v-model="hasDistributor">
+                                      <label class="form-check-label" for="flexSwitchCheckChecked_1">Розподільний механізм</label>
+                                  </div>
+                                  <div class="form-group" v-if="hasDistributor">
+                                      <label for="distributorLength">Довжина розподільного механізму, м</label>
+                                      <input type="number" class="form-control" id="distributorLength" v-model="distributorLength" placeholder="Введіть довжину">
+                                  </div>
+                                  
+                                
+                                  <hr>
+                                  
+                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <span class="label-title">Тип редуктора</span>
+                                <div>
+                                    <label class="btn btn-secondary active">
+                                        <input type="radio" name="mr" checked> Neromotori
+                                    </label>
+                                    <label class="btn btn-secondary">
+                                        <input type="radio" name="mr"> IMAK
+                                      </label>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <label for="mr">Редуктор</label>
+                                <select class="form-control" id="mr">
+                                    <option value="Neromotori">Neromotori 1,5 кВт 75 габарит</option>
+                                    <option value="IMAK">IMAK 3 кВт 100 габарит</option>
+                                </select>
+
+                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                  <span class="label-title">Тип покриття</span>
+                                  <div>
+                                      
+                                      <label class="btn btn-secondary active">
+                                        <input type="radio" name="coating" checked>Грунт
+                                      </label>
+                                      <label class="btn btn-secondary">
+                                          <input type="radio" name="coating">Емаль
+                                      </label>
+                                      <label class="btn btn-secondary">
+                                          <input type="radio" name="coating">Порошкове фарбування
+                                      </label>
+                                      <label class="btn btn-secondary">
+                                        <input type="radio" name="coating">Оцинкований
+                                    </label>
+                                  </div>
+                              </div>
+                              
+  
+
+                              </div>
+                    </div>
+                </div>
+              </div>
         </div>
-        <div class="card-body">
-          <div class="row">
-
-            <div class="col-sm">
-              <div class="card mb-3">
-                <img class="card-img-top" src="src\img\banner22.jpg" alt="Card image cap">
-              </div>
-
-
-            </div>
+    </div>
 
 
 
-            <div class="col-sm">
+</body>
 
-              <div class="form-group">
+  <!-- Vue.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script src="src/calc_sh_t/src/vue.js"></script>
 
-
-
-
-                <label for="params_trans">Продуктивність транспортера</label>
-                <select class="form-control" id="params_trans">
-                  <option value="25">ТШ 25</option>
-                  <option value="50">ТШ 50</option>
-                  <option value="100">ТШ 100</option>
-                  <option value="200">ТШ 200</option>
-                </select>
-
-                <br>
-
-                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                  <span class="label-title">*тип короба</span>
-                  <div>
-                    <label class="btn btn-secondary active">
-                      <input type="radio" name="box" checked> Розбірний
-                    </label>
-                    <label class="btn btn-secondary">
-                      <input type="radio" name="box"> Зварний
-                    </label>
-                  </div>
-                </div>
-
-
-                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                  <span class="label-title">*тип редуктора</span>
-                  <div>
-                    <label class="btn btn-secondary active">
-                      <input type="radio" name="mr" checked> Neromotori
-                    </label>
-                    <label class="btn btn-secondary">
-                      <input type="radio" name="mr"> IMAK
-                    </label>
-                  </div>
-                </div>
-
-                
-
-
-                <div class="form-check form-switch">
-                  <input class="form-check-input radio_boonker" type="checkbox" id="flexSwitchCheckChecked_1">
-                  <label class="form-check-label" for="flexSwitchCheckChecked_1">Розподільний механізм</label>
-                </div>
-
-
-                <br><br><br><br><br><br>
-
-
-                <div class="form-check form-switch">
-                  <input class="form-check-input radio_pidstavka" type="checkbox" id="flexSwitchCheckChecked_2">
-                  <label class="form-check-label" for="flexSwitchCheckChecked_2">Підставка</label>
-                </div>
-
-                <div class="form-check form-switch">
-                  <input class="form-check-input radio_krot" type="checkbox" id="flexSwitchCheckChecked_krot">
-                  <label class="form-check-label" for="flexSwitchCheckChecked_krot">Крот</label>
-                </div>
-
-                <div class="form-check form-switch">
-                  <input class="form-check-input radio_zholob" type="checkbox" id="flexSwitchCheckChecked_zholob">
-                  <label class="form-check-label" for="flexSwitchCheckChecked_zholob">Жолоб</label>
-                </div>
-
-                <br>
-                <br>
-                <h6>Тип Двигуна</h6> <span class="need_engyne" style="float: right;"></span>
-
-                <input class="form-check-input form-check-input_engyne" type="radio" name="exampleRadios" id="exampleRadios1" value="option2" checked>
-                <label class="form-check-label" for="exampleRadios1">
-                  Двигун
-                </label>
-
-                <input class="form-check-input input_two form-check-input_engyne form-check-input_motor_engyne" type="radio" name="exampleRadios" id="exampleRadios2" value="option1">
-                <label class="form-check-label label_two" for="exampleRadios2">
-                  Мотор редуктор
-                </label>
-
-
-
-                <select class="form-control" id="engine_params">
-                  <option selected value="0,0,0">Без двигуна</option>
-                  <option value="1500,1.1,5470">Мотор 1.1 кВт. 1500 об./хв.</option>
-                  <option value="1500,1.5,6053">Мотор 1.5 кВт. 1500 об./хв.</option>
-                  <option value="1500,2.2,9206">Мотор 2.2 кВт. 1500 об./хв.</option>
-                  <option value="1500,3.0,8198">Мотор 3.0 кВт. 1500 об./хв.</option>
-                  <option value="1500,4.0,10656">Мотор 4.0 кВт. 1500 об./хв.</option>
-                  <option value="1500,5.5,14834">Мотор 5.5 кВт. 1500 об./хв.</option>
-                  <option value="1500,7.5,19301">Мотор 7.5 кВт. 1500 об./хв.</option>
-                  <option value="1500,11.0,23904">Мотор 11.0 кВт. 1500 об./хв.</option>
-                </select>
-
-                <br />
-                <hr />
-
-                <button type="button" id="calck_price" class="btn btn-dark">Розрахувати</button>
-
-                <br />
-                <div class="table-responsive">
-                  <table class="table table-sm table-borderless mb-0">
-                    <tbody>
-                      <tr>
-                        <th class="pl-0 w-25" scope="row"><strong>Ціна</strong></th>
-                        <td>
-                          <p>
-                            <span class="mr-3">
-                              <strong>
-                                <span class="price">
-
-                                </span>
-                              </strong>
-                            </span>
-                          </p>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <hr>
-
-          <!-- Optional JavaScript -->
-          <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-          <script>
-            $(document).ready(function(){
-            
-              $(document).ready(function() {//перемикання кнопок
-                $(".btn-group-toggle label").click(function() {
-                  $(this).siblings().removeClass('active');
-                  $(this).addClass('active');
-                });
-              });
-                      
-                $.ajax({
-                  url: "https://script.google.com/macros/s/1oKxB9-igISUz20Wt0qcyb4_9fbww-czlBzrI2a-DW90/edit?gid=0#gid=0",
-                  dataType: "json",
-                  success: function(data) {
-                    localStorage.setItem('sclad_sp_json', JSON.stringify(data)); 
-                  },
-                  error: function(xhr, status, error) {            
-                    console.error("Error fetching data:", error);
-                  }
-                });
-              
-              });
-          </script>
-          <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-          <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-          <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-          <script src="calc_sh_t2.js"></script>
-
-  </body>
 </html>
