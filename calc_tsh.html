@@ -91,7 +91,7 @@
 
                             <div class="form-group">
                                 <label for="length_trans">Довжина транспортера, м</label>
-                                <input type="number" class="form-control" id="length_trans" placeholder="Введіть довжину">
+                                <input type="number" class="form-control" id="length_trans" v-model="lengthTrans" placeholder="Введіть довжину">
                             </div>
 
                             <hr>
@@ -124,7 +124,9 @@
                                   
                                 
                                 
-
+                                <div class="form-group ee">
+                                <div>Рекомендована потужність: {{ recommendedKwt }} кВт</div>
+                                <div class="alert alert-info temp-debug" v-if="recommendedKwtDebug">{{ recommendedKwtDebug }}</div>
                                 <label for="mr">Редуктор</label>
                                 <select class="form-control" id="mr" v-model="selectedMrId">
                                   <option v-for="mr in mrOptions" :key="mr.id || mr.name" :value="mr.id || mr.name">{{ formatMrOption(mr) }}</option>

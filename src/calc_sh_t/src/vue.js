@@ -19,6 +19,8 @@ new Vue({
       tableData: {}, // відповіді сервера по кожній таблиці
       selectedMrId: null, // id вибраного приводу MR
       mrData: [],
+      lengthTrans: null,
+      tshLKData: [],
       tables: [ // конфігурація джерел даних
         {
           name: "MR", // довідник приводів MR
@@ -62,6 +64,70 @@ new Vue({
           // Додаємо опцію "Без приводу" на початок
           const noDrive = normalized.find(it => String(it.name || '').trim().toLowerCase() === 'без приводу') || { name: 'Без приводу', kWt: '', gab: '', price: '', id: 'no_drive' };
           return [noDrive, ...base];
+        },
+        recommendedKwt() {
+          const rows = Array.isArray(this.tshLKData) ? this.tshLKData.slice() : [];
+          const prodSel = String(this.selectedTsh || '').trim();
+          const normProdSel = prodSel.replace(/[^\d]/g, '');
+          const filtered = rows.filter(r => String(r.prod).replace(/[^\d]/g, '') === normProdSel)
+            .sort((a, b) => (a.L - b.L));
+          if (!filtered.length) return '';
+          const totalLen = Number(this.lengthTrans) || 0;
+          const distLen = this.hasDistributor ? (Number(this.distributorLength) || 0) : 0;
+          const effLen = Math.max(totalLen - distLen, 0);
+          const findRow = (arr, target) => {
+            let row = arr.find(r => r.L === target);
+            if (row) return row;
+            row = arr.find(r => r.L >= target);
+            if (row) return row;
+            return arr[arr.length - 1];
+          };
+          const baseRow = findRow(filtered, effLen);
+          const baseKwt = Number(baseRow && baseRow.kwt) || 0;
+          let distKwt = 0;
+          if (this.hasDistributor && distLen > 0) {
+            const distRow = findRow(filtered, distLen);
+            distKwt = Number(distRow && distRow.rozp) || 0;
+          }
+          const result = baseKwt + distKwt;
+          return result ? String(result).replace(/\.0+$/, '') : '';
+        },
+        recommendedKwtDebug() {
+          const rows = Array.isArray(this.tshLKData) ? this.tshLKData.slice() : [];
+          const prodSel = String(this.selectedTsh || '').trim();
+          const normProdSel = prodSel.replace(/[^\d]/g, '');
+          const filtered = rows.filter(r => String(r.prod).replace(/[^\d]/g, '') === normProdSel)
+            .sort((a, b) => (a.L - b.L));
+          if (!filtered.length) return '';
+          const totalLen = Number(this.lengthTrans) || 0;
+          const distLen = this.hasDistributor ? (Number(this.distributorLength) || 0) : 0;
+          const effLen = Math.max(totalLen - distLen, 0);
+          const findRow = (arr, target) => {
+            let row = arr.find(r => r.L === target);
+            if (row) return row;
+            row = arr.find(r => r.L >= target);
+            if (row) return row;
+            return arr[arr.length - 1];
+          };
+          const baseRow = findRow(filtered, effLen);
+          const baseKwt = Number(baseRow && baseRow.kwt) || 0;
+          let distKwt = 0;
+          let distRow = null;
+          if (this.hasDistributor && distLen > 0) {
+            distRow = findRow(filtered, distLen);
+            distKwt = Number(distRow && distRow.rozp) || 0;
+          }
+          const result = baseKwt + distKwt;
+          const parts = [
+            'prod=' + normProdSel,
+            'L_total=' + (isNaN(totalLen) ? '' : totalLen),
+            'L_dist=' + (isNaN(distLen) ? '' : distLen),
+            'L_eff=' + (isNaN(effLen) ? '' : effLen),
+            'base(L=' + (baseRow ? baseRow.L : '') + ')->kwt=' + baseKwt,
+            'L_dist(rozp): L=' + (distRow ? distRow.L : '') + ' -> ' + distKwt,
+            'result=' + result
+          ];
+          return parts.join(' | ');
         }
         },
        
@@ -92,6 +158,25 @@ new Vue({
                   const first = this.mrOptions && this.mrOptions[0];
                   this.selectedMrId = first ? (first.id || first.name) : null;
                 });
+              } else if (item.name === 'tsh_leangth_kWt') {
+                let d = data;
+                if (typeof d === 'string') {
+                  try { d = JSON.parse(d) } catch(e) { d = [] }
+                }
+                if (d && Array.isArray(d.data)) d = d.data;
+                const arr = Array.isArray(d) ? d : [];
+                const norm = arr.map(it => {
+                  let prod = it.prod ?? it.Prod ?? it.product ?? it.PROD ?? '';
+                  prod = String(prod).trim();
+                  let L = it.L ?? it.length ?? it.Len ?? 0;
+                  if (typeof L === 'string') L = Number(L.replace(',', '.')) || 0;
+                  let kwt = it.kwt ?? it.kWt ?? it.kW ?? it.kw ?? 0;
+                  if (typeof kwt === 'string') kwt = Number(kwt.replace(',', '.')) || 0;
+                  let rozp = it.rozp ?? it.Rozp ?? it.distributor ?? 0;
+                  if (typeof rozp === 'string') rozp = Number(rozp.replace(',', '.')) || 0;
+                  return { prod, L: Number(L) || 0, kwt: Number(kwt) || 0, rozp: Number(rozp) || 0 };
+                }).filter(r => r.prod && (r.L || r.kwt || r.rozp));
+                this.tshLKData = norm;
               }
             },
             error: (xhr, status, error) => {
