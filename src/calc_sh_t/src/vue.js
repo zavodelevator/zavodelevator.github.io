@@ -18,7 +18,6 @@ new Vue({
       selectedTsh: "25", // вибраний тип TSH для картинки
       tableData: {}, // відповіді сервера по кожній таблиці
       selectedMrId: null, // id вибраного приводу MR
-      mrBrand: "Neromotori", // фільтр за брендом для списку MR
       mrData: [],
       tables: [ // конфігурація джерел даних
         {
@@ -59,29 +58,12 @@ new Vue({
             let id = it.id ?? it.ID ?? it.Id ?? null;
             return { name, kWt, gab, price, id };
           }).filter(it => it.name || it.id);
-          // Фільтр за брендом; виключаємо запис "без приводу"
-          const brand = String(this.mrBrand || '').trim().toLowerCase();
-          let base = normalized.filter(it => {
-            const n = String(it.name || '').trim().toLowerCase();
-            return n !== 'без приводу' && (!brand || n.includes(brand));
-          });
-          // Якщо після фільтру немає результатів — повертаємо всі, окрім "без приводу"
-          if (!base.length) {
-            base = normalized.filter(it => String(it.name || '').trim().toLowerCase() !== 'без приводу');
-          }
+          let base = normalized.filter(it => String(it.name || '').trim().toLowerCase() !== 'без приводу');
           // Додаємо опцію "Без приводу" на початок
           const noDrive = normalized.find(it => String(it.name || '').trim().toLowerCase() === 'без приводу') || { name: 'Без приводу', kWt: '', gab: '', price: '', id: 'no_drive' };
           return [noDrive, ...base];
         }
         },
-    watch: {
-      mrBrand() {
-        this.$nextTick(() => {
-          const first = this.mrOptions && this.mrOptions[0];
-          this.selectedMrId = first ? (first.id || first.name) : null;
-        });
-      }
-    },
        
   
     // methods: завантаження та форматування даних
