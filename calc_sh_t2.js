@@ -333,12 +333,17 @@ function prace_vue() {
   price_sh_transporter = parseInt(price_sh_transporter*1.15)
   price_sh_transporter = parseInt(price_sh_transporter*1.1)
 
+
+  
+
   var priceHtml = ""
     + "<p> Транспортер ₴ " + numberToSpaceString(price_sh_transporter) + ".00 з пдв </p>"
     + "<p> Привід ₴ "  + numberToSpaceString(engine_params[2]*1) + ".00 з пдв </p>"
     + "<hr>"
     + "<p><b> Разом ₴ " + numberToSpaceString(price_sh_transporter + (engine_params[2]*1)) + ".00 з пдв </b></p>";
   $(".price").html(priceHtml);
+  var dbgCalc = priceDebugFormula();
+  renderPriceDebug(dbgCalc);
                         
 
 
@@ -350,6 +355,58 @@ function prace_vue() {
   }
  
 }
+
+function priceDebugFormula(){
+  var steps = [];
+  var p;
+  if(chek_chose_radio == false){
+      p = ((params_trans[2]*1)+(params_trans[1]*1)+(params_trans[3]*l_trans*1.1)*1.2)+(engine_params[2]*1);
+      steps.push("База (двигун): ("+params_trans[2]+" + "+params_trans[1]+" + "+(params_trans[3]*l_trans*1.1)+"*1.2) + "+engine_params[2]+" | рядки 292-295");
+    }else{
+      p = (3000 + (params_trans[1]*1)+(params_trans[3]*l_trans*1.1)*1.2);
+      steps.push("База (мотор-редуктор): 3000 + "+params_trans[1]+" + "+(params_trans[3]*l_trans*1.1)+"*1.2 | рядки 292-295");
+    }
+  if($(".radio_boonker").prop("checked")){
+    if(params_trans[0]<160){ p += 2000; steps.push("Бункер +2000 | рядки 301-307"); }
+    else { p += 3000; steps.push("Бункер +3000 | рядки 301-307"); }
+  }
+  if($(".radio_pidstavka").prop("checked")){
+    if(params_trans[0]<160){ p += 4000; steps.push("Підставка +4000 | рядки 309-315"); }
+    else { p += 5000; steps.push("Підставка +5000 | рядки 309-315"); }
+  }
+  if($(".radio_krot").prop("checked")){
+    p += (params_trans[3]*0.5); steps.push("Крот +("+params_trans[3]+"*0.5) | рядки 317-319");
+  }
+  if($(".radio_zholob").prop("checked")){
+    p = p*1.1; steps.push("Жолоб ×1.1 | рядки 322-324");
+  }
+  if(l_trans >= 10){
+    p = p*1.1; steps.push("Довжина ≥ 10 ×1.1 | рядки 326-330");
+  }
+  p = parseInt(p*1.15); steps.push("ПДВ 15% та округлення вниз | рядок 333");
+  p = parseInt(p*1.1); steps.push("Націнка 10% та округлення вниз | рядок 334");
+  return {
+    transportPrice: p,
+    enginePrice: (engine_params[2]*1),
+    total: p + (engine_params[2]*1),
+    steps: steps
+  };
+}
+
+function renderPriceDebug(calc){
+  if($("#price_debug_ex").length === 0){
+    $(".price").after('<div id="price_debug_ex" class="alert alert-secondary" style="margin-top:10px;"></div>');
+  }
+  function fmt(n){ return String(Math.trunc(Number(n))).replace(/\B(?=(\d{3})+(?!\d))/g,' '); }
+  var html = "<b>Формула ціноутворення (тимчасово)</b><br>"
+    + calc.steps.join("<br>")
+    + "<br>Транспортер: ₴ "+fmt(calc.transportPrice)
+    + " | Привід: ₴ "+fmt(calc.enginePrice)
+    + " | Разом: ₴ "+fmt(calc.total);
+  $("#price_debug_ex").html(html);
+}
+
+
 
 
 
