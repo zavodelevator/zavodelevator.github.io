@@ -333,22 +333,22 @@ function prace_vue() {
   price_sh_transporter = parseInt(price_sh_transporter*1.15)
   price_sh_transporter = parseInt(price_sh_transporter*1.1)
 
-  $(".price").html( "<p> Транспортер ₴ " + numberToSpaceString(price_sh_transporter) + ".00 з пдв </p>");
-  $(".price").html( "<p> Привід ₴ "  + numberToSpaceString(engine_params[2]*1) + ".00 з пдв </p>");  
-  $(".price").html( "<hr>");
-  $(".price").html( "<p><b> Разом ₴ " + numberToSpaceString(price_sh_transporter + (engine_params[2]*1)) + ".00 з пдв </b></p>");
+  var priceHtml = ""
+    + "<p> Транспортер ₴ " + numberToSpaceString(price_sh_transporter) + ".00 з пдв </p>"
+    + "<p> Привід ₴ "  + numberToSpaceString(engine_params[2]*1) + ".00 з пдв </p>"
+    + "<hr>"
+    + "<p><b> Разом ₴ " + numberToSpaceString(price_sh_transporter + (engine_params[2]*1)) + ".00 з пдв </b></p>";
+  $(".price").html(priceHtml);
                         
 
 
 
 
-function numberToSpaceString(n) {
-  var s = String(Math.trunc(Number(n)));
-  return s.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-}
-                        
-
-
+  function numberToSpaceString(n) {
+    var s = String(Math.trunc(Number(n)));
+    return s.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  }
+ 
 }
 
 
