@@ -289,9 +289,9 @@ function build_select_engin() {
 function prace_vue() {
   // перевірка та обрахунок на моторі та мотор-редукторі
   if(chek_chose_radio == false){
-      price_sh_transporter = ((params_trans[2]*1)+(params_trans[1]*1)+(params_trans[3]*l_trans*1.1));
+      price_sh_transporter = ((params_trans[2]*1)+(params_trans[1]*1)+(params_trans[3]*l_trans*1.1*1.2));
     }else{
-      price_sh_transporter = (3000 + (params_trans[1]*1)+(params_trans[3]*l_trans*1.1));
+      price_sh_transporter = (3000 + (params_trans[1]*1)+(params_trans[3]*l_trans*1.1*1.2));
     }
 
     
@@ -332,6 +332,7 @@ function prace_vue() {
 
   price_sh_transporter = parseInt(price_sh_transporter*1.15)
   price_sh_transporter = parseInt(price_sh_transporter*1.1)
+
 
 
   
