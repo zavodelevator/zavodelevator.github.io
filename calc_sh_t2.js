@@ -333,9 +333,21 @@ function prace_vue() {
   price_sh_transporter = parseInt(price_sh_transporter*1.15)
   price_sh_transporter = parseInt(price_sh_transporter*1.1)
 
-  $(".price").html( " ₴ " + (price_sh_transporter + (engine_params[2]*1)) + ".00 з пдв");
-
+  $(".price").html( "<p> Транспортер ₴ " + numberToSpaceString(price_sh_transporter) + ".00 з пдв </p>");
+  $(".price").html( "<p> Привід ₴ "  + numberToSpaceString(engine_params[2]*1) + ".00 з пдв </p>");  
+  $(".price").html( "<hr>");
+  $(".price").html( "<p><b> Разом ₴ " + numberToSpaceString(price_sh_transporter + (engine_params[2]*1)) + ".00 з пдв </b></p>");
                         
+
+
+
+
+function numberToSpaceString(n) {
+  var s = String(Math.trunc(Number(n)));
+  return s.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+}
+                        
+
 
 }
 
