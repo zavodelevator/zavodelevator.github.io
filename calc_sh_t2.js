@@ -404,12 +404,6 @@ function calck_production(){
     else{}
   }
 
-
-
-
-
-
-
   function add_content_params_select (){
     if ($("#diam_out_pipe").length){
       
