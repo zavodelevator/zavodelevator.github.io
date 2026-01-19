@@ -323,15 +323,13 @@ function prace_vue() {
     price_sh_transporter = price_sh_transporter*1.1
   }
 
-  if(l_trans >= 10){
-    
-    price_sh_transporter = price_sh_transporter*1.1
-    
+  if(l_trans >= 10){    
+    price_sh_transporter = price_sh_transporter*1.1    
   }
   
 
   price_sh_transporter = parseInt(price_sh_transporter*1.15)
-  price_sh_transporter = parseInt(price_sh_transporter*1.1)
+  price_sh_transporter = parseInt(price_sh_transporter*1.1) 
 
 
 
