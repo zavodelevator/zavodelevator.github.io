@@ -291,7 +291,7 @@ function prace_vue() {
   if(chek_chose_radio == false){
       price_sh_transporter = ((params_trans[2]*1)+(params_trans[1]*1)+(params_trans[3]*l_trans*1.1)*1.2)+(engine_params[2]*1);
     }else{
-      price_sh_transporter = (3000 + (params_trans[1]*1)+(params_trans[3]*l_trans*1.1)*1.2)+(engine_params[2]*1);
+      price_sh_transporter = (3000 + (params_trans[1]*1)+(params_trans[3]*l_trans*1.1)*1.2);
     }
 
     
@@ -333,7 +333,7 @@ function prace_vue() {
   price_sh_transporter = parseInt(price_sh_transporter*1.15)
   price_sh_transporter = parseInt(price_sh_transporter*1.1)
 
-  $(".price").html( " ₴ " + price_sh_transporter+ ".00 з пдв");
+  $(".price").html( " ₴ " + price_sh_transporter+ (engine_params[2]*1) + ".00 з пдв");
 
                         
 
