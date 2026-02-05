@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QR Code Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #f5f5f5;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 320px;
+      text-align: center;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    img {
+      margin-top: 20px;
+      width: 300px;
+      height: 300px;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>QR Code Generator</h2>
+    <input type="text" id="textInput" placeholder="Enter address or text" />
+    <button onclick="generateQR()">Generate QR</button>
+    <button onclick="downloadQR()">Download Image</button>
+    <div>
+      <img id="qrImage" src="" alt="QR Code will appear here" />
+    </div>
+  </div>
+
+  <script>
+    function generateQR() {
+      const text = document.getElementById('textInput').value.trim();
+      const qrImg = document.getElementById('qrImage');
+
+      if (!text) {
+        alert('Please enter text or address!');
+        return;
+      }
+
+      const apiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(text)}`;
+      qrImg.src = apiUrl;
+    }
+
+    function downloadQR() {
+      const qrImg = document.getElementById('qrImage');
+      const src = qrImg && qrImg.src;
+      if (!src) {
+        alert('Please generate a QR code first!');
+        return;
+      }
+      fetch(src)
+        .then(res => res.blob())
+        .then(blob => {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'qr.png';
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          URL.revokeObjectURL(url);
+        })
+        .catch(() => alert('Failed to download QR image.'));
+    }
+  </script>
+</body>
+</html>
