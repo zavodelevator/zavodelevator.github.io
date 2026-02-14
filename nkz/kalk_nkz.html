@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Норія</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="https://agrohelix.com.ua/">Agrohelix</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="https://zavodelevator.github.io/calc_sh_t2.html">Шнековий транспортер</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://zavodelevator.github.io/sclad_sp2.html">Цільнокатана спіраль</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="https://zavodelevator.github.io/kalk_nkz.html">Норія</a>
+          </li>
+
+        </ul>
+      </div>
+    </nav>
+    
+    <div class="container">
+  
+      <div class="card">
+        <div class="card-header">
+              Норія
+        </div>
+        <div class="card-body">
+          <div class="row">
+
+            <div class="col-sm">
+            
+              <div class="card mb-3">
+                <img class="card-img-top" src="/img/nkz/Screenshot_1.png" alt="Card image cap">
+            
+              </div>
+            
+            </div>
+  
+            <div class="col-sm">
+          
+              
+              <div id="app-4">
+                
+                <div class="row">
+                
+                  <div class="col-sm">
+                    <label for="nkz_type">Noria</label>
+                      <select class="form-control" id="nkz_type" @change="nkzSelectChange($event)">
+                        <option v-for="todo in todos" :key="todo.id">{{ todo.full_name }}</option>
+                      </select>
+                  </div>
+
+                  <div style="width: 10px; height: 30px;"></div>
+                  
+                  <div class="col-sm">
+                    <label for="nkz_l">Висота норії</label>
+                    <select v-model="select_h_nkz" @change="handleSelectChange_l" class="form-control" id="nkz_l">
+                      <option v-for="number in l_numbers" :key="number" :value="number[0]">
+                        {{ number[1]  }}
+                      </option>
+                    </select>
+                    <p>Selected value: {{ select_h_nkz }}</p>
+
+
+                  </div>
+                  
+                </div>
+              
+                <div style="width: 10px; height: 30px;"></div>
+                  
+                <div class="row">
+                                 
+                  <button type="button" class="btn btn-dark" @click="nkzCalck">Розрахувати</button>
+                  
+                </div>    
+              
+              </div>  
+            
+            </div>            
+            
+          </div>    
+        </div>
+      </div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script src="./js/script.js"></script>
+</body>
+</html>
+
