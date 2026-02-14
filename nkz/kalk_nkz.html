@@ -64,8 +64,14 @@
                 
                   <div class="col-sm">
                     <label for="nkz_type">Noria</label>
-                      <select class="form-control" id="nkz_type" @change="nkzSelectChange($event)">
-                        <option v-for="todo in todos" :key="todo.id">{{ todo.full_name }}</option>
+                      <select class="form-control" id="nkz_type">
+                        <option value="5">НКЗ-5</option>
+                        <option value="10">НКЗ-10</option>
+                        <option value="25">НКЗ-25</option>
+                        <option value="50">НКЗ-50</option>
+                        <option value="100">НКЗ-100</option>
+                        <option value="150">НКЗ-150</option>
+                        <option value="200">НКЗ-200</option>
                       </select>
                   </div>
 
@@ -73,12 +79,9 @@
                   
                   <div class="col-sm">
                     <label for="nkz_l">Висота норії</label>
-                    <select v-model="select_h_nkz" @change="handleSelectChange_l" class="form-control" id="nkz_l">
-                      <option v-for="number in l_numbers" :key="number" :value="number[0]">
-                        {{ number[1]  }}
-                      </option>
+                    <select class="form-control" id="nkz_l">
+                      <option value="">— оберіть висоту —</option>
                     </select>
-                    <p>Selected value: {{ select_h_nkz }}</p>
 
 
                   </div>
@@ -89,7 +92,7 @@
                   
                 <div class="row">
                                  
-                  <button type="button" class="btn btn-dark" @click="nkzCalck">Розрахувати</button>
+                  <button type="button" class="btn btn-dark">Розрахувати</button>
                   
                 </div>    
               
