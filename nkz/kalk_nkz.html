@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <title>Норія</title>
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -50,7 +51,45 @@
             
               <div class="card mb-3">
                 <img class="card-img-top" src="/img/nkz/Screenshot_1.png" alt="Card image cap">
-            
+              </div>
+              
+              <div class="card-info">
+                <button type="button" class="btn btn-link info-toggle" aria-expanded="false"><span class="arrow">▾</span> Інфо</button>
+                <div class="info-content" style="display:none">
+                  <p class="gab_vis">Габаритна висота норії: <span></span>м.</p>
+                  <p class="rob_vis">Робоча висота норії: <span></span>м.</p>
+                  <div style="height:8px;"></div>
+                  
+                  <div class="sub-section">
+                    <button type="button" class="btn btn-sm btn-outline-secondary sub-toggle" data-target="info-belt" aria-expanded="false"><span class="arrow">▾</span>стрічка, ланцюг</button>
+                    <div id="info-belt" class="sub-content" style="display:none">
+                                      <div class="col-sm">
+                    <label for="conv_item">Стрічка/Ланцюг</label>
+                    <select class="form-control" id="conv_item">
+                      
+                    </select>
+                  </div>
+
+                    </div>
+                  </div>
+                  
+                  <div class="sub-section" style="margin-top:6px;">
+                    <button type="button" class="btn btn-sm btn-outline-secondary sub-toggle" data-target="info-buckets" aria-expanded="false"><span class="arrow">▾</span> ківші</button>
+                    <div id="info-buckets" class="sub-content" style="display:none"></div>
+                  </div>
+                  <div class="sub-section" style="margin-top:6px;">
+                    <button type="button" class="btn btn-sm btn-outline-secondary sub-toggle" data-target="info-fasteners" aria-expanded="false"><span class="arrow">▾</span> метизи</button>
+                    <div id="info-fasteners" class="sub-content" style="display:none"></div>
+                  </div>
+                  <div class="sub-section" style="margin-top:6px;">
+                    <button type="button" class="btn btn-sm btn-outline-secondary sub-toggle" data-target="info-shafts" aria-expanded="false"><span class="arrow">▾</span> шахти</button>
+                    <div id="info-shafts" class="sub-content" style="display:none"></div>
+                  </div>
+                  <div class="sub-section" style="margin-top:6px;">
+                    <button type="button" class="btn btn-sm btn-outline-secondary sub-toggle" data-target="info-paint" aria-expanded="false"><span class="arrow">▾</span> фарбування</button>
+                    <div id="info-paint" class="sub-content" style="display:none"></div>
+                  </div>
+                </div>
               </div>
             
             </div>
@@ -70,23 +109,62 @@
                         <option value="25">НКЗ-25</option>
                         <option value="50">НКЗ-50</option>
                         <option value="100">НКЗ-100</option>
-                        <option value="150">НКЗ-150</option>
+                        <option value="175">НКЗ-175</option>
                         <option value="200">НКЗ-200</option>
                       </select>
                   </div>
+                  
+                
 
                   <div style="width: 10px; height: 30px;"></div>
                   
                   <div class="col-sm">
-                    <label for="nkz_l">Висота норії</label>
-                    <select class="form-control" id="nkz_l">
-                      <option value="">— оберіть висоту —</option>
-                    </select>
-
-
+                    <label for="nkz_l">Вис.роб.частини</label>
+                    <input type="number" class="form-control" id="nkz_l" min="1" max="30" step="1" placeholder="Висоту робочої частини норії 1–30">
                   </div>
+
+                  <div style="width: 100%; height: 30px;"></div>
+
+                  
+                  <b>Мотор редуктор</b>
+                  <div style="width: 100%; height: 3px;"></div>
+
+                  <div class="col-sm">
+                    <label for="drive_saler">виробник</label>
+                    <select class="form-control" id="drive_saler">
+                      <option value="">—</option>
+                    </select>
+                  </div>
+
+                  <div style="width: 10px; height: 30px;"></div>
+
+                  <div class="col-sm">
+                    <label for="drive_type">тип</label>
+                    <select class="form-control" id="drive_type">
+                      <option value="">—</option>
+                    </select>
+                  </div>
+
+                  <div style="width: 10px; height: 30px;"></div>
+
+                  <div class="col-sm">
+                    <label for="drive_item">модель</label>
+                    <select class="form-control" id="drive_item">
+                      <option value="">—</option>
+                    </select>
+                  </div>
+
+                  <div style="width: 100%; height: 30px;"></div>
+
+                  <div class="col-sm">
+                    <input type="checkbox" id="lan_check" class="form-check-input">
+                    <label for="lan_check">Ланюгова</label>
+                  </div>
+
+                  
                   
                 </div>
+              
               
                 <div style="width: 10px; height: 30px;"></div>
                   
@@ -107,6 +185,10 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.min.js"></script>
+<script src="./vue.js"></script>
+<script src="./js/mr_kaskad_selektor_choise.js"></script>
+<script src="./js/info_accordion.js"></script>
 <script src="./js/script.js"></script>
 </body>
 </html>
