@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
   var infoToggle = document.querySelector('.card-info .info-toggle');
   var infoContent = document.querySelector('.card-info .info-content');
+  var imgCard = document.querySelector('.card.mb-3');
   function setArrow(btn, open) {
     var s = btn && btn.querySelector('.arrow');
     if (s) s.textContent = open ? '▴' : '▾';
@@ -9,8 +10,16 @@ document.addEventListener('DOMContentLoaded', function () {
     setArrow(infoToggle, false);
     infoToggle.addEventListener('click', function () {
       var open = infoContent.style.display !== 'none';
-      infoContent.style.display = open ? 'none' : '';
-      setArrow(infoToggle, !open);
+      var newOpen = !open;
+      infoContent.style.display = newOpen ? '' : 'none';
+      setArrow(infoToggle, newOpen);
+      if (imgCard) {
+        if (newOpen) {
+          imgCard.classList.add('collapsed');
+        } else {
+          imgCard.classList.remove('collapsed');
+        }
+      }
     });
   }
   var subs = document.querySelectorAll('.card-info .sub-toggle');
