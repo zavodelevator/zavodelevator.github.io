@@ -56,7 +56,7 @@
     }, []);
 
     // Action buttons (placeholders): "1", "2", "3"
-    var btn1 = el('button', { className: 'btn btn-sm btn-outline-secondary', type: 'button' }, [el('span', { text: '1' })]);
+    var btn1 = el('button', { className: 'btn btn-sm btn-outline-secondary', type: 'button' }, [el('span', { text: 'паспорт pdf' })]);
     var btn2 = el('button', { className: 'btn btn-sm btn-outline-primary', type: 'button' }, [el('span', { text: '2' })]);
     var btn3 = el('button', { className: 'btn btn-sm btn-outline-info', type: 'button' }, [el('span', { text: '3' })]);
 
@@ -75,7 +75,11 @@
       fabMenu.setAttribute('aria-hidden', open ? 'true' : 'false');
     });
 
-    // No actions bound to buttons 1, 2, 3
+    btn1.addEventListener('click', function () {
+      if (typeof window.exportNkzPassport === 'function') {
+        window.exportNkzPassport();
+      }
+    });
 
     // Bind outside click for closing
     bindOutsideClose(fabMenu, fabBtn);
