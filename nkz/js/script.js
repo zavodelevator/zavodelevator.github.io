@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
   var typeEl = document.getElementById('nkz_type');
   if (typeEl) {
-    nkz_h_base = baseHeights[typeEl.value] || null;
+    nkz_h_base = baseHeights[normType(typeEl.value)] || null;
     NKZ_HEIGHT();
     // Показ/приховування чекбокса “Ланцюгова” залежно від обраного типу НКЗ
     // Виклик функції керування видимістю
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function () {
     updateConvSelect();
 
     typeEl.addEventListener('change', function () {
-      nkz_h_base = baseHeights[this.value] || null;
+      nkz_h_base = baseHeights[normType(this.value)] || null;
       NKZ_HEIGHT();
 
       // Перерахувати вибір норії при зміні типу
@@ -179,7 +179,8 @@ function NKZ_HEIGHT() {
 
 // Перевірка, чи для поточного типу потрібно показувати чекбокс “Ланцюгова”
 function shouldShowChainCheckbox(typeVal) {
-  return typeVal === '10' || typeVal === '25' || typeVal === '50';
+  var v = normType(typeVal);
+  return v === '10' || v === '25' || v === '50';
 }
 
 // Керування видимістю чекбокса “Ланцюгова” за значенням типу НКЗ
@@ -194,14 +195,20 @@ let nkz_product = null;
 const nkzTypeMap = { '5': '1', '10': '2', '25': '3', '50': '4', '100': '5', '175': '6', '200': '7' };
 function selectNkzProduct(typeVal, chainChecked) {
   var data = (NKZ_data && NKZ_data.prod) ? NKZ_data.prod : [];
-  var code = nkzTypeMap[typeVal];
+  var code = nkzTypeMap[normType(typeVal)];
   if (!code) return null;
   var allowChain = shouldShowChainCheckbox(typeVal);
   var effectiveChain = allowChain && !!chainChecked;
   var candidates = data.filter(function (x) {
     return x.n_2 === code && (effectiveChain ? x.chain === '1' : x.chain !== '1');
   });
-  return candidates.length ? candidates[0] : null;
+  if (!candidates.length) return null;
+  var modeWord = effectiveChain ? 'ланцюг' : 'стріч';
+  var byName = candidates.filter(function (x) {
+    var s = (x.name_3 || '').toLowerCase();
+    return s.indexOf(modeWord) !== -1;
+  });
+  return byName.length ? byName[0] : candidates[0];
 }
 function updateNkzProduct() {
   try {
@@ -300,12 +307,16 @@ function initAfterDataReady() {
   try {
     var typeEl = document.getElementById('nkz_type');
     if (typeEl) {
-      setChainCheckboxVisibility(typeEl.value);
+      setChainCheckboxVisibility(normType(typeEl.value));
       updateNkzProduct();
       updateConvSelect();
       updateBucketSelect(); // виклик: ініціалізація блоку “ківші” після надходження даних
     }
   } catch (_) {}
+}
+function normType(v) {
+  var m = String(v || '').match(/\d+/);
+  return m ? m[0] : String(v || '');
 }
 
 // -----------------------------------------------
@@ -313,14 +324,31 @@ function initAfterDataReady() {
 // -----------------------------------------------
 let nkz_bucket = null;
 let __bucketMap = new Map();
+function __getBucketDataset() {
+  var a = (NKZ_data && NKZ_data.busket) ? NKZ_data.busket : [];
+  var b = (NKZ_data && NKZ_data.bucket) ? NKZ_data.bucket : [];
+  return (a && a.length) ? a : b;
+}
 function __bucketCandidates(nkzProd) {
   if (!nkzProd) return [];
-  var ds = (NKZ_data && NKZ_data.busket) ? NKZ_data.busket : [];
+  var ds = __getBucketDataset();
   var code = nkzProd.full_n;
-  return ds.filter(function (x) {
+  var out = ds.filter(function (x) {
     var setOn = (x.set_on || '').split(',').map(function (s) { return s.trim(); });
     return setOn.indexOf(code) !== -1;
   });
+  if (!out.length && typeof code === 'string') {
+    var parts = code.split('-');
+    if (parts.length >= 4) {
+      var prefix = parts.slice(0, 3).join('-') + '-';
+      out = ds.filter(function (x) {
+        var setOn = (x.set_on || '').split(',').map(function (s) { return s.trim(); });
+        return setOn.some(function (c) { return c.indexOf(prefix) === 0; });
+      });
+    }
+  }
+  console.log('Кандидати ківшів:', { total: ds.length, code: code, matched: out.length });
+  return out;
 }
 function __num(v) {
   var n = parseFloat(v);
