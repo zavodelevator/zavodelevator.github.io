@@ -105,6 +105,8 @@ document.addEventListener('DOMContentLoaded', function () {
       updateNkzProduct();
       // Перерахувати селектор стрічка/ланцюг при зміні типу
       updateConvSelect();
+      // Оновити список ківшів для нової норії
+      updateBucketSelect(); // виклик: оновлення UI ківшів відповідно до типу
       // Оновити видимість чекбокса ланюгова відповідно до нового типу
       setChainCheckboxVisibility(this.value);
     });
@@ -117,6 +119,8 @@ document.addEventListener('DOMContentLoaded', function () {
       updateNkzProduct();
       // Перерахувати селектор стрічка/ланцюг при зміні стану “ланцюгова”
       updateConvSelect();
+      // Перерахувати ківші при зміні стану “ланцюгова”
+      updateBucketSelect(); // виклик: синхронізувати вибір ківшів із режимом ланцюга/стрічки
     });
   }
   // Збереження вибраного елемента стрічка/ланцюг при зміні селектора
@@ -299,6 +303,105 @@ function initAfterDataReady() {
       setChainCheckboxVisibility(typeEl.value);
       updateNkzProduct();
       updateConvSelect();
+      updateBucketSelect(); // виклик: ініціалізація блоку “ківші” після надходження даних
+    }
+  } catch (_) {}
+}
+
+// -----------------------------------------------
+// Ківші: фільтрація, вибір за замовчуванням, відображення
+// -----------------------------------------------
+let nkz_bucket = null;
+let __bucketMap = new Map();
+function __bucketCandidates(nkzProd) {
+  if (!nkzProd) return [];
+  var ds = (NKZ_data && NKZ_data.busket) ? NKZ_data.busket : [];
+  var code = nkzProd.full_n;
+  return ds.filter(function (x) {
+    var setOn = (x.set_on || '').split(',').map(function (s) { return s.trim(); });
+    return setOn.indexOf(code) !== -1;
+  });
+}
+function __num(v) {
+  var n = parseFloat(v);
+  return isNaN(n) ? 0 : n;
+}
+function __bucketLength(x) {
+  // “довжчий” ківш: візьмемо максимум з width/depth; якщо немає — за об’ємом
+  var w = __num(x.width);
+  var d = __num(x.depth);
+  var vol = __num(x.volume_litr);
+  var dim = Math.max(w, d);
+  return dim > 0 ? dim : vol;
+}
+function __defaultBucketIndex(items) {
+  if (!items.length) return -1;
+  var sorted = items.slice().sort(function (a, b) { return __bucketLength(b) - __bucketLength(a); });
+  var pick = sorted[0];
+  var idx = items.findIndex(function (x) { return x.full_n === pick.full_n; });
+  return idx >= 0 ? idx : 0;
+}
+function __bucketLabel(x) {
+  var specW = x.width || '';
+  var specD = x.depth || '';
+  var specM = x.s_material || '';
+  var mNum = !isNaN(parseFloat(specM));
+  var size = '';
+  if (specW && specD) {
+    size = ' ' + String(specW) + '/' + String(specD) + 'мм.';
+  } else if (specW) {
+    size = ' ' + String(specW) + 'мм.';
+  } else if (specD) {
+    size = ' ' + String(specD) + 'мм.';
+  }
+  var vol = __num(x.volume_litr);
+  var volStr = vol ? (' • ' + vol.toFixed(2) + ' л') : '';
+  var price = __parsePrice(x);
+  var priceStr = (__fmtUA ? __fmtUA(price) : price.toFixed(2)) + ' грн/шт.';
+  return (x.name_1 || '') + ' ' + (x.type_and_material || x.name_2 || '') + ' ' + (x.name_3 || '') + size + volStr + '  ' + priceStr;
+}
+function updateBucketSelect() {
+  try {
+    __bucketMap.clear();
+    var wrap = document.getElementById('info-buckets');
+    var candidates = __bucketCandidates(nkz_product);
+    if (wrap) {
+      wrap.innerHTML = '';
+      var col = document.createElement('div');
+      col.className = 'col-sm';
+      var lbl = document.createElement('label');
+      lbl.setAttribute('for', 'bucket_item');
+      lbl.textContent = 'Ківші';
+      var sel = document.createElement('select');
+      sel.className = 'form-control';
+      sel.id = 'bucket_item';
+      var ph = document.createElement('option');
+      ph.value = '';
+      ph.textContent = '— оберіть —';
+      sel.appendChild(ph);
+      candidates.forEach(function (x) {
+        var val = x.full_n;
+        __bucketMap.set(val, x);
+        var o = document.createElement('option');
+        o.value = val;
+        o.textContent = __bucketLabel(x);
+        sel.appendChild(o);
+      });
+      var di = __defaultBucketIndex(candidates);
+      if (di >= 0) {
+        var def = candidates[di];
+        sel.value = def ? def.full_n : '';
+        nkz_bucket = def || null;
+        console.log('Вибрано ківш (дефолт):', nkz_bucket);
+      }
+      sel.addEventListener('change', function () {
+        var v = this.value;
+        nkz_bucket = __bucketMap.get(v) || null;
+        console.log('Вибрано ківш:', nkz_bucket);
+      });
+      col.appendChild(lbl);
+      col.appendChild(sel);
+      wrap.appendChild(col);
     }
   } catch (_) {}
 }
