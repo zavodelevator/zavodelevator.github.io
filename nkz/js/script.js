@@ -60,8 +60,7 @@ let nkz_h_base = null;
 let count_nkz_section = {
   one: 0,
   two: 0,
-  revision_secton: 1,
-  totel: 0
+  revision_secton: 1 
 };
 
 total_h_nkz = 0;
@@ -100,14 +99,10 @@ document.addEventListener('DOMContentLoaded', function () {
     typeEl.addEventListener('change', function () {
       nkz_h_base = baseHeights[normType(this.value)] || null;
       NKZ_HEIGHT();
-
-      // Перерахувати вибір норії при зміні типу
       updateNkzProduct();
-      // Перерахувати селектор стрічка/ланцюг при зміні типу
       updateConvSelect();
-      // Оновити список ківшів для нової норії
-      updateBucketSelect(); // виклик: оновлення UI ківшів відповідно до типу
-      // Оновити видимість чекбокса ланюгова відповідно до нового типу
+      updateConvLengthAndPrice();
+      updatebusketSelect();
       setChainCheckboxVisibility(this.value);
     });
   }
@@ -117,10 +112,9 @@ document.addEventListener('DOMContentLoaded', function () {
   if (chainEl) {
     chainEl.addEventListener('change', function () {
       updateNkzProduct();
-      // Перерахувати селектор стрічка/ланцюг при зміні стану “ланцюгова”
       updateConvSelect();
-      // Перерахувати ківші при зміні стану “ланцюгова”
-      updateBucketSelect(); // виклик: синхронізувати вибір ківшів із режимом ланцюга/стрічки
+      updateConvLengthAndPrice();
+      updatebusketSelect();
     });
   }
   // Збереження вибраного елемента стрічка/ланцюг при зміні селектора
@@ -130,6 +124,7 @@ document.addEventListener('DOMContentLoaded', function () {
       var v = this.value;
       nkz_conv = __convMap.get(v) || null;
       console.log('Вибрано стрічку/ланцюг:', nkz_conv);
+      updateConvLengthAndPrice();
     });
   }
 });
@@ -161,9 +156,9 @@ function NKZ_HEIGHT() {
       count_nkz_section.one = 1;
       count_nkz_section.two = half;
     }
-  total_h_nkz = Math.round((((count_nkz_section.one + count_nkz_section.two + count_nkz_section.revision_secton) * 20)/1000 + nkz_h + nkz_h_base) * 1000) / 1000;
+  total_h_nkz = Math.round((((count_nkz_section.one + count_nkz_section.two + count_nkz_section.revision_secton) * 30)/1000 + nkz_h + nkz_h_base) * 1000) / 1000;
 
-  rob_h_nkz = Math.round((((count_nkz_section.one + count_nkz_section.two + count_nkz_section.revision_secton) * 20)/1000 + nkz_h ) * 1000) / 1000;
+  rob_h_nkz = Math.round((((count_nkz_section.one + count_nkz_section.two + count_nkz_section.revision_secton) * 30)/1000 + nkz_h ) * 1000) / 1000;
 
     // Вивід результатів у відповідні елементи DOM
     document.querySelector('.gab_vis span').textContent = total_h_nkz;
@@ -174,6 +169,9 @@ function NKZ_HEIGHT() {
   };
     
   setHeight(v);
+  updateShaftsInfo();
+  updateConvLengthAndPrice();
+  updateFasteners();
 
 }
 
@@ -297,6 +295,7 @@ function updateConvSelect() {
         convEl.value = def ? def.full_n : '';
         nkz_conv = def || null;
         console.log('Вибрано стрічку/ланцюг (дефолт):', nkz_conv);
+        updateConvLengthAndPrice();
       }
     }
   } catch (_) {}
@@ -310,7 +309,8 @@ function initAfterDataReady() {
       setChainCheckboxVisibility(normType(typeEl.value));
       updateNkzProduct();
       updateConvSelect();
-      updateBucketSelect(); // виклик: ініціалізація блоку “ківші” після надходження даних
+      updateConvLengthAndPrice();
+      updatebusketSelect(); // виклик: ініціалізація блоку “ківші” після надходження даних
     }
   } catch (_) {}
 }
@@ -322,16 +322,16 @@ function normType(v) {
 // -----------------------------------------------
 // Ківші: фільтрація, вибір за замовчуванням, відображення
 // -----------------------------------------------
-let nkz_bucket = null;
-let __bucketMap = new Map();
-function __getBucketDataset() {
+let nkz_busket = null; // вибраний ківш
+let __busketMap = new Map();
+function __getbusketDataset() {
   var a = (NKZ_data && NKZ_data.busket) ? NKZ_data.busket : [];
-  var b = (NKZ_data && NKZ_data.bucket) ? NKZ_data.bucket : [];
+  var b = (NKZ_data && NKZ_data.busket) ? NKZ_data.busket : [];
   return (a && a.length) ? a : b;
 }
-function __bucketCandidates(nkzProd) {
+function __busketCandidates(nkzProd) {
   if (!nkzProd) return [];
-  var ds = __getBucketDataset();
+  var ds = __getbusketDataset();
   var code = nkzProd.full_n;
   var out = ds.filter(function (x) {
     var setOn = (x.set_on || '').split(',').map(function (s) { return s.trim(); });
@@ -354,7 +354,7 @@ function __num(v) {
   var n = parseFloat(v);
   return isNaN(n) ? 0 : n;
 }
-function __bucketLength(x) {
+function __busketLength(x) {
   // “довжчий” ківш: візьмемо максимум з width/depth; якщо немає — за об’ємом
   var w = __num(x.width);
   var d = __num(x.depth);
@@ -362,14 +362,14 @@ function __bucketLength(x) {
   var dim = Math.max(w, d);
   return dim > 0 ? dim : vol;
 }
-function __defaultBucketIndex(items) {
+function __defaultbusketIndex(items) {
   if (!items.length) return -1;
-  var sorted = items.slice().sort(function (a, b) { return __bucketLength(b) - __bucketLength(a); });
+  var sorted = items.slice().sort(function (a, b) { return __busketLength(b) - __busketLength(a); });
   var pick = sorted[0];
   var idx = items.findIndex(function (x) { return x.full_n === pick.full_n; });
   return idx >= 0 ? idx : 0;
 }
-function __bucketLabel(x) {
+function __busketLabel(x) {
   var specW = x.width || '';
   var specD = x.depth || '';
   var specM = x.s_material || '';
@@ -388,49 +388,269 @@ function __bucketLabel(x) {
   var priceStr = (__fmtUA ? __fmtUA(price) : price.toFixed(2)) + ' грн/шт.';
   return (x.name_1 || '') + ' ' + (x.type_and_material || x.name_2 || '') + ' ' + (x.name_3 || '') + size + volStr + '  ' + priceStr;
 }
-function updateBucketSelect() {
+function updatebusketSelect() {
   try {
-    __bucketMap.clear();
+    __busketMap.clear();
     var wrap = document.getElementById('info-buckets');
-    var candidates = __bucketCandidates(nkz_product);
+    var candidates = __busketCandidates(nkz_product);
     if (wrap) {
       wrap.innerHTML = '';
       var col = document.createElement('div');
       col.className = 'col-sm';
       var lbl = document.createElement('label');
-      lbl.setAttribute('for', 'bucket_item');
+      lbl.setAttribute('for', 'busket_item');
       lbl.textContent = 'Ківші';
       var sel = document.createElement('select');
       sel.className = 'form-control';
-      sel.id = 'bucket_item';
+      sel.id = 'busket_item';
       var ph = document.createElement('option');
       ph.value = '';
       ph.textContent = '— оберіть —';
       sel.appendChild(ph);
       candidates.forEach(function (x) {
         var val = x.full_n;
-        __bucketMap.set(val, x);
+        __busketMap.set(val, x);
         var o = document.createElement('option');
         o.value = val;
-        o.textContent = __bucketLabel(x);
+        o.textContent = __busketLabel(x);
         sel.appendChild(o);
       });
-      var di = __defaultBucketIndex(candidates);
+      var di = __defaultbusketIndex(candidates);
       if (di >= 0) {
         var def = candidates[di];
         sel.value = def ? def.full_n : '';
-        nkz_bucket = def || null;
-        console.log('Вибрано ківш (дефолт):', nkz_bucket);
+        nkz_busket = def || null;
+        console.log('Вибрано ківш (дефолт):', nkz_busket);
       }
       sel.addEventListener('change', function () {
         var v = this.value;
-        nkz_bucket = __bucketMap.get(v) || null;
-        console.log('Вибрано ківш:', nkz_bucket);
+        nkz_busket = __busketMap.get(v) || null;
+        console.log('Вибрано ківш:', nkz_busket);
+        updateFasteners(); // оновити метизи після вибору ківша
       });
       col.appendChild(lbl);
       col.appendChild(sel);
+      var totalP = document.createElement('p');
+      totalP.id = 'busket_total_p';
+      totalP.textContent = 'Кількість ківшів: ' + total_count_busket;
+      col.appendChild(totalP);
       wrap.appendChild(col);
+      // первинне оновлення метизів для дефолтного ківша
+      updateFasteners();
     }
+  } catch (_) {}
+}
+
+// -----------------------------------------------
+// Довжина і вартість стрічки/ланцюга для норії
+// -----------------------------------------------
+let chain_belt_l = 0;
+let price_chain_or_belt = 0;
+let total_count_busket = 0;
+function updateConvLengthAndPrice() {
+  try {
+    var wrap = document.getElementById('info-belt');
+    var chainEl = document.getElementById('lan_check');
+    var typeEl = document.getElementById('nkz_type');
+    var typeVal = typeEl ? normType(typeEl.value) : '';
+    var isChainMode = chainEl ? !!chainEl.checked : false;
+    var isChainTargetType = isChainMode && (typeVal === '25' || typeVal === '50');
+    var H = typeof total_h_nkz === 'number' ? total_h_nkz : 0;
+    var len = isChainTargetType ? (H * 4 + 2) : (H * 2 + 1);
+    chain_belt_l = Math.max(0, Math.round(len * 100) / 100);
+    var pricePerUnit = nkz_conv ? __parsePrice(nkz_conv) : 0;
+    price_chain_or_belt = Math.round(chain_belt_l * pricePerUnit * 100) / 100;
+    var cb = parseFloat(nkz_product && nkz_product.count_busket) || 0;
+    total_count_busket = Math.ceil((isChainTargetType ? (chain_belt_l * cb / 2) : (chain_belt_l * cb)));
+    if (wrap) {
+      var host = wrap.querySelector('.col-sm');
+      if (!host) {
+        host = document.createElement('div');
+        host.className = 'col-sm';
+        wrap.appendChild(host);
+      }
+      var lenP = host.querySelector('#conv_len_p');
+      var priceP = host.querySelector('#conv_price_p');
+      if (!lenP) { lenP = document.createElement('p'); lenP.id = 'conv_len_p'; host.appendChild(lenP); }
+      if (!priceP) { priceP = document.createElement('p'); priceP.id = 'conv_price_p'; host.appendChild(priceP); }
+      lenP.textContent = 'Довжина: ' + chain_belt_l + ' м';
+      var priceStr = (__fmtUA ? __fmtUA(price_chain_or_belt) : price_chain_or_belt.toFixed(2)) + ' грн';
+      priceP.textContent = 'Вартість: ' + priceStr;
+    }
+    var totalP = document.getElementById('busket_total_p');
+    if (totalP) {
+      totalP.textContent = 'Кількість ківшів: ' + total_count_busket;
+    }
+    console.log('Довжина і вартість стрічки/ланцюга:', { chain_belt_l: chain_belt_l, price_chain_or_belt: price_chain_or_belt });
+  } catch (_) {}
+}
+// -----------------------------------------------
+// Метизи для вибраного ківша: пошук і відображення
+// -----------------------------------------------
+let busket_metiz = null;
+let busket_metiz_weight = 0;
+let busket_metiz_prace = 0;
+let busket_metiz_count = 0;
+
+let busket_metiz_gayka = null;
+let busket_metiz_gayka_count = 0;
+let busket_metiz_gayka_weight = 0;
+let busket_metiz_gayka_prace = 0;
+
+let busket_metiz_shayba_noriyna = null;
+let busket_metiz_shayba_noriyna_count = 0;
+let busket_metiz_shayba_noriyna_weight = 0;
+let busket_metiz_shayba_noriyna_prace = 0;
+
+
+function __getMetizDataset() {
+  var a = (NKZ_data && NKZ_data.metiz) ? NKZ_data.metiz : [];
+  return Array.isArray(a) ? a : [];
+}
+function __findMetizByCode(code) {
+  var ds = __getMetizDataset();
+  var c = String(code || '').trim();
+  if (!c) return null;
+  return ds.find(function (x) { return String(x.full_n || '').trim() === c; }) || null;
+}
+function __fmtMetizText(m, busket) {
+  var title = (m.full_name || ((m.name_1 || '') + ' ' + (m.name_2 || '') + ' ' + (m.name_3 || ''))).trim();
+
+  
+  return title;
+}
+function __extractThreadSize(m) {
+  var s = '';
+  var t = String(nkz_busket && nkz_busket.mitiz || '');
+  var mm = t.match(/M\d+/i);
+  if (mm) s = mm[0].toUpperCase();
+  if (!s && m) {
+    var pool = [m.name_3, m.full_name, m.name_2];
+    for (var i = 0; i < pool.length; i++) {
+      var v = String(pool[i] || '');
+      var k = v.match(/M\d+/i);
+      if (k) { s = k[0].toUpperCase(); break; }
+    }
+  }
+  return s;
+}
+function __findNutForMetiz(m) {
+  var ds = __getMetizDataset();
+  var size = __extractThreadSize(m);
+  for (var i = 0; i < ds.length; i++) {
+    var x = ds[i];
+    var txt = (String(x.name_1 || '') + ' ' + String(x.name_2 || '') + ' ' + String(x.name_3 || '') + ' ' + String(x.full_name || '')).toLowerCase();
+    var isNut = txt.indexOf('гайка') !== -1;
+    var ok = true;
+    if (size) {
+      var up = (String(x.full_name || '') + ' ' + String(x.name_3 || '')).toUpperCase();
+      ok = up.indexOf(size) !== -1;
+    }
+    if (isNut && ok) return x;
+  }
+  return null;
+}
+function __findNoriynaWasherForMetiz(m) {
+  var ds = __getMetizDataset();
+  var size = __extractThreadSize(m);
+  for (var i = 0; i < ds.length; i++) {
+    var x = ds[i];
+    var txt = (String(x.name_1 || '') + ' ' + String(x.name_2 || '') + ' ' + String(x.name_3 || '') + ' ' + String(x.full_name || '')).toLowerCase();
+    var isWasher = txt.indexOf('шайба') !== -1 && (txt.indexOf('нор') !== -1 || txt.indexOf('норі') !== -1);
+    var ok = true;
+    if (size) {
+      var up = (String(x.full_name || '') + ' ' + String(x.name_3 || '')).toUpperCase();
+      ok = up.indexOf(size) !== -1;
+    }
+    if (isWasher && ok) return x;
+  }
+  return null;
+}
+function updateFasteners() {
+  try {
+    var wrap = document.getElementById('info-fasteners');
+    if (!wrap) return;
+    wrap.innerHTML = '';
+    busket_metiz = null;
+    if (!nkz_busket) return;
+    var code = nkz_busket.mitiz || '';
+    var m = __findMetizByCode(code);
+    busket_metiz = m || null;
+    var col = document.createElement('div');
+    col.className = 'col-sm';
+    var p = document.createElement('p');
+    p.textContent = m ? __fmtMetizText(m, nkz_busket) : 'Метизи для вибраного ківша не знайдено';
+    col.appendChild(p);
+    if (m) {
+      var cm = parseFloat(nkz_busket && nkz_busket.count_metiz) || 0;
+      var w = parseFloat(m.weight) || 0;
+      var pr = parseFloat(m.sale_price) || 0;
+      busket_metiz_count = Math.ceil((total_count_busket || 0) * cm);
+      busket_metiz_weight = busket_metiz_count * w;
+      busket_metiz_prace = Math.round((busket_metiz_weight * pr) * 100) / 100;
+      var s = document.createElement('small');
+      s.textContent = 'вага: ' + busket_metiz_weight.toFixed(2) + 'кг, Ціна ' + busket_metiz_prace.toFixed(2) + 'грн з пдв. Кільк: ' + busket_metiz_count + 'шт.';
+      s.style.fontSize = '0.875em';
+      s.style.color = '#555';
+      s.style.display = 'block';
+      col.appendChild(s);
+      busket_metiz_gayka = __findNutForMetiz(m);
+      if (busket_metiz_gayka) {
+        var gCnt = Math.ceil(busket_metiz_count * 2);
+        var gW = (parseFloat(busket_metiz_gayka.weight) || 0) * gCnt;
+        var gP = Math.round(gW * (parseFloat(busket_metiz_gayka.sale_price) || 0) * 100) / 100;
+        busket_metiz_gayka_count = gCnt;
+        busket_metiz_gayka_weight = gW;
+        busket_metiz_gayka_prace = gP;
+        var gs = document.createElement('small');
+        gs.textContent = 'Гайка: вага ' + gW.toFixed(2) + 'кг, Ціна ' + gP.toFixed(2) + 'грн з пдв, Кільк ' + gCnt + 'шт.';
+        gs.style.fontSize = '0.875em';
+        gs.style.color = '#555';
+        gs.style.display = 'block';
+        col.appendChild(gs);
+      }
+      busket_metiz_shayba_noriyna = __findNoriynaWasherForMetiz(m);
+      if (busket_metiz_shayba_noriyna) {
+        var wCnt = busket_metiz_count;
+        var wW = (parseFloat(busket_metiz_shayba_noriyna.weight) || 0) * wCnt;
+        var wP = Math.round(wW * (parseFloat(busket_metiz_shayba_noriyna.sale_price) || 0) * 100) / 100;
+        busket_metiz_shayba_noriyna_count = wCnt;
+        busket_metiz_shayba_noriyna_weight = wW;
+        busket_metiz_shayba_noriyna_prace = wP;
+        var ws = document.createElement('small');
+        ws.textContent = 'Шайба норійна: вага ' + wW.toFixed(2) + 'кг, Ціна ' + wP.toFixed(2) + 'грн з пдв, Кільк ' + wCnt + 'шт.';
+        ws.style.fontSize = '0.875em';
+        ws.style.color = '#555';
+        ws.style.display = 'block';
+        col.appendChild(ws);
+      }
+    }
+    wrap.appendChild(col);
+    console.log('Вибрані метизи (busket_metiz):', busket_metiz);
+  } catch (_) {}
+}
+
+// -----------------------------------------------
+// Шахти: вивід кількості секцій (ревізійна, метрова, двохметрова)
+// -----------------------------------------------
+function updateShaftsInfo() {
+  try {
+    var wrap = document.getElementById('info-shafts');
+    if (!wrap) return;
+    wrap.innerHTML = '';
+    var col = document.createElement('div');
+    col.className = 'col-sm';
+    var p = document.createElement('p');
+    var rev = parseInt(count_nkz_section.revision_secton, 10);
+    var one = parseInt(count_nkz_section.one, 10);
+    var two = parseInt(count_nkz_section.two, 10);
+    var txt = 'Секції: ревізійна — ' + (isNaN(rev) ? 0 : rev) +
+              '; метрова — ' + (isNaN(one) ? 0 : one) +
+              '; двохметрова — ' + (isNaN(two) ? 0 : two);
+    p.textContent = txt;
+    col.appendChild(p);
+    wrap.appendChild(col);
+    console.log('Кількість секцій (шахти):', { revision: rev, one: one, two: two });
   } catch (_) {}
 }
 
