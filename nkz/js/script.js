@@ -115,6 +115,8 @@ document.addEventListener('DOMContentLoaded', function () {
       updateConvSelect();
       updateConvLengthAndPrice();
       updatebusketSelect();
+      updateShaftsDetails();
+      updatePricesSummary();
     });
   }
   // Збереження вибраного елемента стрічка/ланцюг при зміні селектора
@@ -170,8 +172,10 @@ function NKZ_HEIGHT() {
     
   setHeight(v);
   updateShaftsInfo();
+  updateShaftsDetails();
   updateConvLengthAndPrice();
   updateFasteners();
+  updatePricesSummary();
 
 }
 
@@ -219,6 +223,139 @@ function updateNkzProduct() {
   } catch (_) {}
 }
 
+// -----------------------------------------------
+// Узагальнення цін: побудова хеша і відображення
+// -----------------------------------------------
+let nkz_prices = {};
+function updatePricesSummary() {
+  try {
+    var out = {};
+    // Стрічка/ланцюг: назва, довжина, вартість
+    out.conv = {
+      name: nkz_conv ? ((nkz_conv.name_1 || '') + ' ' + (nkz_conv.name_2 || '')).trim() : '',
+      length_m: chain_belt_l || 0,
+      price: price_chain_or_belt || 0
+    };
+    // Ківші: назва (лейбл), ціна за шт, кількість, загальна вартість
+    var bucketUnit = nkz_busket ? __parsePrice(nkz_busket) : 0;
+    var bucketName = nkz_busket ? __busketLabel(nkz_busket) : '';
+    var bucketSum = Math.round(bucketUnit * (total_count_busket || 0) * 100) / 100;
+    out.buckets = {
+      name: bucketName,
+      unit_price: bucketUnit,
+      count: total_count_busket || 0,
+      total_price: bucketSum
+    };
+    // Метизи: болт, гайка, шайба норійна
+    out.fasteners = {
+      bolt: {
+        count: busket_metiz_count || 0,
+        weight_kg: Number((busket_metiz_weight || 0).toFixed ? (busket_metiz_weight || 0).toFixed(2) : (busket_metiz_weight || 0)),
+        price: busket_metiz_prace || 0
+      },
+      nut: {
+        count: busket_metiz_gayka_count || 0,
+        weight_kg: Number((busket_metiz_gayka_weight || 0).toFixed ? (busket_metiz_gayka_weight || 0).toFixed(2) : (busket_metiz_gayka_weight || 0)),
+        price: busket_metiz_gayka_prace || 0
+      },
+      washer: {
+        count: busket_metiz_shayba_noriyna_count || 0,
+        weight_kg: Number((busket_metiz_shayba_noriyna_weight || 0).toFixed ? (busket_metiz_shayba_noriyna_weight || 0).toFixed(2) : (busket_metiz_shayba_noriyna_weight || 0)),
+        price: busket_metiz_shayba_noriyna_prace || 0
+      }
+    };
+    // Мотор-редуктор: назва і ціна
+    var drvName = '';
+    var drvPrice = 0;
+    if (typeof drive === 'object' && drive) {
+      var parts = [];
+      if (drive.saler) parts.push(String(drive.saler));
+      if (drive.type) parts.push(String(drive.type));
+      var gab = String(drive.gab || '').trim();
+      var kwt = String(drive.kwt || '').trim();
+      var spec = '';
+      if (gab || kwt) {
+        spec = (gab ? gab : '') + (kwt ? ('/' + kwt + 'кВт') : '');
+      }
+      if (spec) parts.push(spec);
+      drvName = parts.join(' ');
+      drvPrice = __parsePrice(drive) || 0;
+    }
+    out.drive = { name: drvName, price: drvPrice };
+    // Секції: зважування і ціни
+    var chainEl = document.getElementById('lan_check');
+    var isChainMode = chainEl ? !!chainEl.checked : false;
+    var frame = __pickFirst(__noriaItemsForProductByName('Рамка шахти '));
+    var rev = __pickFirst(__noriaItemsForProductByName('Шахта оглядова'));
+    var shaft1mName = isChainMode ? 'Шахта ланцюгова 1м.' : 'Шахта 1м.';
+    var shaft1m = __pickFirst(__noriaItemsForProductByName(shaft1mName));
+    var wFrame = __itemWeightKg(frame), pFrame = __parsePrice(frame);
+    var wRev = __itemWeightKg(rev), pRev = __parsePrice(rev);
+    var w1m = __itemWeightKg(shaft1m), p1m = __parsePrice(shaft1m);
+    var cntRev = parseInt(count_nkz_section.revision_secton, 10) || 0;
+    var cntOne = parseInt(count_nkz_section.one, 10) || 0;
+    var cntTwo = parseInt(count_nkz_section.two, 10) || 0;
+    var wR = frame && rev ? (wFrame * 2 + wRev) * cntRev : 0;
+    var pR = frame && rev ? (pFrame * 2 + pRev) * cntRev : 0;
+    var wM = frame && shaft1m ? (wFrame * 2 + w1m) * cntOne : 0;
+    var pM = frame && shaft1m ? (pFrame * 2 + p1m) * cntOne : 0;
+    var wT = frame && shaft1m ? (wFrame * 2 + (w1m * 2)) * cntTwo : 0;
+    var pT = frame && shaft1m ? (pFrame * 2 + (p1m * 2)) * cntTwo : 0;
+    var head = __pickFirst(__noriaItemsForProductByName('Голова привідна в зборі'));
+    var wH = __itemWeightKg(head), pH = __parsePrice(head);
+    out.shafts = {
+      revision: { count: cntRev, weight_kg: Number(wR.toFixed ? wR.toFixed(2) : wR), price: pR || 0 },
+      meter:    { count: cntOne, weight_kg: Number(wM.toFixed ? wM.toFixed(2) : wM), price: pM || 0 },
+      twometer: { count: cntTwo, weight_kg: Number(wT.toFixed ? wT.toFixed(2) : wT), price: pT || 0 },
+      bashmak:  { weight_kg: Number((__itemWeightKg(__pickFirst(__noriaItemsForProductByName('Башмак в зборі'))) || 0).toFixed ? (__itemWeightKg(__pickFirst(__noriaItemsForProductByName('Башмак в зборі'))) || 0).toFixed(2) : (__itemWeightKg(__pickFirst(__noriaItemsForProductByName('Башмак в зборі'))) || 0)), price: __parsePrice(__pickFirst(__noriaItemsForProductByName('Башмак в зборі'))) || 0 },
+      head:     { weight_kg: Number(wH.toFixed ? wH.toFixed(2) : wH), price: pH || 0 }
+    };
+    // Підсумкова вартість: сума всіх відомих позицій
+    var tp = 0;
+    tp += out.conv.price || 0;
+    tp += out.buckets.total_price || 0;
+    tp += (out.fasteners.bolt.price || 0) + (out.fasteners.nut.price || 0) + (out.fasteners.washer.price || 0);
+    tp += (out.shafts.revision.price || 0) + (out.shafts.meter.price || 0) + (out.shafts.twometer.price || 0);
+    tp += (out.shafts.bashmak.price || 0) + (out.shafts.head.price || 0);
+    tp += out.drive.price || 0;
+    out.total_price = Math.round(tp * 100) / 100;
+    nkz_prices = out;
+    // Оновити заголовок “Ціни — total_price”
+    var labelEl = document.getElementById('total_price_label');
+    if (labelEl) {
+      var labelStr = (__fmtUA ? __fmtUA(out.total_price) : out.total_price.toFixed(2)) + ' грн';
+      labelEl.textContent = labelStr;
+    }
+    // Оновити контент розкривного блоку “Ціни”
+    var wrap = document.getElementById('info-prices');
+    if (wrap) {
+      wrap.innerHTML = '';
+      var col = document.createElement('div');
+      col.className = 'col-sm';
+      function line(txt) {
+        var p = document.createElement('p');
+        p.textContent = txt;
+        p.style.fontSize = '0.875em';
+        p.style.color = '#555';
+        p.style.display = 'block';
+        col.appendChild(p);
+      }
+      line('Стрічка/Ланцюг: ' + (out.conv.name || '') + '; довжина ' + (out.conv.length_m || 0) + 'м; ціна ' + ((__fmtUA ? __fmtUA(out.conv.price) : (out.conv.price || 0).toFixed(2)) + ' грн'));
+      line('Ківші: ' + (out.buckets.name || '') + '; кільк. ' + (out.buckets.count || 0) + 'шт; ціна ' + ((__fmtUA ? __fmtUA(out.buckets.total_price) : (out.buckets.total_price || 0).toFixed(2)) + ' грн'));
+      line('Болти: ' + (out.fasteners.bolt.count || 0) + 'шт; вага ' + Number(out.fasteners.bolt.weight_kg).toFixed(2) + 'кг; ціна ' + ((__fmtUA ? __fmtUA(out.fasteners.bolt.price) : (out.fasteners.bolt.price || 0).toFixed(2)) + ' грн'));
+      line('Гайки: ' + (out.fasteners.nut.count || 0) + 'шт; вага ' + Number(out.fasteners.nut.weight_kg).toFixed(2) + 'кг; ціна ' + ((__fmtUA ? __fmtUA(out.fasteners.nut.price) : (out.fasteners.nut.price || 0).toFixed(2)) + ' грн'));
+      line('Шайби норійні: ' + (out.fasteners.washer.count || 0) + 'шт; вага ' + Number(out.fasteners.washer.weight_kg).toFixed(2) + 'кг; ціна ' + ((__fmtUA ? __fmtUA(out.fasteners.washer.price) : (out.fasteners.washer.price || 0).toFixed(2)) + ' грн'));
+      line('Секція ревізійна (' + (out.shafts.revision.count || 0) + ' шт.): вага ' + Number(out.shafts.revision.weight_kg).toFixed(2) + 'кг; ціна ' + ((__fmtUA ? __fmtUA(out.shafts.revision.price) : (out.shafts.revision.price || 0).toFixed(2)) + ' грн'));
+      line('Секції метрові (' + (out.shafts.meter.count || 0) + ' шт.): вага ' + Number(out.shafts.meter.weight_kg).toFixed(2) + 'кг; ціна ' + ((__fmtUA ? __fmtUA(out.shafts.meter.price) : (out.shafts.meter.price || 0).toFixed(2)) + ' грн'));
+      line('Секції двохметрові (' + (out.shafts.twometer.count || 0) + ' шт.): вага ' + Number(out.shafts.twometer.weight_kg).toFixed(2) + 'кг; ціна ' + ((__fmtUA ? __fmtUA(out.shafts.twometer.price) : (out.shafts.twometer.price || 0).toFixed(2)) + ' грн'));
+      line('Башмак в зборі: вага ' + Number(out.shafts.bashmak.weight_kg || 0).toFixed(2) + 'кг; ціна ' + ((__fmtUA ? __fmtUA(out.shafts.bashmak.price) : (out.shafts.bashmak.price || 0).toFixed(2)) + ' грн'));
+      line('Голова привідна в зборі: вага ' + Number(out.shafts.head.weight_kg || 0).toFixed(2) + 'кг; ціна ' + ((__fmtUA ? __fmtUA(out.shafts.head.price) : (out.shafts.head.price || 0).toFixed(2)) + ' грн'));
+      line('Мотор-редуктор: ' + (out.drive.name || '') + '; ціна ' + ((__fmtUA ? __fmtUA(out.drive.price) : (out.drive.price || 0).toFixed(2)) + ' грн'));
+      line('Разом (total_price): ' + ((__fmtUA ? __fmtUA(out.total_price) : out.total_price.toFixed(2)) + ' грн'));
+      wrap.appendChild(col);
+    }
+  } catch (_) {}
+}
 // Дані стрічка/ланцюг: мапа, вибраний об’єкт, фільтрація та заповнення селектора
 let nkz_conv = null;
 let __convMap = new Map();
@@ -311,6 +448,8 @@ function initAfterDataReady() {
       updateConvSelect();
       updateConvLengthAndPrice();
       updatebusketSelect(); // виклик: ініціалізація блоку “ківші” після надходження даних
+      updateShaftsDetails();
+      updatePricesSummary();
     }
   } catch (_) {}
 }
@@ -427,16 +566,38 @@ function updatebusketSelect() {
         nkz_busket = __busketMap.get(v) || null;
         console.log('Вибрано ківш:', nkz_busket);
         updateFasteners(); // оновити метизи після вибору ківша
+        var totalPriceP = document.getElementById('busket_total_price_p');
+        if (totalPriceP && nkz_busket) {
+          var unit = __parsePrice(nkz_busket) || 0;
+          var sum = Math.round(unit * (total_count_busket || 0) * 100) / 100;
+          var priceStr = (__fmtUA ? __fmtUA(sum) : sum.toFixed(2)) + ' грн';
+          totalPriceP.textContent = 'Загальна вартість ківшів: ' + priceStr;
+        }
+        updatePricesSummary();
       });
       col.appendChild(lbl);
       col.appendChild(sel);
       var totalP = document.createElement('p');
       totalP.id = 'busket_total_p';
       totalP.textContent = 'Кількість ківшів: ' + total_count_busket;
+       totalP.style.fontSize = '0.875em';
+       totalP.style.color = '#555';
+       totalP.style.display = 'block';
       col.appendChild(totalP);
+       var totalPriceP = document.createElement('p');
+       totalPriceP.id = 'busket_total_price_p';
+       var unit = nkz_busket ? __parsePrice(nkz_busket) : 0;
+       var sum = Math.round((unit || 0) * (total_count_busket || 0) * 100) / 100;
+       var priceStr = (__fmtUA ? __fmtUA(sum) : sum.toFixed(2)) + ' грн';
+       totalPriceP.textContent = 'Загальна вартість ківшів: ' + priceStr;
+       totalPriceP.style.fontSize = '0.875em';
+       totalPriceP.style.color = '#555';
+       totalPriceP.style.display = 'block';
+       col.appendChild(totalPriceP);
       wrap.appendChild(col);
       // первинне оновлення метизів для дефолтного ківша
       updateFasteners();
+      updatePricesSummary();
     }
   } catch (_) {}
 }
@@ -473,6 +634,12 @@ function updateConvLengthAndPrice() {
       var priceP = host.querySelector('#conv_price_p');
       if (!lenP) { lenP = document.createElement('p'); lenP.id = 'conv_len_p'; host.appendChild(lenP); }
       if (!priceP) { priceP = document.createElement('p'); priceP.id = 'conv_price_p'; host.appendChild(priceP); }
+      lenP.style.fontSize = '0.875em';
+      lenP.style.color = '#555';
+      lenP.style.display = 'block';
+      priceP.style.fontSize = '0.875em';
+      priceP.style.color = '#555';
+      priceP.style.display = 'block';
       lenP.textContent = 'Довжина: ' + chain_belt_l + ' м';
       var priceStr = (__fmtUA ? __fmtUA(price_chain_or_belt) : price_chain_or_belt.toFixed(2)) + ' грн';
       priceP.textContent = 'Вартість: ' + priceStr;
@@ -481,6 +648,14 @@ function updateConvLengthAndPrice() {
     if (totalP) {
       totalP.textContent = 'Кількість ківшів: ' + total_count_busket;
     }
+    var totalPriceP = document.getElementById('busket_total_price_p');
+    if (totalPriceP && nkz_busket) {
+      var unit2 = __parsePrice(nkz_busket) || 0;
+      var sum2 = Math.round(unit2 * total_count_busket * 100) / 100;
+      var priceStr2 = (__fmtUA ? __fmtUA(sum2) : sum2.toFixed(2)) + ' грн';
+      totalPriceP.textContent = 'Загальна вартість ківшів: ' + priceStr2;
+    }
+    updatePricesSummary();
     console.log('Довжина і вартість стрічки/ланцюга:', { chain_belt_l: chain_belt_l, price_chain_or_belt: price_chain_or_belt });
   } catch (_) {}
 }
@@ -654,3 +829,123 @@ function updateShaftsInfo() {
   } catch (_) {}
 }
 
+// -----------------------------------------------
+// Шахти: деталізований вивід ваги/ціни елементів і секцій
+// -----------------------------------------------
+function __getNoriaDataset() {
+  // Отримати масив елементів норії
+  var a = (NKZ_data && NKZ_data.noria) ? NKZ_data.noria : [];
+  return Array.isArray(a) ? a : [];
+}
+function __noriaItemsForProductByName(name) {
+  // Підібрати елемент(и) норії за назвою і прив'язкою set_on до вибраної норії
+  var ds = __getNoriaDataset();
+  var code = nkz_product ? nkz_product.full_n : '';
+  var target = String(name || '').trim().toLowerCase();
+  if (!code || !target) return [];
+  return ds.filter(function (x) {
+    var n1 = String(x.name_1 || '').trim().toLowerCase();
+    var setOn = (x.set_on || '').split(',').map(function (s) { return s.trim(); });
+    return n1 === target && setOn.indexOf(code) !== -1;
+  });
+}
+function __pickFirst(arr) {
+  // Взяти перший елемент зі списку-кандидата
+  return Array.isArray(arr) && arr.length ? arr[0] : null;
+}
+function __itemWeightKg(x) {
+  // Отримати вагу елементу; у норійних даних зберігається в полі "kg"
+  var v = parseFloat(x && x.kg);
+  return isNaN(v) ? 0 : v;
+}
+function updateShaftsDetails() {
+  try {
+    var wrap = document.getElementById('info-shafts'); // Контейнер секцій
+    if (!wrap) return;
+    var host = wrap.querySelector('.col-sm'); // Вже існуюча колонка з лічильниками
+    if (!host) {
+      host = document.createElement('div'); // Створити колонку, якщо її немає
+      host.className = 'col-sm';
+      wrap.appendChild(host);
+    }
+    // Очистити попередні деталізовані рядки (залишити лічильники)
+    var olds = host.querySelectorAll('p._shaft_detail');
+    olds.forEach(function (el) { el.remove(); });
+    // Визначити режим: ланцюгова чи стрічкова
+    var chainEl = document.getElementById('lan_check');
+    var isChainMode = chainEl ? !!chainEl.checked : false;
+    // Башмак в зборі: один елемент, вага і ціна
+    var bashmak = __pickFirst(__noriaItemsForProductByName('Башмак в зборі'));
+    if (bashmak) {
+      var wB = __itemWeightKg(bashmak);
+      var pB = __parsePrice(bashmak);
+      var p = document.createElement('p'); // Створити рядок для башмака
+      p.className = '_shaft_detail';
+      p.textContent = 'Башмак в зборі: вага ' + wB.toFixed(2) + 'кг, ціна ' + (pB.toFixed ? pB.toFixed(2) : Number(pB).toFixed(2)) + 'грн';
+      p.style.fontSize = '0.875em';
+      p.style.color = '#555';
+      host.appendChild(p);
+    }
+    // Підібрати базові елементи секцій
+    var frame = __pickFirst(__noriaItemsForProductByName('Рамка шахти '));
+    var rev = __pickFirst(__noriaItemsForProductByName('Шахта оглядова'));
+    var shaft1mName = isChainMode ? 'Шахта ланцюгова 1м.' : 'Шахта 1м.';
+    var shaft1m = __pickFirst(__noriaItemsForProductByName(shaft1mName));
+    // Витягнути ваги і ціни
+    var wFrame = __itemWeightKg(frame);
+    var pFrame = __parsePrice(frame);
+    var wRev = __itemWeightKg(rev);
+    var pRev = __parsePrice(rev);
+    var w1m = __itemWeightKg(shaft1m);
+    var p1m = __parsePrice(shaft1m);
+    // Лічильники секцій
+    var cntRev = parseInt(count_nkz_section.revision_secton, 10) || 0;
+    var cntOne = parseInt(count_nkz_section.one, 10) || 0;
+    var cntTwo = parseInt(count_nkz_section.two, 10) || 0;
+    // Ревізійна секція: дві рамки + оглядова, з урахуванням кількості
+    if (frame && rev && cntRev > 0) {
+      var wR = (wFrame * 2 + wRev) * cntRev;
+      var pR = (pFrame * 2 + pRev) * cntRev;
+      var pr = document.createElement('p'); // Рядок для ревізійної секції
+      pr.className = '_shaft_detail';
+      pr.textContent = 'Секція ревізійна: вага ' + wR.toFixed(2) + 'кг, ціна ' + pR.toFixed(2) + 'грн';
+      pr.style.fontSize = '0.875em';
+      pr.style.color = '#555';
+      host.appendChild(pr);
+    }
+    // Метрова секція: дві рамки + шахта 1м., з урахуванням кількості
+    if (frame && shaft1m && cntOne > 0) {
+      var wM = (wFrame * 2 + w1m) * cntOne;
+      var pM = (pFrame * 2 + p1m) * cntOne;
+      var pm = document.createElement('p'); // Рядок для метрових секцій
+      pm.className = '_shaft_detail';
+      pm.textContent = 'Секція метрова (' + cntOne + ' шт.): вага ' + wM.toFixed(2) + 'кг, ціна ' + pM.toFixed(2) + 'грн';
+      pm.style.fontSize = '0.875em';
+      pm.style.color = '#555';
+      host.appendChild(pm);
+    }
+    // Двохметрова секція: дві рамки + подвійна шахта 1м., * кількість
+    if (frame && shaft1m && cntTwo > 0) {
+      var wT = (wFrame * 2 + (w1m * 2)) * cntTwo;
+      var pT = (pFrame * 2 + (p1m * 2)) * cntTwo;
+      var pt = document.createElement('p'); // Рядок для двохметрових секцій
+      pt.className = '_shaft_detail';
+      pt.textContent = 'Секції двохметрові (' + cntTwo + ' шт.): вага ' + wT.toFixed(2) + 'кг, ціна ' + pT.toFixed(2) + 'грн';
+      pt.style.fontSize = '0.875em';
+      pt.style.color = '#555';
+      host.appendChild(pt);
+    }
+    // Голова привідна в зборі: один елемент
+    var head = __pickFirst(__noriaItemsForProductByName('Голова привідна в зборі'));
+    if (head) {
+      var wH = __itemWeightKg(head);
+      var pH = __parsePrice(head);
+      var ph = document.createElement('p'); // Рядок для голови
+      ph.className = '_shaft_detail';
+      ph.textContent = 'Голова привідна в зборі: вага ' + wH.toFixed(2) + 'кг, ціна ' + (pH.toFixed ? pH.toFixed(2) : Number(pH).toFixed(2)) + 'грн';
+      ph.style.fontSize = '0.875em';
+      ph.style.color = '#555';
+      host.appendChild(ph);
+    }
+  } catch (_) {}
+}

@@ -99,6 +99,9 @@ function initDriveFilters() {
       var v = this.value;
       drive = __driveMap.get(v) || null;
       console.log('Обрана модель мотора:', drive);
+      if (typeof updatePricesSummary === 'function') {
+        try { updatePricesSummary(); } catch (_) {}
+      }
     });
   }
 
