@@ -100,10 +100,14 @@ document.addEventListener('DOMContentLoaded', function () {
       nkz_h_base = baseHeights[normType(this.value)] || null;
       NKZ_HEIGHT();
       updateNkzProduct();
+      resetShaftThickness();
       updateConvSelect();
       updateConvLengthAndPrice();
       updatebusketSelect();
       setChainCheckboxVisibility(this.value);
+      updateShaftsInfo();
+      updateShaftsDetails();
+      updatePrivodKwtInfo();
     });
   }
 
@@ -176,6 +180,7 @@ function NKZ_HEIGHT() {
   updateConvLengthAndPrice();
   updateFasteners();
   updatePricesSummary();
+  updatePrivodKwtInfo();
 
 }
 
@@ -195,6 +200,96 @@ function setChainCheckboxVisibility(typeVal) {
 // Вибір норії за типом та станом “ланцюгова”; збереження у nkz_product та логування
 let nkz_product = null;
 const nkzTypeMap = { '5': '1', '10': '2', '25': '3', '50': '4', '100': '5', '175': '6', '200': '7' };
+
+// -----------------------------------------------
+// Товщина шахт: зберігається окремо для кожного типу секції
+// -----------------------------------------------
+let shaft_thickness = { revision: 1.5, meter: 1.5, twometer: 1.5 };
+
+// Парсинг поля thinks_mine_nkz: може бути JSON-рядком [“1,5”,”2”] або масивом
+function __parseThicknessList(raw) {
+  var list = raw;
+  if (typeof list === 'string') {
+    try { list = JSON.parse(list); } catch (_) { list = list.split(','); }
+  }
+  if (!Array.isArray(list)) list = [String(list)];
+  return list.map(function (s) {
+    return parseFloat(String(s).replace(',', '.'));
+  }).filter(function (v) { return !isNaN(v) && v > 0; });
+}
+
+// Побудова списку доступних товщин: значення з thinks_mine_nkz + крок 0.5 до 5мм
+function getAvailableThicknesses() {
+  var raw = nkz_product ? nkz_product.thinks_mine_nkz : null;
+  var base = raw ? __parseThicknessList(raw) : [1.5, 2];
+  var min = base.length ? Math.min.apply(null, base) : 1.5;
+  var set = {};
+  base.forEach(function (v) { set[Math.round(v * 10) / 10] = true; });
+  for (var t = min; t <= 5.001; t += 0.5) {
+    set[Math.round(t * 10) / 10] = true;
+  }
+  return Object.keys(set).map(Number).sort(function (a, b) { return a - b; });
+}
+
+// Мінімальна товщина з thinks_mine_nkz для поточної норії
+function getDefaultThickness() {
+  var raw = nkz_product ? nkz_product.thinks_mine_nkz : null;
+  var base = raw ? __parseThicknessList(raw) : [1.5];
+  return base.length ? Math.min.apply(null, base) : 1.5;
+}
+
+// Скидання товщини до мінімальної при зміні типу норії
+function resetShaftThickness() {
+  var def = getDefaultThickness();
+  shaft_thickness.revision = def;
+  shaft_thickness.meter = def;
+  shaft_thickness.twometer = def;
+}
+
+// Рендеринг трьох селекторів товщини всередині контейнера host
+function renderThicknessSelectors(host) {
+  var existing = host.querySelectorAll('._thickness_row');
+  existing.forEach(function (el) { el.remove(); });
+  var thicknesses = getAvailableThicknesses();
+  var types = [
+    { key: 'revision',  label: 'Ревізійна товщина' },
+    { key: 'meter',     label: 'Метрова товщина' },
+    { key: 'twometer',  label: 'Двохметрова товщина' }
+  ];
+  var refEl = host.querySelector('#shafts_count_p');
+  types.forEach(function (t) {
+    var row = document.createElement('div');
+    row.className = '_thickness_row';
+    row.style.cssText = 'display:flex;align-items:center;gap:6px;margin-top:3px;';
+    var lbl = document.createElement('small');
+    lbl.textContent = t.label + ':';
+    lbl.style.cssText = 'color:#555;min-width:152px;font-size:0.875em;';
+    var sel = document.createElement('select');
+    sel.className = 'form-control form-control-sm';
+    sel.style.cssText = 'width:auto;font-size:0.875em;';
+    sel.dataset.thicknessKey = t.key;
+    thicknesses.forEach(function (v) {
+      var o = document.createElement('option');
+      o.value = String(v);
+      o.textContent = v + ' мм';
+      sel.appendChild(o);
+    });
+    sel.value = String(shaft_thickness[t.key]);
+    sel.addEventListener('change', function () {
+      shaft_thickness[t.key] = parseFloat(this.value) || 1.5;
+      updateShaftsDetails();
+      updatePricesSummary();
+    });
+    row.appendChild(lbl);
+    row.appendChild(sel);
+    if (refEl && refEl.parentNode === host) {
+      refEl.insertAdjacentElement('afterend', row);
+    } else {
+      host.appendChild(row);
+    }
+    refEl = row;
+  });
+}
 function selectNkzProduct(typeVal, chainChecked) {
   var data = (NKZ_data && NKZ_data.prod) ? NKZ_data.prod : [];
   var code = nkzTypeMap[normType(typeVal)];
@@ -295,12 +390,15 @@ function updatePricesSummary() {
     var cntRev = parseInt(count_nkz_section.revision_secton, 10) || 0;
     var cntOne = parseInt(count_nkz_section.one, 10) || 0;
     var cntTwo = parseInt(count_nkz_section.two, 10) || 0;
-    var wR = frame && rev ? (wFrame * 2 + wRev) * cntRev : 0;
-    var pR = frame && rev ? (pFrame * 2 + pRev) * cntRev : 0;
-    var wM = frame && shaft1m ? (wFrame * 2 + w1m) * cntOne : 0;
-    var pM = frame && shaft1m ? (pFrame * 2 + p1m) * cntOne : 0;
-    var wT = frame && shaft1m ? (wFrame * 2 + (w1m * 2)) * cntTwo : 0;
-    var pT = frame && shaft1m ? (pFrame * 2 + (p1m * 2)) * cntTwo : 0;
+    var _tRev = shaft_thickness.revision || 1;
+    var _tOne = shaft_thickness.meter || 1;
+    var _tTwo = shaft_thickness.twometer || 1;
+    var wR = frame && rev ? (wFrame * 2 + wRev) * cntRev * _tRev : 0;
+    var pR = frame && rev ? (pFrame * 2 + pRev) * cntRev * _tRev : 0;
+    var wM = frame && shaft1m ? (wFrame * 2 + w1m) * cntOne * _tOne : 0;
+    var pM = frame && shaft1m ? (pFrame * 2 + p1m) * cntOne * _tOne : 0;
+    var wT = frame && shaft1m ? (wFrame * 2 + (w1m * 2)) * cntTwo * _tTwo * 2 : 0;
+    var pT = frame && shaft1m ? (pFrame * 2 + (p1m * 2)) * cntTwo * _tTwo * 2 : 0;
     var head = __pickFirst(__noriaItemsForProductByName('Голова привідна в зборі'));
     var wH = __itemWeightKg(head), pH = __parsePrice(head);
     out.shafts = {
@@ -445,11 +543,14 @@ function initAfterDataReady() {
     if (typeEl) {
       setChainCheckboxVisibility(normType(typeEl.value));
       updateNkzProduct();
+      resetShaftThickness();
       updateConvSelect();
       updateConvLengthAndPrice();
-      updatebusketSelect(); // виклик: ініціалізація блоку “ківші” після надходження даних
+      updatebusketSelect();
+      updateShaftsInfo();
       updateShaftsDetails();
       updatePricesSummary();
+      updatePrivodKwtInfo();
     }
   } catch (_) {}
 }
@@ -806,25 +907,34 @@ function updateFasteners() {
 }
 
 // -----------------------------------------------
-// Шахти: вивід кількості секцій (ревізійна, метрова, двохметрова)
+// Шахти: вивід кількості секцій + інтерактивні селектори товщини
 // -----------------------------------------------
 function updateShaftsInfo() {
   try {
     var wrap = document.getElementById('info-shafts');
     if (!wrap) return;
-    wrap.innerHTML = '';
-    var col = document.createElement('div');
-    col.className = 'col-sm';
-    var p = document.createElement('p');
+    // Зберігаємо host між викликами (не очищуємо wrap повністю)
+    var host = wrap.querySelector('.col-sm');
+    if (!host) {
+      host = document.createElement('div');
+      host.className = 'col-sm';
+      wrap.appendChild(host);
+    }
+    // Оновлюємо або створюємо рядок з кількістю секцій
+    var countP = host.querySelector('#shafts_count_p');
+    if (!countP) {
+      countP = document.createElement('p');
+      countP.id = 'shafts_count_p';
+      host.insertBefore(countP, host.firstChild);
+    }
     var rev = parseInt(count_nkz_section.revision_secton, 10);
     var one = parseInt(count_nkz_section.one, 10);
     var two = parseInt(count_nkz_section.two, 10);
-    var txt = 'Секції: ревізійна — ' + (isNaN(rev) ? 0 : rev) +
-              '; метрова — ' + (isNaN(one) ? 0 : one) +
-              '; двохметрова — ' + (isNaN(two) ? 0 : two);
-    p.textContent = txt;
-    col.appendChild(p);
-    wrap.appendChild(col);
+    countP.textContent = 'Секції: ревізійна — ' + (isNaN(rev) ? 0 : rev) +
+                         '; метрова — ' + (isNaN(one) ? 0 : one) +
+                         '; двохметрова — ' + (isNaN(two) ? 0 : two);
+    // Рендеримо три селектори товщини (один на тип секції)
+    renderThicknessSelectors(host);
     console.log('Кількість секцій (шахти):', { revision: rev, one: one, two: two });
   } catch (_) {}
 }
@@ -902,35 +1012,42 @@ function updateShaftsDetails() {
     var cntRev = parseInt(count_nkz_section.revision_secton, 10) || 0;
     var cntOne = parseInt(count_nkz_section.one, 10) || 0;
     var cntTwo = parseInt(count_nkz_section.two, 10) || 0;
-    // Ревізійна секція: дві рамки + оглядова, з урахуванням кількості
+    // Коефіцієнти товщини: значення з shaft_thickness × висота секції
+    var tRev = shaft_thickness.revision || 1;
+    var tOne = shaft_thickness.meter || 1;
+    var tTwo = shaft_thickness.twometer || 1;
+    // Ревізійна секція (1м): × T_rev × 1
     if (frame && rev && cntRev > 0) {
-      var wR = (wFrame * 2 + wRev) * cntRev;
-      var pR = (pFrame * 2 + pRev) * cntRev;
-      var pr = document.createElement('p'); // Рядок для ревізійної секції
+      var wR = (wFrame * 2 + wRev) * cntRev * tRev;
+      var pR = (pFrame * 2 + pRev) * cntRev * tRev;
+      var pr = document.createElement('p');
       pr.className = '_shaft_detail';
-      pr.textContent = 'Секція ревізійна: вага ' + wR.toFixed(2) + 'кг, ціна ' + pR.toFixed(2) + 'грн';
+      pr.textContent = 'Секція ревізійна: вага ' + wR.toFixed(2) + 'кг, ціна ' + pR.toFixed(2) + 'грн' +
+                       ' (т.' + tRev + 'мм)';
       pr.style.fontSize = '0.875em';
       pr.style.color = '#555';
       host.appendChild(pr);
     }
-    // Метрова секція: дві рамки + шахта 1м., з урахуванням кількості
+    // Метрова секція (1м): × T_one × 1
     if (frame && shaft1m && cntOne > 0) {
-      var wM = (wFrame * 2 + w1m) * cntOne;
-      var pM = (pFrame * 2 + p1m) * cntOne;
-      var pm = document.createElement('p'); // Рядок для метрових секцій
+      var wM = (wFrame * 2 + w1m) * cntOne * tOne;
+      var pM = (pFrame * 2 + p1m) * cntOne * tOne;
+      var pm = document.createElement('p');
       pm.className = '_shaft_detail';
-      pm.textContent = 'Секція метрова (' + cntOne + ' шт.): вага ' + wM.toFixed(2) + 'кг, ціна ' + pM.toFixed(2) + 'грн';
+      pm.textContent = 'Секція метрова (' + cntOne + ' шт.): вага ' + wM.toFixed(2) + 'кг, ціна ' + pM.toFixed(2) + 'грн' +
+                       ' (т.' + tOne + 'мм)';
       pm.style.fontSize = '0.875em';
       pm.style.color = '#555';
       host.appendChild(pm);
     }
-    // Двохметрова секція: дві рамки + подвійна шахта 1м., * кількість
+    // Двохметрова секція (2м): × T_two × 2
     if (frame && shaft1m && cntTwo > 0) {
-      var wT = (wFrame * 2 + (w1m * 2)) * cntTwo;
-      var pT = (pFrame * 2 + (p1m * 2)) * cntTwo;
-      var pt = document.createElement('p'); // Рядок для двохметрових секцій
+      var wT = (wFrame * 2 + (w1m * 2)) * cntTwo * tTwo * 2;
+      var pT = (pFrame * 2 + (p1m * 2)) * cntTwo * tTwo * 2;
+      var pt = document.createElement('p');
       pt.className = '_shaft_detail';
-      pt.textContent = 'Секції двохметрові (' + cntTwo + ' шт.): вага ' + wT.toFixed(2) + 'кг, ціна ' + pT.toFixed(2) + 'грн';
+      pt.textContent = 'Секції двохметрові (' + cntTwo + ' шт.): вага ' + wT.toFixed(2) + 'кг, ціна ' + pT.toFixed(2) + 'грн' +
+                       ' (т.' + tTwo + 'мм)';
       pt.style.fontSize = '0.875em';
       pt.style.color = '#555';
       host.appendChild(pt);
@@ -946,6 +1063,73 @@ function updateShaftsDetails() {
       ph.style.fontSize = '0.875em';
       ph.style.color = '#555';
       host.appendChild(ph);
+    }
+  } catch (_) {}
+}
+
+// -----------------------------------------------
+// Privod kWt: пошук рекомендованої потужності за типом і висотою норії,
+// відображення інфополя та автовибір черв'ячного редуктора techno_privod
+// -----------------------------------------------
+
+// Автоматично визначає поля таблиці privod_nkz незалежно від назв заголовків.
+// Поле nkz_type: всі значення входять у множину допустимих типів НКЗ.
+// Поле kwt: всі значення є стандартними номіналами кВт.
+// Поля h_from / h_to: з двох решт менший середній — h_from.
+function __detectPrivodFields(pnData) {
+  var nkzTypeSet = {'5':1,'10':1,'25':1,'50':1,'100':1,'175':1,'200':1};
+  var motorKwtSet = {'1.1':1,'1.5':1,'2.2':1,'3':1,'4':1,'5.5':1,'7.5':1,
+                     '9.2':1,'11':1,'15':1,'18':1,'22':1,'30':1,'37':1,'45':1,'55':1};
+  var keys = Object.keys(pnData[0]);
+  var typeKey = null, kwtKey = null;
+  keys.forEach(function(k) {
+    var vals = pnData.map(function(r) { return String(r[k]).trim(); })
+                     .filter(function(v) { return v !== ''; });
+    if (!typeKey && vals.length && vals.every(function(v) { return !!nkzTypeSet[v]; })) typeKey = k;
+    if (!kwtKey  && vals.length && vals.every(function(v) { return !!motorKwtSet[v]; })) kwtKey  = k;
+  });
+  var rem = keys.filter(function(k) { return k !== typeKey && k !== kwtKey; });
+  if (rem.length < 2) return null;
+  var avg = function(k) {
+    return pnData.reduce(function(s, r) { return s + (parseFloat(r[k]) || 0); }, 0) / pnData.length;
+  };
+  var hFromKey = avg(rem[0]) <= avg(rem[1]) ? rem[0] : rem[1];
+  var hToKey   = avg(rem[0]) <= avg(rem[1]) ? rem[1] : rem[0];
+  return { typeKey: typeKey, hFromKey: hFromKey, hToKey: hToKey, kwtKey: kwtKey };
+}
+
+function updatePrivodKwtInfo() {
+  try {
+    var kwtRow  = document.getElementById('drive_kwt_row');
+    var kwtInfo = document.getElementById('drive_kwt_info');
+    var pnData  = (NKZ_data && NKZ_data.privod_nkz) ? NKZ_data.privod_nkz : [];
+    if (!pnData.length) {
+      if (kwtRow) kwtRow.style.display = 'none';
+      return;
+    }
+    var fields = __detectPrivodFields(pnData);
+    if (!fields || !fields.typeKey || !fields.kwtKey) {
+      if (kwtRow) kwtRow.style.display = 'none';
+      return;
+    }
+    var typeEl  = document.getElementById('nkz_type');
+    var typeVal = typeEl ? normType(typeEl.value) : '';
+    var h = typeof nkz_h === 'number' ? nkz_h : 0;
+    var found = null;
+    for (var i = 0; i < pnData.length; i++) {
+      var x = pnData[i];
+      var rowType  = normType(String(x[fields.typeKey] || '').trim());
+      var hFrom    = parseFloat(x[fields.hFromKey]) || 0;
+      var hTo      = parseFloat(x[fields.hToKey])   || 999;
+      if (rowType === typeVal && h >= hFrom && h <= hTo) { found = x; break; }
+    }
+    var kwt = found ? parseFloat(found[fields.kwtKey]) : null;
+    if (kwtRow) kwtRow.style.display = (kwt !== null && !isNaN(kwt)) ? '' : 'none';
+    if (kwtInfo && kwt !== null && !isNaN(kwt)) {
+      kwtInfo.textContent = 'Рекомендована потужність приводу: ' + kwt + ' кВт';
+    }
+    if (kwt !== null && !isNaN(kwt) && typeof autoSelectDrive === 'function') {
+      autoSelectDrive("techno_privod", "Черв'ячний", kwt);
     }
   } catch (_) {}
 }
