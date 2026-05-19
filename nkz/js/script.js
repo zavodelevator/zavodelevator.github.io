@@ -443,7 +443,7 @@ function updatePricesSummary() {
       var labelStr = (__fmtUA ? __fmtUA(out.total_price) : out.total_price.toFixed(2)) + ' грн';
       labelEl.textContent = labelStr;
     }
-    // Оновити контент розкривного блоку “Ціни”
+    // Оновити контент розкривного блоку "Ціни"
     var wrap = document.getElementById('info-prices');
     if (wrap) {
       function fmtP(v) { return (__fmtUA ? __fmtUA(v) : (v || 0).toFixed(2)) + ' грн'; }
@@ -452,26 +452,33 @@ function updatePricesSummary() {
       var num = 0;
       function addRow(name, qty, wkg, price) {
         num++;
-        rows.push('<tr><td style=”color:#888;font-size:0.8em”>' + num + '</td><td>' + name + '</td>' +
-          '<td>' + (qty || '—') + '</td>' +
-          '<td style=”text-align:right”>' + fmtW(wkg) + '</td>' +
-          '<td style=”text-align:right;white-space:nowrap”>' + (price > 0 ? fmtP(price) : '—') + '</td></tr>');
+        rows.push(
+          '<tr>' +
+          '<td class="text-center text-muted" style="font-size:0.78em;width:28px">' + num + '</td>' +
+          '<td>' + name + '</td>' +
+          '<td><span class="badge badge-secondary">' + (qty || '—') + '</span></td>' +
+          '<td class="text-right text-monospace" style="white-space:nowrap">' + fmtW(wkg) + '</td>' +
+          '<td class="text-right text-monospace font-weight-bold" style="white-space:nowrap">' +
+            (price > 0 ? fmtP(price) : '<span class="text-muted">—</span>') +
+          '</td></tr>'
+        );
       }
       function addGroup(title) {
-        rows.push('<tr style=”background:#e9ecef”><td colspan=”5” style=”font-size:0.75em;letter-spacing:0.06em;' +
-          'text-transform:uppercase;padding:3px 8px;color:#6c757d;font-weight:600”>' + title + '</td></tr>');
+        rows.push(
+          '<tr class="table-secondary">' +
+          '<td colspan="5" class="text-uppercase small font-weight-bold text-secondary" ' +
+          'style="letter-spacing:0.07em;padding:3px 10px">' + title + '</td></tr>'
+        );
       }
-      if (out.conv && out.conv.name) {
-        addRow('Стрічка/Ланцюг: ' + out.conv.name, (out.conv.length_m || 0) + ' м', null, out.conv.price);
-      }
-      if (out.buckets && out.buckets.name) {
+      if (out.conv && out.conv.name)
+        addRow('Стрічка / Ланцюг: ' + out.conv.name, (out.conv.length_m || 0) + ' м', null, out.conv.price);
+      if (out.buckets && out.buckets.name)
         addRow('Ківші: ' + out.buckets.name, (out.buckets.count || 0) + ' шт', null, out.buckets.total_price);
-      }
       var hasFast = out.fasteners && (out.fasteners.bolt.count > 0 || out.fasteners.nut.count > 0 || out.fasteners.washer.count > 0);
       if (hasFast) {
         addGroup('Кріплення');
-        if (out.fasteners.bolt.count > 0) addRow('Болти', out.fasteners.bolt.count + ' шт', out.fasteners.bolt.weight_kg, out.fasteners.bolt.price);
-        if (out.fasteners.nut.count > 0) addRow('Гайки', out.fasteners.nut.count + ' шт', out.fasteners.nut.weight_kg, out.fasteners.nut.price);
+        if (out.fasteners.bolt.count   > 0) addRow('Болти',          out.fasteners.bolt.count   + ' шт', out.fasteners.bolt.weight_kg,   out.fasteners.bolt.price);
+        if (out.fasteners.nut.count    > 0) addRow('Гайки',          out.fasteners.nut.count    + ' шт', out.fasteners.nut.weight_kg,    out.fasteners.nut.price);
         if (out.fasteners.washer.count > 0) addRow('Шайби норійні', out.fasteners.washer.count + ' шт', out.fasteners.washer.weight_kg, out.fasteners.washer.price);
       }
       var shf = out.shafts || {};
@@ -479,129 +486,147 @@ function updatePricesSummary() {
                    (shf.meter && shf.meter.count > 0) || (shf.twometer && shf.twometer.count > 0) || (shf.head && shf.head.price > 0);
       if (hasShf) {
         addGroup('Секції шахт та вузли');
-        if (shf.bashmak && shf.bashmak.price > 0) addRow('Башмак в зборі', '1 шт', shf.bashmak.weight_kg, shf.bashmak.price);
         var revTh = (shaft_thickness && shaft_thickness.revision) ? shaft_thickness.revision : 1.5;
         var mTh   = (shaft_thickness && shaft_thickness.meter)    ? shaft_thickness.meter    : 1.5;
         var tTh   = (shaft_thickness && shaft_thickness.twometer) ? shaft_thickness.twometer : 1.5;
-        if (shf.revision && shf.revision.count > 0)
-          addRow('Секція ревізійна <small style=”color:#888”>товщ. ' + revTh + ' мм</small>', shf.revision.count + ' шт', shf.revision.weight_kg, shf.revision.price);
-        if (shf.meter && shf.meter.count > 0)
-          addRow('Секція метрова <small style=”color:#888”>товщ. ' + mTh + ' мм</small>', shf.meter.count + ' шт', shf.meter.weight_kg, shf.meter.price);
-        if (shf.twometer && shf.twometer.count > 0)
-          addRow('Секція двохметрова <small style=”color:#888”>товщ. ' + tTh + ' мм</small>', shf.twometer.count + ' шт', shf.twometer.weight_kg, shf.twometer.price);
-        if (shf.head && shf.head.price > 0) addRow('Голова привідна в зборі', '1 шт', shf.head.weight_kg, shf.head.price);
+        if (shf.bashmak  && shf.bashmak.price  > 0) addRow('Башмак в зборі', '1 шт', shf.bashmak.weight_kg, shf.bashmak.price);
+        if (shf.revision && shf.revision.count > 0) addRow('Секція ревізійна <small class="text-muted">· ' + revTh + ' мм</small>', shf.revision.count + ' шт', shf.revision.weight_kg, shf.revision.price);
+        if (shf.meter    && shf.meter.count    > 0) addRow('Секція метрова <small class="text-muted">· ' + mTh + ' мм</small>',   shf.meter.count    + ' шт', shf.meter.weight_kg,    shf.meter.price);
+        if (shf.twometer && shf.twometer.count > 0) addRow('Секція двохметрова <small class="text-muted">· ' + tTh + ' мм</small>', shf.twometer.count + ' шт', shf.twometer.weight_kg, shf.twometer.price);
+        if (shf.head     && shf.head.price     > 0) addRow('Голова привідна в зборі', '1 шт', shf.head.weight_kg, shf.head.price);
       }
       if (out.drive && out.drive.name) {
         addGroup('Привід');
         addRow('Мотор-редуктор: ' + out.drive.name, '1 шт', null, out.drive.price);
       }
-      var totalRow = '<tr style=”background:#212529;color:#fff”>' +
-        '<td colspan=”4” style=”font-weight:700;padding:6px 8px;font-size:0.9em”>Разом</td>' +
-        '<td style=”font-weight:700;padding:6px 8px;text-align:right;white-space:nowrap;font-size:0.95em”>' + fmtP(out.total_price) + '</td></tr>';
+      var totalRow =
+        '<tr class="table-dark">' +
+        '<td colspan="3" class="font-weight-bold" style="padding:7px 10px;font-size:0.9em">РАЗОМ</td>' +
+        '<td class="text-right text-muted small" style="padding:7px 8px"></td>' +
+        '<td class="text-right font-weight-bold text-monospace" style="padding:7px 8px;white-space:nowrap;font-size:0.95em">' + fmtP(out.total_price) + '</td>' +
+        '</tr>';
+
       wrap.innerHTML =
-        '<div style=”margin-bottom:8px;display:flex;gap:8px;flex-wrap:wrap”>' +
-          '<button type=”button” class=”btn btn-sm btn-outline-primary” onclick=”__printPriceTable()”>&#128438;&nbsp;Друк&nbsp;/&nbsp;PDF</button>' +
-          '<button type=”button” class=”btn btn-sm btn-outline-secondary” onclick=”__downloadPriceTable()”>&#8659;&nbsp;Завантажити&nbsp;HTML</button>' +
+        '<div class="mb-2 d-flex flex-wrap" style="gap:6px">' +
+          '<button type="button" class="btn btn-sm btn-primary" id="_p_btn_print">' +
+            '<svg width="13" height="13" fill="currentColor" viewBox="0 0 16 16" class="mr-1">' +
+            '<path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"/>' +
+            '<path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zm0 1h6a1 1 0 0 1 1 1v2H4V3a1 1 0 0 1 1-1zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2H6zm7 2v3a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1z"/>' +
+            '</svg>Друк / PDF' +
+          '</button>' +
+          '<button type="button" class="btn btn-sm btn-outline-secondary" id="_p_btn_dl">' +
+            '<svg width="13" height="13" fill="currentColor" viewBox="0 0 16 16" class="mr-1">' +
+            '<path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>' +
+            '<path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>' +
+            '</svg>Завантажити HTML' +
+          '</button>' +
         '</div>' +
-        '<div style=”overflow-x:auto”>' +
-          '<table class=”table table-sm table-bordered” id=”price-breakdown-table” style=”font-size:0.85em;min-width:360px;margin-bottom:0”>' +
-            '<thead class=”thead-light”><tr>' +
-              '<th style=”width:28px;color:#aaa”>#</th>' +
+        '<div class="table-responsive">' +
+          '<table class="table table-sm table-bordered table-hover" id="price-breakdown-table" style="font-size:0.875em;margin-bottom:0">' +
+            '<thead class="thead-dark"><tr>' +
+              '<th class="text-center" style="width:28px">#</th>' +
               '<th>Найменування</th>' +
-              '<th style=”width:88px”>Кількість</th>' +
-              '<th style=”width:88px;text-align:right”>Вага</th>' +
-              '<th style=”width:120px;text-align:right”>Вартість</th>' +
+              '<th style="width:80px">К-сть</th>' +
+              '<th class="text-right" style="width:88px">Вага</th>' +
+              '<th class="text-right" style="width:122px">Вартість</th>' +
             '</tr></thead>' +
             '<tbody>' + rows.join('') + totalRow + '</tbody>' +
           '</table>' +
         '</div>';
+
+      // addEventListener надійніший за onclick у innerHTML
+      var _bp = document.getElementById('_p_btn_print');
+      var _bd = document.getElementById('_p_btn_dl');
+      if (_bp) _bp.addEventListener('click', function() {
+        var html = window.__buildPriceHTML();
+        if (!html) return;
+        var blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+        var url  = URL.createObjectURL(blob);
+        var w = window.open(url, '_blank');
+        if (!w) { var a = document.createElement('a'); a.href = url; a.target = '_blank'; document.body.appendChild(a); a.click(); document.body.removeChild(a); }
+        setTimeout(function() { URL.revokeObjectURL(url); }, 8000);
+      });
+      if (_bd) _bd.addEventListener('click', function() {
+        var html = window.__buildPriceHTML();
+        if (!html) return;
+        var blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+        var url  = URL.createObjectURL(blob);
+        var a    = document.createElement('a');
+        var te   = document.getElementById('nkz_type');
+        var he   = document.getElementById('nkz_l');
+        a.href     = url;
+        a.download = 'nkz_' + (te ? te.value : '') + '_h' + (he ? he.value : '') + '_price.html';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        setTimeout(function() { URL.revokeObjectURL(url); }, 2000);
+      });
     }
   } catch (_) {}
 }
 
-window.__getPriceTableHTML = function() {
-  var typeEl = document.getElementById('nkz_type');
-  var heightEl = document.getElementById('nkz_l');
-  var t = typeEl ? ('НКЗ-' + typeEl.value) : '';
-  var h = heightEl ? (', висота ' + heightEl.value + ' м') : '';
-  var title = 'Калькуляція ' + t + h;
-  var date = new Date().toLocaleDateString('uk-UA');
-  var p = (typeof nkz_prices === 'object' && nkz_prices) ? nkz_prices : {};
-  function fP(v) { return (v || 0).toLocaleString('uk-UA', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' грн'; }
-  function fW(v) { return (v != null && Number(v) > 0) ? Number(v).toFixed(2) + ' кг' : '—'; }
-  var rows2 = [];
-  var n = 0;
-  function r(name, qty, wkg, price) {
-    n++;
-    return '<tr><td>' + n + '</td><td>' + name + '</td><td>' + (qty || '—') + '</td>' +
-      '<td class=”r”>' + fW(wkg) + '</td><td class=”r”>' + (price > 0 ? fP(price) : '—') + '</td></tr>';
-  }
-  function g(title2) {
-    return '<tr class=”gr”><td colspan=”5”>' + title2 + '</td></tr>';
-  }
-  var shf = p.shafts || {};
+window.__buildPriceHTML = function() {
+  var p  = (typeof nkz_prices === 'object' && nkz_prices) ? nkz_prices : {};
   var st = (typeof shaft_thickness === 'object' && shaft_thickness) ? shaft_thickness : {};
-  if (p.conv && p.conv.name) rows2.push(r('Стрічка/Ланцюг: ' + p.conv.name, (p.conv.length_m || 0) + ' м', null, p.conv.price));
-  if (p.buckets && p.buckets.name) rows2.push(r('Ківші: ' + p.buckets.name, (p.buckets.count || 0) + ' шт', null, p.buckets.total_price));
-  var fa = p.fasteners || {};
-  if (fa.bolt && fa.bolt.count > 0 || fa.nut && fa.nut.count > 0 || fa.washer && fa.washer.count > 0) {
-    rows2.push(g('Кріплення'));
-    if (fa.bolt && fa.bolt.count > 0) rows2.push(r('Болти', fa.bolt.count + ' шт', fa.bolt.weight_kg, fa.bolt.price));
-    if (fa.nut && fa.nut.count > 0) rows2.push(r('Гайки', fa.nut.count + ' шт', fa.nut.weight_kg, fa.nut.price));
-    if (fa.washer && fa.washer.count > 0) rows2.push(r('Шайби норійні', fa.washer.count + ' шт', fa.washer.weight_kg, fa.washer.price));
+  var te = document.getElementById('nkz_type');
+  var he = document.getElementById('nkz_l');
+  var title = 'Калькуляція НКЗ-' + (te ? te.value : '') + (he ? ', висота ' + he.value + ' м' : '');
+  var date  = new Date().toLocaleDateString('uk-UA');
+  function fP(v) { return (v || 0).toLocaleString('uk-UA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' грн'; }
+  function fW(v) { return (v != null && Number(v) > 0) ? Number(v).toFixed(2) + ' кг' : '—'; }
+  var rows = []; var n = 0;
+  function row(name, qty, wkg, price) {
+    n++;
+    return '<tr><td class="num">' + n + '</td><td>' + name + '</td><td>' + (qty || '—') +
+      '</td><td class="r">' + fW(wkg) + '</td><td class="r pr">' + (price > 0 ? fP(price) : '—') + '</td></tr>';
+  }
+  function grp(t) { return '<tr class="gr"><td colspan="5">' + t + '</td></tr>'; }
+  var shf = p.shafts || {}; var fa = p.fasteners || {};
+  if (p.conv    && p.conv.name)    rows.push(row('Стрічка/Ланцюг: ' + p.conv.name, (p.conv.length_m || 0) + ' м', null, p.conv.price));
+  if (p.buckets && p.buckets.name) rows.push(row('Ківші: '   + p.buckets.name, (p.buckets.count || 0) + ' шт', null, p.buckets.total_price));
+  if ((fa.bolt && fa.bolt.count > 0) || (fa.nut && fa.nut.count > 0) || (fa.washer && fa.washer.count > 0)) {
+    rows.push(grp('Кріплення'));
+    if (fa.bolt   && fa.bolt.count   > 0) rows.push(row('Болти',          fa.bolt.count   + ' шт', fa.bolt.weight_kg,   fa.bolt.price));
+    if (fa.nut    && fa.nut.count    > 0) rows.push(row('Гайки',          fa.nut.count    + ' шт', fa.nut.weight_kg,    fa.nut.price));
+    if (fa.washer && fa.washer.count > 0) rows.push(row('Шайби норійні', fa.washer.count + ' шт', fa.washer.weight_kg, fa.washer.price));
   }
   if (shf.bashmak || shf.revision || shf.meter || shf.twometer || shf.head) {
-    rows2.push(g('Секції шахт та вузли'));
-    if (shf.bashmak && shf.bashmak.price > 0) rows2.push(r('Башмак в зборі', '1 шт', shf.bashmak.weight_kg, shf.bashmak.price));
-    if (shf.revision && shf.revision.count > 0) rows2.push(r('Секція ревізійна (товщ. ' + (st.revision || 1.5) + ' мм)', shf.revision.count + ' шт', shf.revision.weight_kg, shf.revision.price));
-    if (shf.meter && shf.meter.count > 0) rows2.push(r('Секція метрова (товщ. ' + (st.meter || 1.5) + ' мм)', shf.meter.count + ' шт', shf.meter.weight_kg, shf.meter.price));
-    if (shf.twometer && shf.twometer.count > 0) rows2.push(r('Секція двохметрова (товщ. ' + (st.twometer || 1.5) + ' мм)', shf.twometer.count + ' шт', shf.twometer.weight_kg, shf.twometer.price));
-    if (shf.head && shf.head.price > 0) rows2.push(r('Голова привідна в зборі', '1 шт', shf.head.weight_kg, shf.head.price));
+    rows.push(grp('Секції шахт та вузли'));
+    if (shf.bashmak  && shf.bashmak.price  > 0) rows.push(row('Башмак в зборі', '1 шт', shf.bashmak.weight_kg, shf.bashmak.price));
+    if (shf.revision && shf.revision.count > 0) rows.push(row('Секція ревізійна (товщ. ' + (st.revision || 1.5) + ' мм)', shf.revision.count + ' шт', shf.revision.weight_kg, shf.revision.price));
+    if (shf.meter    && shf.meter.count    > 0) rows.push(row('Секція метрова (товщ. '   + (st.meter    || 1.5) + ' мм)', shf.meter.count    + ' шт', shf.meter.weight_kg,    shf.meter.price));
+    if (shf.twometer && shf.twometer.count > 0) rows.push(row('Секція двохметрова (товщ. ' + (st.twometer || 1.5) + ' мм)', shf.twometer.count + ' шт', shf.twometer.weight_kg, shf.twometer.price));
+    if (shf.head     && shf.head.price     > 0) rows.push(row('Голова привідна в зборі', '1 шт', shf.head.weight_kg, shf.head.price));
   }
-  if (p.drive && p.drive.name) { rows2.push(g('Привід')); rows2.push(r('Мотор-редуктор: ' + p.drive.name, '1 шт', null, p.drive.price)); }
-  var totRow = '<tr class=”tot”><td colspan=”4”>Разом</td><td class=”r”>' + fP(p.total_price || 0) + '</td></tr>';
-  return '<!DOCTYPE html><html lang=”uk”><head><meta charset=”utf-8”><title>' + title + '</title>' +
-    '<style>\n' +
-    'body{font-family:Arial,sans-serif;font-size:13px;margin:24px;color:#212529}\n' +
-    'h2{font-size:1.1em;margin:0 0 2px}\n' +
-    '.sub{font-size:.8em;color:#6c757d;margin:0 0 14px}\n' +
+  if (p.drive && p.drive.name) {
+    rows.push(grp('Привід'));
+    rows.push(row('Мотор-редуктор: ' + p.drive.name, '1 шт', null, p.drive.price));
+  }
+  var tot = '<tr class="tot"><td colspan="3">РАЗОМ</td><td></td><td class="r pr">' + fP(p.total_price || 0) + '</td></tr>';
+  return '<!DOCTYPE html><html lang="uk"><head><meta charset="utf-8"><title>' + title + '</title><style>\n' +
+    'body{font-family:Arial,sans-serif;font-size:13px;margin:20px;color:#212529}\n' +
+    'h2{font-size:1em;font-weight:700;margin:0 0 2px}\n' +
+    '.meta{font-size:.78em;color:#6c757d;margin:0 0 12px}\n' +
     'table{border-collapse:collapse;width:100%}\n' +
     'th,td{border:1px solid #dee2e6;padding:5px 8px;text-align:left;vertical-align:middle}\n' +
+    '.num{text-align:center;color:#6c757d;font-size:.8em;width:26px}\n' +
     '.r{text-align:right;white-space:nowrap}\n' +
-    'thead tr{background:#f8f9fa;font-weight:600}\n' +
-    '.gr td{background:#e9ecef;font-size:.75em;text-transform:uppercase;letter-spacing:.06em;color:#6c757d;font-weight:600;padding:3px 8px}\n' +
-    '.tot td{background:#212529;color:#fff;font-weight:700;padding:6px 8px}\n' +
-    '@media print{body{margin:0}button{display:none}}\n' +
+    '.pr{font-weight:700}\n' +
+    'thead th{background:#343a40;color:#fff;font-weight:600;border-color:#343a40}\n' +
+    '.gr td{background:#e9ecef;font-size:.72em;text-transform:uppercase;letter-spacing:.07em;color:#495057;font-weight:700;padding:3px 8px}\n' +
+    '.tot td{background:#212529;color:#fff;font-weight:700;padding:7px 8px;font-size:.95em}\n' +
+    'tbody tr:hover td{background:#f1f3f5}\n' +
+    '.gr:hover td,.tot:hover td{background:inherit}\n' +
+    '@media print{body{margin:0}tr:hover td,.gr:hover td,.tot:hover td{background:inherit}}\n' +
     '</style></head><body>' +
-    '<h2>' + title + '</h2>' +
-    '<p class=”sub”>Дата: ' + date + '</p>' +
-    '<table><thead><tr><th style=”width:28px”>#</th><th>Найменування</th>' +
-    '<th style=”width:90px”>Кількість</th><th style=”width:90px” class=”r”>Вага</th>' +
-    '<th style=”width:130px” class=”r”>Вартість</th></tr></thead>' +
-    '<tbody>' + rows2.join('') + totRow + '</tbody></table>' +
+    '<h2>' + title + '</h2><p class="meta">Дата: ' + date + '</p>' +
+    '<table><thead><tr>' +
+    '<th class="num">#</th><th>Найменування</th>' +
+    '<th style="width:86px">К-сть</th>' +
+    '<th style="width:86px" class="r">Вага</th>' +
+    '<th style="width:128px" class="r">Вартість</th>' +
+    '</tr></thead><tbody>' + rows.join('') + tot + '</tbody></table>' +
+    '<script>window.onload=function(){window.print();}<\/script>' +
     '</body></html>';
 };
-window.__printPriceTable = function() {
-  var html = window.__getPriceTableHTML();
-  if (!html) { alert('Спочатку виконайте розрахунок'); return; }
-  var w = window.open('', '_blank', 'width=860,height=640');
-  if (!w) return;
-  w.document.write(html);
-  w.document.close();
-  w.focus();
-  setTimeout(function() { w.print(); }, 400);
-};
-window.__downloadPriceTable = function() {
-  var html = window.__getPriceTableHTML();
-  if (!html) { alert('Спочатку виконайте розрахунок'); return; }
-  var blob = new Blob([html], { type: 'text/html;charset=utf-8' });
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement('a');
-  var typeEl = document.getElementById('nkz_type');
-  var heightEl = document.getElementById('nkz_l');
-  a.href = url;
-  a.download = 'nkz_' + (typeEl ? typeEl.value : '') + '_h' + (heightEl ? heightEl.value : '') + '_price.html';
-  document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
   setTimeout(function() { URL.revokeObjectURL(url); }, 1000);
