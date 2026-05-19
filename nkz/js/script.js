@@ -933,8 +933,7 @@ function updateShaftsInfo() {
     countP.textContent = 'Секції: ревізійна — ' + (isNaN(rev) ? 0 : rev) +
                          '; метрова — ' + (isNaN(one) ? 0 : one) +
                          '; двохметрова — ' + (isNaN(two) ? 0 : two);
-    // Рендеримо три селектори товщини (один на тип секції)
-    renderThicknessSelectors(host);
+    if (typeof renderShaftSchema === 'function') renderShaftSchema();
     console.log('Кількість секцій (шахти):', { revision: rev, one: one, two: two });
   } catch (_) {}
 }
