@@ -223,6 +223,26 @@ function __stSum(prefix, count, typeKey) {
   return sum;
 }
 
+// Групування секцій за товщиною → [{thickness, count, weight_kg, price, unit_price}]
+function __buildSectionGroups(prefix, count, typeKey, wPerMmSec, pPerMmSec) {
+  var def = (shaft_thickness && shaft_thickness[typeKey]) || 1.5;
+  var byThick = {};
+  for (var i = 0; i < count; i++) {
+    var id = prefix + '_' + i;
+    var t = Math.round(((section_thickness[id] != null) ? section_thickness[id] : def) * 10) / 10;
+    var key = String(t);
+    if (!byThick[key]) byThick[key] = { thickness: t, count: 0 };
+    byThick[key].count++;
+  }
+  return Object.keys(byThick).sort(function(a, b) { return Number(a) - Number(b); }).map(function(key) {
+    var g = byThick[key];
+    var w = Math.round(wPerMmSec * g.count * g.thickness * 100) / 100;
+    var p = Math.round(pPerMmSec * g.count * g.thickness * 100) / 100;
+    return { thickness: g.thickness, count: g.count, weight_kg: w, price: p,
+             unit_price: Math.round(pPerMmSec * g.thickness * 100) / 100 };
+  });
+}
+
 // Парсинг поля thinks_mine_nkz: може бути JSON-рядком [“1,5”,”2”] або масивом
 function __parseThicknessList(raw) {
   var list = raw;
@@ -348,7 +368,8 @@ function updatePricesSummary() {
     out.conv = {
       name: nkz_conv ? ((nkz_conv.name_1 || '') + ' ' + (nkz_conv.name_2 || '')).trim() : '',
       length_m: chain_belt_l || 0,
-      price: price_chain_or_belt || 0
+      price: price_chain_or_belt || 0,
+      unit_price: nkz_conv ? __parsePrice(nkz_conv) : 0
     };
     // Ківші: назва (лейбл), ціна за шт, кількість, загальна вартість
     var bucketUnit = nkz_busket ? __parsePrice(nkz_busket) : 0;
@@ -365,17 +386,20 @@ function updatePricesSummary() {
       bolt: {
         count: busket_metiz_count || 0,
         weight_kg: Number((busket_metiz_weight || 0).toFixed ? (busket_metiz_weight || 0).toFixed(2) : (busket_metiz_weight || 0)),
-        price: busket_metiz_prace || 0
+        price: busket_metiz_prace || 0,
+        unit_price: busket_metiz ? (parseFloat(busket_metiz.sale_price) || 0) : 0
       },
       nut: {
         count: busket_metiz_gayka_count || 0,
         weight_kg: Number((busket_metiz_gayka_weight || 0).toFixed ? (busket_metiz_gayka_weight || 0).toFixed(2) : (busket_metiz_gayka_weight || 0)),
-        price: busket_metiz_gayka_prace || 0
+        price: busket_metiz_gayka_prace || 0,
+        unit_price: busket_metiz_gayka ? (parseFloat(busket_metiz_gayka.sale_price) || 0) : 0
       },
       washer: {
         count: busket_metiz_shayba_noriyna_count || 0,
         weight_kg: Number((busket_metiz_shayba_noriyna_weight || 0).toFixed ? (busket_metiz_shayba_noriyna_weight || 0).toFixed(2) : (busket_metiz_shayba_noriyna_weight || 0)),
-        price: busket_metiz_shayba_noriyna_prace || 0
+        price: busket_metiz_shayba_noriyna_prace || 0,
+        unit_price: busket_metiz_shayba_noriyna ? (parseFloat(busket_metiz_shayba_noriyna.sale_price) || 0) : 0
       }
     };
     // Мотор-редуктор: назва і ціна
@@ -409,22 +433,29 @@ function updatePricesSummary() {
     var cntRev = parseInt(count_nkz_section.revision_secton, 10) || 0;
     var cntOne = parseInt(count_nkz_section.one, 10) || 0;
     var cntTwo = parseInt(count_nkz_section.two, 10) || 0;
-    var _sumRev = __stSum('rev', cntRev, 'revision');
-    var _sumOne = __stSum('one', cntOne, 'meter');
-    var _sumTwo = __stSum('two', cntTwo, 'twometer');
-    var wR = frame && rev ? (wFrame * 2 + wRev) * _sumRev : 0;
-    var pR = frame && rev ? (pFrame * 2 + pRev) * _sumRev : 0;
-    var wM = frame && shaft1m ? (wFrame * 2 + w1m) * _sumOne : 0;
-    var pM = frame && shaft1m ? (pFrame * 2 + p1m) * _sumOne : 0;
-    var wT = frame && shaft1m ? (wFrame * 2 + (w1m * 2)) * _sumTwo * 2 : 0;
-    var pT = frame && shaft1m ? (pFrame * 2 + (p1m * 2)) * _sumTwo * 2 : 0;
+    var wRperMm = frame && rev ? (wFrame * 2 + wRev) : 0;
+    var pRperMm = frame && rev ? (pFrame * 2 + pRev) : 0;
+    var wMperMm = frame && shaft1m ? (wFrame * 2 + w1m) : 0;
+    var pMperMm = frame && shaft1m ? (pFrame * 2 + p1m) : 0;
+    var wTperMm = frame && shaft1m ? (wFrame * 2 + w1m * 2) * 2 : 0;
+    var pTperMm = frame && shaft1m ? (pFrame * 2 + p1m * 2) * 2 : 0;
+    var gRev = __buildSectionGroups('rev', cntRev, 'revision', wRperMm, pRperMm);
+    var gOne = __buildSectionGroups('one', cntOne, 'meter', wMperMm, pMperMm);
+    var gTwo = __buildSectionGroups('two', cntTwo, 'twometer', wTperMm, pTperMm);
+    var wR = gRev.reduce(function(s, g) { return s + g.weight_kg; }, 0);
+    var pR = gRev.reduce(function(s, g) { return s + g.price; }, 0);
+    var wM = gOne.reduce(function(s, g) { return s + g.weight_kg; }, 0);
+    var pM = gOne.reduce(function(s, g) { return s + g.price; }, 0);
+    var wT = gTwo.reduce(function(s, g) { return s + g.weight_kg; }, 0);
+    var pT = gTwo.reduce(function(s, g) { return s + g.price; }, 0);
     var head = __pickFirst(__noriaItemsForProductByName('Голова привідна в зборі'));
     var wH = __itemWeightKg(head), pH = __parsePrice(head);
+    var _bashmakItem = __pickFirst(__noriaItemsForProductByName('Башмак в зборі'));
     out.shafts = {
-      revision: { count: cntRev, weight_kg: Number(wR.toFixed ? wR.toFixed(2) : wR), price: pR || 0 },
-      meter:    { count: cntOne, weight_kg: Number(wM.toFixed ? wM.toFixed(2) : wM), price: pM || 0 },
-      twometer: { count: cntTwo, weight_kg: Number(wT.toFixed ? wT.toFixed(2) : wT), price: pT || 0 },
-      bashmak:  { weight_kg: Number((__itemWeightKg(__pickFirst(__noriaItemsForProductByName('Башмак в зборі'))) || 0).toFixed ? (__itemWeightKg(__pickFirst(__noriaItemsForProductByName('Башмак в зборі'))) || 0).toFixed(2) : (__itemWeightKg(__pickFirst(__noriaItemsForProductByName('Башмак в зборі'))) || 0)), price: __parsePrice(__pickFirst(__noriaItemsForProductByName('Башмак в зборі'))) || 0 },
+      revision: { count: cntRev, weight_kg: Math.round(wR * 100) / 100, price: Math.round(pR * 100) / 100, groups: gRev },
+      meter:    { count: cntOne, weight_kg: Math.round(wM * 100) / 100, price: Math.round(pM * 100) / 100, groups: gOne },
+      twometer: { count: cntTwo, weight_kg: Math.round(wT * 100) / 100, price: Math.round(pT * 100) / 100, groups: gTwo },
+      bashmak:  { weight_kg: Number((__itemWeightKg(_bashmakItem) || 0).toFixed(2)), price: __parsePrice(_bashmakItem) || 0 },
       head:     { weight_kg: Number(wH.toFixed ? wH.toFixed(2) : wH), price: pH || 0 }
     };
     // Підсумкова вартість: сума всіх відомих позицій
@@ -450,7 +481,7 @@ function updatePricesSummary() {
       function fmtW(v) { return (v != null && Number(v) > 0) ? Number(v).toFixed(2) + ' кг' : '—'; }
       var rows = [];
       var num = 0;
-      function addRow(name, qty, wkg, price) {
+      function addRow(name, qty, wkg, unitStr, price) {
         num++;
         rows.push(
           '<tr>' +
@@ -458,6 +489,7 @@ function updatePricesSummary() {
           '<td>' + name + '</td>' +
           '<td><span class="badge badge-secondary">' + (qty || '—') + '</span></td>' +
           '<td class="text-right text-monospace" style="white-space:nowrap">' + fmtW(wkg) + '</td>' +
+          '<td class="text-right text-muted" style="white-space:nowrap;font-size:0.82em">' + (unitStr || '<span class="text-muted">—</span>') + '</td>' +
           '<td class="text-right text-monospace font-weight-bold" style="white-space:nowrap">' +
             (price > 0 ? fmtP(price) : '<span class="text-muted">—</span>') +
           '</td></tr>'
@@ -466,43 +498,62 @@ function updatePricesSummary() {
       function addGroup(title) {
         rows.push(
           '<tr class="table-secondary">' +
-          '<td colspan="5" class="text-uppercase small font-weight-bold text-secondary" ' +
+          '<td colspan="6" class="text-uppercase small font-weight-bold text-secondary" ' +
           'style="letter-spacing:0.07em;padding:3px 10px">' + title + '</td></tr>'
         );
       }
       if (out.conv && out.conv.name)
-        addRow('Стрічка / Ланцюг: ' + out.conv.name, (out.conv.length_m || 0) + ' м', null, out.conv.price);
+        addRow('Стрічка / Ланцюг: ' + out.conv.name, (out.conv.length_m || 0) + ' м', null,
+          out.conv.unit_price > 0 ? fmtP(out.conv.unit_price) + ' /м' : null, out.conv.price);
       if (out.buckets && out.buckets.name)
-        addRow('Ківші: ' + out.buckets.name, (out.buckets.count || 0) + ' шт', null, out.buckets.total_price);
+        addRow('Ківші: ' + out.buckets.name, (out.buckets.count || 0) + ' шт', null,
+          out.buckets.unit_price > 0 ? fmtP(out.buckets.unit_price) + ' /шт' : null, out.buckets.total_price);
       var hasFast = out.fasteners && (out.fasteners.bolt.count > 0 || out.fasteners.nut.count > 0 || out.fasteners.washer.count > 0);
       if (hasFast) {
         addGroup('Кріплення');
-        if (out.fasteners.bolt.count   > 0) addRow('Болти',          out.fasteners.bolt.count   + ' шт', out.fasteners.bolt.weight_kg,   out.fasteners.bolt.price);
-        if (out.fasteners.nut.count    > 0) addRow('Гайки',          out.fasteners.nut.count    + ' шт', out.fasteners.nut.weight_kg,    out.fasteners.nut.price);
-        if (out.fasteners.washer.count > 0) addRow('Шайби норійні', out.fasteners.washer.count + ' шт', out.fasteners.washer.weight_kg, out.fasteners.washer.price);
+        if (out.fasteners.bolt.count   > 0) addRow('Болти',          out.fasteners.bolt.count   + ' шт', out.fasteners.bolt.weight_kg,
+          out.fasteners.bolt.unit_price > 0 ? fmtP(out.fasteners.bolt.unit_price) + ' /кг' : null, out.fasteners.bolt.price);
+        if (out.fasteners.nut.count    > 0) addRow('Гайки',          out.fasteners.nut.count    + ' шт', out.fasteners.nut.weight_kg,
+          out.fasteners.nut.unit_price > 0 ? fmtP(out.fasteners.nut.unit_price) + ' /кг' : null, out.fasteners.nut.price);
+        if (out.fasteners.washer.count > 0) addRow('Шайби норійні', out.fasteners.washer.count + ' шт', out.fasteners.washer.weight_kg,
+          out.fasteners.washer.unit_price > 0 ? fmtP(out.fasteners.washer.unit_price) + ' /кг' : null, out.fasteners.washer.price);
       }
       var shf = out.shafts || {};
       var hasShf = (shf.bashmak && shf.bashmak.price > 0) || (shf.revision && shf.revision.count > 0) ||
                    (shf.meter && shf.meter.count > 0) || (shf.twometer && shf.twometer.count > 0) || (shf.head && shf.head.price > 0);
       if (hasShf) {
         addGroup('Секції шахт та вузли');
-        var revTh = (shaft_thickness && shaft_thickness.revision) ? shaft_thickness.revision : 1.5;
-        var mTh   = (shaft_thickness && shaft_thickness.meter)    ? shaft_thickness.meter    : 1.5;
-        var tTh   = (shaft_thickness && shaft_thickness.twometer) ? shaft_thickness.twometer : 1.5;
-        if (shf.bashmak  && shf.bashmak.price  > 0) addRow('Башмак в зборі', '1 шт', shf.bashmak.weight_kg, shf.bashmak.price);
-        if (shf.revision && shf.revision.count > 0) addRow('Секція ревізійна <small class="text-muted">· ' + revTh + ' мм</small>', shf.revision.count + ' шт', shf.revision.weight_kg, shf.revision.price);
-        if (shf.meter    && shf.meter.count    > 0) addRow('Секція метрова <small class="text-muted">· ' + mTh + ' мм</small>',   shf.meter.count    + ' шт', shf.meter.weight_kg,    shf.meter.price);
-        if (shf.twometer && shf.twometer.count > 0) addRow('Секція двохметрова <small class="text-muted">· ' + tTh + ' мм</small>', shf.twometer.count + ' шт', shf.twometer.weight_kg, shf.twometer.price);
-        if (shf.head     && shf.head.price     > 0) addRow('Голова привідна в зборі', '1 шт', shf.head.weight_kg, shf.head.price);
+        if (shf.bashmak && shf.bashmak.price > 0)
+          addRow('Башмак в зборі', '1 шт', shf.bashmak.weight_kg,
+            fmtP(shf.bashmak.price) + ' /шт', shf.bashmak.price);
+        (shf.revision && shf.revision.groups || []).forEach(function(g) {
+          addRow('Секція ревізійна <small class="text-muted">· ' + g.thickness + ' мм</small>',
+            g.count + ' шт', g.weight_kg,
+            g.unit_price > 0 ? fmtP(g.unit_price) + ' /шт' : null, g.price);
+        });
+        (shf.meter && shf.meter.groups || []).forEach(function(g) {
+          addRow('Секція метрова <small class="text-muted">· ' + g.thickness + ' мм</small>',
+            g.count + ' шт', g.weight_kg,
+            g.unit_price > 0 ? fmtP(g.unit_price) + ' /шт' : null, g.price);
+        });
+        (shf.twometer && shf.twometer.groups || []).forEach(function(g) {
+          addRow('Секція двохметрова <small class="text-muted">· ' + g.thickness + ' мм</small>',
+            g.count + ' шт', g.weight_kg,
+            g.unit_price > 0 ? fmtP(g.unit_price) + ' /шт' : null, g.price);
+        });
+        if (shf.head && shf.head.price > 0)
+          addRow('Голова привідна в зборі', '1 шт', shf.head.weight_kg,
+            fmtP(shf.head.price) + ' /шт', shf.head.price);
       }
       if (out.drive && out.drive.name) {
         addGroup('Привід');
-        addRow('Мотор-редуктор: ' + out.drive.name, '1 шт', null, out.drive.price);
+        addRow('Мотор-редуктор: ' + out.drive.name, '1 шт', null,
+          out.drive.price > 0 ? fmtP(out.drive.price) + ' /шт' : null, out.drive.price);
       }
       var totalRow =
         '<tr class="table-dark">' +
-        '<td colspan="3" class="font-weight-bold" style="padding:7px 10px;font-size:0.9em">РАЗОМ</td>' +
-        '<td class="text-right text-muted small" style="padding:7px 8px"></td>' +
+        '<td colspan="4" class="font-weight-bold" style="padding:7px 10px;font-size:0.9em">РАЗОМ</td>' +
+        '<td style="padding:7px 8px"></td>' +
         '<td class="text-right font-weight-bold text-monospace" style="padding:7px 8px;white-space:nowrap;font-size:0.95em">' + fmtP(out.total_price) + '</td>' +
         '</tr>';
 
@@ -528,6 +579,7 @@ function updatePricesSummary() {
               '<th>Найменування</th>' +
               '<th style="width:80px">К-сть</th>' +
               '<th class="text-right" style="width:88px">Вага</th>' +
+              '<th class="text-right" style="width:108px">Ціна/од.</th>' +
               '<th class="text-right" style="width:122px">Вартість</th>' +
             '</tr></thead>' +
             '<tbody>' + rows.join('') + totalRow + '</tbody>' +
@@ -573,34 +625,48 @@ window.__buildPriceHTML = function() {
   function fP(v) { return (v || 0).toLocaleString('uk-UA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' грн'; }
   function fW(v) { return (v != null && Number(v) > 0) ? Number(v).toFixed(2) + ' кг' : '—'; }
   var rows = []; var n = 0;
-  function row(name, qty, wkg, price) {
+  function row(name, qty, wkg, unitStr, price) {
     n++;
     return '<tr><td class="num">' + n + '</td><td>' + name + '</td><td>' + (qty || '—') +
-      '</td><td class="r">' + fW(wkg) + '</td><td class="r pr">' + (price > 0 ? fP(price) : '—') + '</td></tr>';
+      '</td><td class="r">' + fW(wkg) + '</td><td class="r up">' + (unitStr || '—') + '</td><td class="r pr">' + (price > 0 ? fP(price) : '—') + '</td></tr>';
   }
-  function grp(t) { return '<tr class="gr"><td colspan="5">' + t + '</td></tr>'; }
+  function grp(t) { return '<tr class="gr"><td colspan="6">' + t + '</td></tr>'; }
   var shf = p.shafts || {}; var fa = p.fasteners || {};
-  if (p.conv    && p.conv.name)    rows.push(row('Стрічка/Ланцюг: ' + p.conv.name, (p.conv.length_m || 0) + ' м', null, p.conv.price));
-  if (p.buckets && p.buckets.name) rows.push(row('Ківші: '   + p.buckets.name, (p.buckets.count || 0) + ' шт', null, p.buckets.total_price));
+  if (p.conv    && p.conv.name)    rows.push(row('Стрічка/Ланцюг: ' + p.conv.name, (p.conv.length_m || 0) + ' м', null,
+    p.conv.unit_price > 0 ? fP(p.conv.unit_price) + ' /м' : null, p.conv.price));
+  if (p.buckets && p.buckets.name) rows.push(row('Ківші: ' + p.buckets.name, (p.buckets.count || 0) + ' шт', null,
+    p.buckets.unit_price > 0 ? fP(p.buckets.unit_price) + ' /шт' : null, p.buckets.total_price));
   if ((fa.bolt && fa.bolt.count > 0) || (fa.nut && fa.nut.count > 0) || (fa.washer && fa.washer.count > 0)) {
     rows.push(grp('Кріплення'));
-    if (fa.bolt   && fa.bolt.count   > 0) rows.push(row('Болти',          fa.bolt.count   + ' шт', fa.bolt.weight_kg,   fa.bolt.price));
-    if (fa.nut    && fa.nut.count    > 0) rows.push(row('Гайки',          fa.nut.count    + ' шт', fa.nut.weight_kg,    fa.nut.price));
-    if (fa.washer && fa.washer.count > 0) rows.push(row('Шайби норійні', fa.washer.count + ' шт', fa.washer.weight_kg, fa.washer.price));
+    if (fa.bolt   && fa.bolt.count   > 0) rows.push(row('Болти',          fa.bolt.count   + ' шт', fa.bolt.weight_kg,
+      fa.bolt.unit_price > 0 ? fP(fa.bolt.unit_price) + ' /кг' : null, fa.bolt.price));
+    if (fa.nut    && fa.nut.count    > 0) rows.push(row('Гайки',          fa.nut.count    + ' шт', fa.nut.weight_kg,
+      fa.nut.unit_price > 0 ? fP(fa.nut.unit_price) + ' /кг' : null, fa.nut.price));
+    if (fa.washer && fa.washer.count > 0) rows.push(row('Шайби норійні', fa.washer.count + ' шт', fa.washer.weight_kg,
+      fa.washer.unit_price > 0 ? fP(fa.washer.unit_price) + ' /кг' : null, fa.washer.price));
   }
   if (shf.bashmak || shf.revision || shf.meter || shf.twometer || shf.head) {
     rows.push(grp('Секції шахт та вузли'));
-    if (shf.bashmak  && shf.bashmak.price  > 0) rows.push(row('Башмак в зборі', '1 шт', shf.bashmak.weight_kg, shf.bashmak.price));
-    if (shf.revision && shf.revision.count > 0) rows.push(row('Секція ревізійна (товщ. ' + (st.revision || 1.5) + ' мм)', shf.revision.count + ' шт', shf.revision.weight_kg, shf.revision.price));
-    if (shf.meter    && shf.meter.count    > 0) rows.push(row('Секція метрова (товщ. '   + (st.meter    || 1.5) + ' мм)', shf.meter.count    + ' шт', shf.meter.weight_kg,    shf.meter.price));
-    if (shf.twometer && shf.twometer.count > 0) rows.push(row('Секція двохметрова (товщ. ' + (st.twometer || 1.5) + ' мм)', shf.twometer.count + ' шт', shf.twometer.weight_kg, shf.twometer.price));
-    if (shf.head     && shf.head.price     > 0) rows.push(row('Голова привідна в зборі', '1 шт', shf.head.weight_kg, shf.head.price));
+    if (shf.bashmak && shf.bashmak.price > 0) rows.push(row('Башмак в зборі', '1 шт', shf.bashmak.weight_kg,
+      fP(shf.bashmak.price) + ' /шт', shf.bashmak.price));
+    (shf.revision && shf.revision.groups || []).forEach(function(g) {
+      rows.push(row('Секція ревізійна · ' + g.thickness + ' мм', g.count + ' шт', g.weight_kg,
+        g.unit_price > 0 ? fP(g.unit_price) + ' /шт' : null, g.price)); });
+    (shf.meter && shf.meter.groups || []).forEach(function(g) {
+      rows.push(row('Секція метрова · ' + g.thickness + ' мм', g.count + ' шт', g.weight_kg,
+        g.unit_price > 0 ? fP(g.unit_price) + ' /шт' : null, g.price)); });
+    (shf.twometer && shf.twometer.groups || []).forEach(function(g) {
+      rows.push(row('Секція двохметрова · ' + g.thickness + ' мм', g.count + ' шт', g.weight_kg,
+        g.unit_price > 0 ? fP(g.unit_price) + ' /шт' : null, g.price)); });
+    if (shf.head && shf.head.price > 0) rows.push(row('Голова привідна в зборі', '1 шт', shf.head.weight_kg,
+      fP(shf.head.price) + ' /шт', shf.head.price));
   }
   if (p.drive && p.drive.name) {
     rows.push(grp('Привід'));
-    rows.push(row('Мотор-редуктор: ' + p.drive.name, '1 шт', null, p.drive.price));
+    rows.push(row('Мотор-редуктор: ' + p.drive.name, '1 шт', null,
+      p.drive.price > 0 ? fP(p.drive.price) + ' /шт' : null, p.drive.price));
   }
-  var tot = '<tr class="tot"><td colspan="3">РАЗОМ</td><td></td><td class="r pr">' + fP(p.total_price || 0) + '</td></tr>';
+  var tot = '<tr class="tot"><td colspan="4">РАЗОМ</td><td></td><td class="r pr">' + fP(p.total_price || 0) + '</td></tr>';
   return '<!DOCTYPE html><html lang="uk"><head><meta charset="utf-8"><title>' + title + '</title><style>\n' +
     'body{font-family:Arial,sans-serif;font-size:13px;margin:20px;color:#212529}\n' +
     'h2{font-size:1em;font-weight:700;margin:0 0 2px}\n' +
@@ -609,6 +675,7 @@ window.__buildPriceHTML = function() {
     'th,td{border:1px solid #dee2e6;padding:5px 8px;text-align:left;vertical-align:middle}\n' +
     '.num{text-align:center;color:#6c757d;font-size:.8em;width:26px}\n' +
     '.r{text-align:right;white-space:nowrap}\n' +
+    '.up{text-align:right;white-space:nowrap;color:#6c757d;font-size:.85em}\n' +
     '.pr{font-weight:700}\n' +
     'thead th{background:#343a40;color:#fff;font-weight:600;border-color:#343a40}\n' +
     '.gr td{background:#e9ecef;font-size:.72em;text-transform:uppercase;letter-spacing:.07em;color:#495057;font-weight:700;padding:3px 8px}\n' +
@@ -622,6 +689,7 @@ window.__buildPriceHTML = function() {
     '<th class="num">#</th><th>Найменування</th>' +
     '<th style="width:86px">К-сть</th>' +
     '<th style="width:86px" class="r">Вага</th>' +
+    '<th style="width:100px" class="r">Ціна/од.</th>' +
     '<th style="width:128px" class="r">Вартість</th>' +
     '</tr></thead><tbody>' + rows.join('') + tot + '</tbody></table>' +
     '<script>window.onload=function(){window.print();}<\/script>' +
