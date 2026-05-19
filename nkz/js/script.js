@@ -474,6 +474,13 @@ function updatePricesSummary() {
       var labelStr = (__fmtUA ? __fmtUA(out.total_price) : out.total_price.toFixed(2)) + ' грн';
       labelEl.textContent = labelStr;
     }
+    // Оновити вартість поряд з кнопкою “Розрахувати”
+    var calcEl = document.getElementById('calc_total_price');
+    if (calcEl) {
+      calcEl.textContent = out.total_price > 0
+        ? (__fmtUA ? __fmtUA(out.total_price) : out.total_price.toFixed(2)) + ' грн'
+        : '';
+    }
     // Оновити контент розкривного блоку "Ціни"
     var wrap = document.getElementById('info-prices');
     if (wrap) {
