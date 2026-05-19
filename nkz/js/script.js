@@ -60,8 +60,9 @@ let nkz_h_base = null;
 let count_nkz_section = {
   one: 0,
   two: 0,
-  revision_secton: 1 
+  revision_secton: 1
 };
+window.count_nkz_section = count_nkz_section;
 
 total_h_nkz = 0;
 rob_h_nkz = 0;
@@ -205,6 +206,7 @@ const nkzTypeMap = { '5': '1', '10': '2', '25': '3', '50': '4', '100': '5', '175
 // Товщина шахт: зберігається окремо для кожного типу секції
 // -----------------------------------------------
 let shaft_thickness = { revision: 1.5, meter: 1.5, twometer: 1.5 };
+window.shaft_thickness = shaft_thickness;
 
 // Парсинг поля thinks_mine_nkz: може бути JSON-рядком [“1,5”,”2”] або масивом
 function __parseThicknessList(raw) {

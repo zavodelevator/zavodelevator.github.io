@@ -168,6 +168,100 @@
   window.exportNkzPassport = exportAll;
 })();
 
+// Експорт розпису цін норії у текстовий файл
+window.exportNkzPriceTxt = function () {
+  var p = (typeof nkz_prices === 'object' && nkz_prices) ? nkz_prices : {};
+  var fmt = (typeof __fmtUA === 'function') ? __fmtUA : function (v) { return Number(v || 0).toFixed(2); };
+
+  function selText(id) {
+    var el = document.getElementById(id);
+    if (!el) return '';
+    var i = el.selectedIndex;
+    var opt = i >= 0 ? el.options[i] : null;
+    return opt ? (opt.text || '') : '';
+  }
+  function val(id) {
+    var el = document.getElementById(id);
+    return el ? (el.value || '') : '';
+  }
+  function checked(id) {
+    var el = document.getElementById(id);
+    return el ? !!el.checked : false;
+  }
+
+  var model = selText('nkz_type') || ('НКЗ-' + val('nkz_type'));
+  var workH = val('nkz_l');
+  var chainType = checked('lan_check') ? 'ланцюгова' : 'стрічкова';
+
+  var lines = [];
+  lines.push('РОЗПИС ВАРТОСТІ НОРІЇ');
+  lines.push('=============================================');
+  lines.push('Модель: ' + model);
+  lines.push('Тип: ' + chainType);
+  lines.push('Робоча висота: ' + workH + ' м');
+  lines.push('Дата: ' + new Date().toLocaleDateString('uk-UA'));
+  lines.push('');
+  lines.push('СКЛАДОВІ ВАРТОСТІ:');
+  lines.push('---------------------------------------------');
+
+  var conv = p.conv || {};
+  lines.push('Стрічка / Ланцюг: ' + (conv.name || '—'));
+  lines.push('  Довжина: ' + (conv.length_m || 0) + ' м');
+  lines.push('  Вартість: ' + fmt(conv.price || 0) + ' грн');
+  lines.push('');
+
+  var bk = p.buckets || {};
+  lines.push('Ківші: ' + (bk.name || '—'));
+  lines.push('  Кількість: ' + (bk.count || 0) + ' шт');
+  lines.push('  Ціна за шт: ' + fmt(bk.unit_price || 0) + ' грн');
+  lines.push('  Вартість: ' + fmt(bk.total_price || 0) + ' грн');
+  lines.push('');
+
+  var ft = p.fasteners || {};
+  var bolt = ft.bolt || {};
+  var nut = ft.nut || {};
+  var washer = ft.washer || {};
+  lines.push('Метизи:');
+  lines.push('  Болти: ' + (bolt.count || 0) + ' шт, ' + Number(bolt.weight_kg || 0).toFixed(2) + ' кг  →  ' + fmt(bolt.price || 0) + ' грн');
+  lines.push('  Гайки: ' + (nut.count || 0) + ' шт, ' + Number(nut.weight_kg || 0).toFixed(2) + ' кг  →  ' + fmt(nut.price || 0) + ' грн');
+  lines.push('  Шайби норійні: ' + (washer.count || 0) + ' шт, ' + Number(washer.weight_kg || 0).toFixed(2) + ' кг  →  ' + fmt(washer.price || 0) + ' грн');
+  lines.push('');
+
+  var sh = p.shafts || {};
+  var rev = sh.revision || {};
+  var mtr = sh.meter || {};
+  var two = sh.twometer || {};
+  var bsh = sh.bashmak || {};
+  var hd  = sh.head || {};
+  lines.push('Секції шахти:');
+  lines.push('  Ревізійна (' + (rev.count || 0) + ' шт): ' + Number(rev.weight_kg || 0).toFixed(2) + ' кг  →  ' + fmt(rev.price || 0) + ' грн');
+  lines.push('  Метрові (' + (mtr.count || 0) + ' шт): ' + Number(mtr.weight_kg || 0).toFixed(2) + ' кг  →  ' + fmt(mtr.price || 0) + ' грн');
+  lines.push('  Двохметрові (' + (two.count || 0) + ' шт): ' + Number(two.weight_kg || 0).toFixed(2) + ' кг  →  ' + fmt(two.price || 0) + ' грн');
+  lines.push('');
+  lines.push('Башмак в зборі: ' + Number(bsh.weight_kg || 0).toFixed(2) + ' кг  →  ' + fmt(bsh.price || 0) + ' грн');
+  lines.push('Голова привідна в зборі: ' + Number(hd.weight_kg || 0).toFixed(2) + ' кг  →  ' + fmt(hd.price || 0) + ' грн');
+  lines.push('');
+
+  var drv = p.drive || {};
+  lines.push('Мотор-редуктор: ' + (drv.name || '—'));
+  lines.push('  Вартість: ' + fmt(drv.price || 0) + ' грн');
+  lines.push('');
+  lines.push('=============================================');
+  lines.push('РАЗОМ: ' + fmt(p.total_price || 0) + ' грн');
+  lines.push('=============================================');
+
+  var text = lines.join('\r\n');
+  var blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'ціни_' + model.replace(/\s+/g, '_') + '_' + (workH || '0') + 'м.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+};
+
 // Render summary to canvas (avoids font encoding issues by rasterizing)
 function renderCanvasSummary(d) {
   var cw = 1200, ch = 1700;

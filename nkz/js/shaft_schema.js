@@ -201,27 +201,16 @@
     });
 
     var wrap = document.createElement('div');
-    wrap.style.cssText = 'position:relative;display:inline-block;margin-bottom:5px;';
+    wrap.style.cssText = 'margin-bottom:5px;';
 
     var btn = document.createElement('button');
     btn.type = 'button';
     btn.style.cssText = 'background:#f0f4f8;border:1px solid #ccc;border-radius:4px;padding:3px 9px;font-size:0.8em;cursor:pointer;display:inline-flex;align-items:center;gap:5px;color:#444;line-height:1.6;';
     btn.innerHTML = '<span style="font-size:1.15em;line-height:1;">&#9776;</span> Товщина шахт';
 
-    var dropdown = document.createElement('div');
-    dropdown.style.cssText = [
-      'display:none',
-      'position:absolute',
-      'top:calc(100% + 4px)',
-      'left:0',
-      'z-index:200',
-      'background:#fff',
-      'border:1px solid #ccc',
-      'border-radius:5px',
-      'padding:8px 10px',
-      'box-shadow:0 3px 10px rgba(0,0,0,.15)',
-      'min-width:190px'
-    ].join(';');
+    // Inline panel — no absolute positioning, avoids all overflow-clip issues
+    var panel = document.createElement('div');
+    panel.style.cssText = 'display:none;margin-top:4px;background:#f8f9fa;border:1px solid #dee2e6;border-radius:4px;padding:7px 9px;';
 
     keys.forEach(function (kn) {
       var row = document.createElement('div');
@@ -249,25 +238,25 @@
       })(kn.key);
       row.appendChild(lbl);
       row.appendChild(sel);
-      dropdown.appendChild(row);
+      panel.appendChild(row);
     });
 
     if (!keys.length) {
       var empty = document.createElement('span');
       empty.style.cssText = 'font-size:0.8em;color:#999;font-style:italic;';
       empty.textContent = 'Немає секцій з товщиною';
-      dropdown.appendChild(empty);
+      panel.appendChild(empty);
     }
 
     btn.addEventListener('click', function (e) {
       e.stopPropagation();
-      dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+      panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
     });
-    dropdown.addEventListener('click', function (e) { e.stopPropagation(); });
+    panel.addEventListener('click', function (e) { e.stopPropagation(); });
 
     wrap.appendChild(btn);
-    wrap.appendChild(dropdown);
-    return { el: wrap, dropdown: dropdown };
+    wrap.appendChild(panel);
+    return { el: wrap, panel: panel };
   }
 
   window.renderShaftSchema = function renderShaftSchema() {
@@ -377,7 +366,7 @@
       svgEl.addEventListener('click', function (e) { e.stopPropagation(); deselect(); });
 
       var docFn = function () {
-        burger.dropdown.style.display = 'none';
+        burger.panel.style.display = 'none';
         deselect();
       };
       document.addEventListener('click', docFn);
