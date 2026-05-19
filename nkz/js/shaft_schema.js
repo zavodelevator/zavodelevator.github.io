@@ -23,7 +23,10 @@
     twometer: 'Двохметрова (2м)'
   };
 
+  // Cleanup for document-level listeners on re-render
   var __docCleanup = [];
+
+  // ---- Helpers -------------------------------------------------------
 
   function buildSections() {
     var cnts = window.count_nkz_section || {};
@@ -42,10 +45,33 @@
     return a;
   }
 
-  function tVal(key) {
-    var t = window.shaft_thickness && window.shaft_thickness[key];
-    return t != null ? t : 1.5;
+  // Per-section thickness: check section_thickness first, then shaft_thickness, then default
+  function tValS(id, typeKey) {
+    var st = window.section_thickness;
+    if (st && st[id] != null) return st[id];
+    var tt = window.shaft_thickness;
+    if (tt && typeKey && tt[typeKey] != null) return tt[typeKey];
+    return 1.5;
   }
+
+  function refreshSectionBadge(svgEl, id, val) {
+    var g = svgEl.querySelector('.ss[data-id="' + id + '"]');
+    if (g) {
+      var tb = g.querySelector('.tb');
+      if (tb) tb.textContent = val + 'мм';
+    }
+  }
+
+  // Update all badges for a given type key (after burger bulk change)
+  function refreshTypeBadges(svgEl, typeKey) {
+    svgEl.querySelectorAll('.ss[data-tkey="' + typeKey + '"]').forEach(function (g) {
+      var id = g.dataset.id;
+      var tb = g.querySelector('.tb');
+      if (tb) tb.textContent = tValS(id, typeKey) + 'мм';
+    });
+  }
+
+  // ---- SVG builder ---------------------------------------------------
 
   function buildSVG(secs) {
     var totalH = secs.reduce(function (s, x) { return s + x.hpx; }, 0) + 8;
@@ -74,61 +100,35 @@
       var cx  = OX + SW / 2;
       var col = COLORS[s.type] || '#78909c';
       var hc  = s.hasT ? ' htbl' : '';
+      var tv  = s.tKey ? tValS(s.id, s.tKey) : '';
 
       p.push('<g class="ss' + hc + '" data-id="' + s.id + '" data-type="' + s.type + '" data-tkey="' + s.tKey + '">');
 
       if (s.type === 'head') {
         var pcY = y + 22;
-        // Housing (wider than shaft)
         p.push('<rect x="' + (OX-4) + '" y="' + (y+2) + '" width="' + (SW+8) + '" height="' + (HH-18) + '" rx="3" fill="' + col + '" stroke="#263238" stroke-width="1.5"/>');
-        // Inner frame
         p.push('<rect x="' + (OX+4) + '" y="' + (y+6) + '" width="' + (SW-8) + '" height="' + (HH-30) + '" rx="2" fill="rgba(0,0,0,0.2)"/>');
-        // Drive pulley
         p.push('<circle cx="' + cx + '" cy="' + pcY + '" r="13" fill="#ffa000" stroke="#e65100" stroke-width="1.5"/>');
-        // Spokes
         p.push('<line x1="' + cx + '" y1="' + (pcY-13) + '" x2="' + cx + '" y2="' + (pcY+13) + '" stroke="rgba(0,0,0,.3)" stroke-width="1.5"/>');
         p.push('<line x1="' + (cx-13) + '" y1="' + pcY + '" x2="' + (cx+13) + '" y2="' + pcY + '" stroke="rgba(0,0,0,.3)" stroke-width="1.5"/>');
-        // Hub
         p.push('<circle cx="' + cx + '" cy="' + pcY + '" r="4" fill="#bf360c"/>');
-        // Discharge nozzle →
-        p.push('<polygon points="'
-          + (OX+SW+4) + ',' + (y+10)
-          + ' ' + (OX+SW+18) + ',' + (y+14)
-          + ' ' + (OX+SW+18) + ',' + (y+22)
-          + ' ' + (OX+SW+4) + ',' + (y+24)
-          + '" fill="#546e7a" stroke="#263238" stroke-width="1"/>');
-        // Belt guide down
+        p.push('<polygon points="' + (OX+SW+4) + ',' + (y+10) + ' ' + (OX+SW+18) + ',' + (y+14) + ' ' + (OX+SW+18) + ',' + (y+22) + ' ' + (OX+SW+4) + ',' + (y+24) + '" fill="#546e7a" stroke="#263238" stroke-width="1"/>');
         p.push('<line x1="' + cx + '" y1="' + (pcY+13) + '" x2="' + cx + '" y2="' + (y+HH-18) + '" stroke="rgba(255,255,255,.2)" stroke-width="1.5" stroke-dasharray="3,2"/>');
-        // Flange plate
         p.push('<rect x="' + OX + '" y="' + (y+HH-14) + '" width="' + SW + '" height="6" rx="1" fill="#37474f" stroke="#263238" stroke-width="1"/>');
-        // Flange bolts
         p.push('<rect x="' + (OX+5) + '" y="' + (y+HH-16) + '" width="5" height="10" rx="1" fill="#546e7a" stroke="#263238" stroke-width=".5"/>');
         p.push('<rect x="' + (OX+SW-10) + '" y="' + (y+HH-16) + '" width="5" height="10" rx="1" fill="#546e7a" stroke="#263238" stroke-width=".5"/>');
 
       } else if (s.type === 'bashmak') {
-        // Flange bolts at top
         p.push('<rect x="' + (OX+5) + '" y="' + (y-2) + '" width="5" height="10" rx="1" fill="#546e7a" stroke="#263238" stroke-width=".5"/>');
         p.push('<rect x="' + (OX+SW-10) + '" y="' + (y-2) + '" width="5" height="10" rx="1" fill="#546e7a" stroke="#263238" stroke-width=".5"/>');
-        // Flange plate
         p.push('<rect x="' + OX + '" y="' + y + '" width="' + SW + '" height="6" rx="1" fill="#37474f" stroke="#263238" stroke-width="1"/>');
-        // Housing
         p.push('<rect x="' + (OX-4) + '" y="' + (y+6) + '" width="' + (SW+8) + '" height="' + (BH-18) + '" rx="3" fill="' + col + '" stroke="#263238" stroke-width="1.5"/>');
-        // Loading throat ←
-        p.push('<polygon points="'
-          + (OX-4) + ',' + (y+12)
-          + ' ' + (OX-14) + ',' + (y+17)
-          + ' ' + (OX-14) + ',' + (y+27)
-          + ' ' + (OX-4) + ',' + (y+30)
-          + '" fill="#546e7a" stroke="#263238" stroke-width="1"/>');
-        // Tension drum
+        p.push('<polygon points="' + (OX-4) + ',' + (y+12) + ' ' + (OX-14) + ',' + (y+17) + ' ' + (OX-14) + ',' + (y+27) + ' ' + (OX-4) + ',' + (y+30) + '" fill="#546e7a" stroke="#263238" stroke-width="1"/>');
         var bDY = y + BH - 24;
         p.push('<circle cx="' + cx + '" cy="' + bDY + '" r="10" fill="rgba(255,255,255,.1)" stroke="rgba(255,255,255,.45)" stroke-width="1.5"/>');
         p.push('<circle cx="' + cx + '" cy="' + bDY + '" r="3.5" fill="rgba(255,255,255,.25)"/>');
-        // Belt guide up
         p.push('<line x1="' + cx + '" y1="' + (y+8) + '" x2="' + cx + '" y2="' + (bDY-10) + '" stroke="rgba(255,255,255,.15)" stroke-width="1.5" stroke-dasharray="3,2"/>');
-        // Tension rail
         p.push('<rect x="' + (OX-4) + '" y="' + (y+BH-12) + '" width="' + (SW+8) + '" height="4" rx="1" fill="#37474f" stroke="#263238" stroke-width="1"/>');
-        // Adjustment bolts ×3
         p.push('<circle cx="' + (OX+8) + '" cy="' + (y+BH-10) + '" r="3" fill="#455a64" stroke="#263238" stroke-width=".8"/>');
         p.push('<circle cx="' + cx + '" cy="' + (y+BH-10) + '" r="3" fill="#455a64" stroke="#263238" stroke-width=".8"/>');
         p.push('<circle cx="' + (OX+SW-8) + '" cy="' + (y+BH-10) + '" r="3" fill="#455a64" stroke="#263238" stroke-width=".8"/>');
@@ -139,7 +139,7 @@
         p.push('<rect x="' + (OX+3) + '" y="' + (y+2) + '" width="10" height="' + winH + '" rx="1.5" fill="#bbdefb" stroke="#64b5f6" stroke-width=".8" opacity=".9"/>');
         p.push('<line x1="' + cx + '" y1="' + (y+2) + '" x2="' + cx + '" y2="' + (y+sh-2) + '" stroke="rgba(255,255,255,.15)" stroke-width="1.5" stroke-dasharray="3,2"/>');
         p.push('<rect x="' + (OX+SW-22) + '" y="' + (cy-5.5) + '" width="22" height="11" rx="2" fill="rgba(0,0,0,.45)"/>');
-        p.push('<text class="tb" x="' + (OX+SW-11) + '" y="' + (cy+2) + '" text-anchor="middle">' + tVal(s.tKey) + 'мм</text>');
+        p.push('<text class="tb" x="' + (OX+SW-11) + '" y="' + (cy+2) + '" text-anchor="middle">' + tv + 'мм</text>');
 
       } else {
         // meter / twometer
@@ -150,7 +150,7 @@
           p.push('<line x1="' + OX + '" y1="' + mid + '" x2="' + (OX+SW) + '" y2="' + mid + '" stroke="rgba(255,255,255,.18)" stroke-width="1" stroke-dasharray="2,3"/>');
         }
         p.push('<rect x="' + (OX+SW-22) + '" y="' + (cy-5.5) + '" width="22" height="11" rx="2" fill="rgba(0,0,0,.3)"/>');
-        p.push('<text class="tb" x="' + (OX+SW-11) + '" y="' + (cy+2) + '" text-anchor="middle">' + tVal(s.tKey) + 'мм</text>');
+        p.push('<text class="tb" x="' + (OX+SW-11) + '" y="' + (cy+2) + '" text-anchor="middle">' + tv + 'мм</text>');
       }
 
       p.push('</g>');
@@ -160,6 +160,8 @@
     p.push('</svg>');
     return { html: p.join(''), w: W, h: totalH };
   }
+
+  // ---- Legend --------------------------------------------------------
 
   function buildLegend(secs, container) {
     container.innerHTML = '';
@@ -180,11 +182,7 @@
     });
   }
 
-  function refreshBadges(svgEl, key, val) {
-    svgEl.querySelectorAll('.ss[data-tkey="' + key + '"] .tb').forEach(function (t) {
-      t.textContent = val + 'мм';
-    });
-  }
+  // ---- Burger menu (body-appended, fixed position) -------------------
 
   function buildBurgerMenu(secs, svgEl) {
     var tList = typeof getAvailableThicknesses === 'function'
@@ -196,73 +194,105 @@
     secs.forEach(function (s) {
       if (s.tKey && !seen[s.tKey]) {
         seen[s.tKey] = true;
-        keys.push({ key: s.tKey, name: NAMES[s.type] });
+        keys.push({ key: s.tKey, type: s.type, name: NAMES[s.type] });
       }
     });
-
-    var wrap = document.createElement('div');
-    wrap.style.cssText = 'margin-bottom:5px;';
 
     var btn = document.createElement('button');
     btn.type = 'button';
     btn.style.cssText = 'background:#f0f4f8;border:1px solid #ccc;border-radius:4px;padding:3px 9px;font-size:0.8em;cursor:pointer;display:inline-flex;align-items:center;gap:5px;color:#444;line-height:1.6;';
     btn.innerHTML = '<span style="font-size:1.15em;line-height:1;">&#9776;</span> Товщина шахт';
 
-    // Inline panel — no absolute positioning, avoids all overflow-clip issues
-    var panel = document.createElement('div');
-    panel.style.cssText = 'display:none;margin-top:4px;background:#f8f9fa;border:1px solid #dee2e6;border-radius:4px;padding:7px 9px;';
+    // Dropdown appended to body with fixed positioning — bypasses all overflow clipping
+    var dropdown = document.createElement('div');
+    dropdown.id = '__shaft_burger_dd';
+    dropdown.style.cssText = [
+      'display:none',
+      'position:fixed',
+      'z-index:9999',
+      'background:#fff',
+      'border:1px solid #ccc',
+      'border-radius:5px',
+      'padding:8px 10px',
+      'box-shadow:0 3px 10px rgba(0,0,0,.18)',
+      'min-width:200px'
+    ].join(';');
+    document.body.appendChild(dropdown);
 
     keys.forEach(function (kn) {
       var row = document.createElement('div');
-      row.style.cssText = 'display:flex;align-items:center;gap:6px;margin-bottom:5px;';
+      row.style.cssText = 'display:flex;align-items:center;gap:6px;margin-bottom:6px;';
+      var dot = document.createElement('span');
+      dot.style.cssText = 'width:8px;height:8px;border-radius:2px;flex-shrink:0;background:' + (COLORS[kn.type] || '#888') + ';';
       var lbl = document.createElement('label');
       lbl.textContent = kn.name + ':';
-      lbl.style.cssText = 'font-size:0.78em;color:#555;min-width:100px;flex-shrink:0;';
+      lbl.style.cssText = 'font-size:0.78em;color:#555;flex:1;';
       var sel = document.createElement('select');
-      sel.style.cssText = 'font-size:0.82em;padding:2px 4px;border-radius:3px;border:1px solid #bbb;flex:1;';
+      sel.style.cssText = 'font-size:0.82em;padding:2px 4px;border-radius:3px;border:1px solid #bbb;width:72px;';
       tList.forEach(function (v) {
         var o = document.createElement('option');
         o.value = v;
         o.textContent = v + ' мм';
-        if (Math.abs(v - tVal(kn.key)) < 0.01) o.selected = true;
+        if (Math.abs(v - (window.shaft_thickness && window.shaft_thickness[kn.key] || 1.5)) < 0.01) o.selected = true;
         sel.appendChild(o);
       });
-      (function (key) {
+      (function (typeKey, type) {
         sel.addEventListener('change', function () {
           var newT = parseFloat(this.value);
-          if (window.shaft_thickness) window.shaft_thickness[key] = newT;
-          if (svgEl) refreshBadges(svgEl, key, newT);
+          // Set type-level default
+          if (window.shaft_thickness) window.shaft_thickness[typeKey] = newT;
+          // Clear per-section overrides for this type so all sections use new default
+          var st = window.section_thickness || {};
+          secs.forEach(function (s) {
+            if (s.tKey === typeKey && st[s.id] != null) delete st[s.id];
+          });
+          // Refresh all badges for this type
+          if (svgEl) refreshTypeBadges(svgEl, typeKey);
           if (typeof updateShaftsDetails === 'function') updateShaftsDetails();
           if (typeof updatePricesSummary === 'function') updatePricesSummary();
         });
-      })(kn.key);
+      })(kn.key, kn.type);
+      row.appendChild(dot);
       row.appendChild(lbl);
       row.appendChild(sel);
-      panel.appendChild(row);
+      dropdown.appendChild(row);
     });
 
     if (!keys.length) {
       var empty = document.createElement('span');
       empty.style.cssText = 'font-size:0.8em;color:#999;font-style:italic;';
       empty.textContent = 'Немає секцій з товщиною';
-      panel.appendChild(empty);
+      dropdown.appendChild(empty);
     }
 
+    var ddOpen = false;
     btn.addEventListener('click', function (e) {
       e.stopPropagation();
-      panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+      ddOpen = !ddOpen;
+      if (ddOpen) {
+        var rect = btn.getBoundingClientRect();
+        dropdown.style.top  = (rect.bottom + 4) + 'px';
+        dropdown.style.left = rect.left + 'px';
+        dropdown.style.display = 'block';
+      } else {
+        dropdown.style.display = 'none';
+      }
     });
-    panel.addEventListener('click', function (e) { e.stopPropagation(); });
+    dropdown.addEventListener('click', function (e) { e.stopPropagation(); });
 
-    wrap.appendChild(btn);
-    wrap.appendChild(panel);
-    return { el: wrap, panel: panel };
+    return { btn: btn, dropdown: dropdown, close: function () { ddOpen = false; dropdown.style.display = 'none'; } };
   }
+
+  // ---- Main render ---------------------------------------------------
 
   window.renderShaftSchema = function renderShaftSchema() {
     try {
+      // Remove previous document listeners
       __docCleanup.forEach(function (fn) { document.removeEventListener('click', fn); });
       __docCleanup = [];
+      // Remove previous body-appended burger dropdown
+      var oldDD = document.getElementById('__shaft_burger_dd');
+      if (oldDD) oldDD.remove();
 
       var host = document.querySelector('#info-shafts .col-sm');
       if (!host) return;
@@ -277,22 +307,28 @@
       wrap.id = 'shaft_schema_wrap';
       wrap.style.cssText = 'margin:6px 0 4px;';
 
+      // SVG column
       var svgCol = document.createElement('div');
       svgCol.style.cssText = 'flex-shrink:0;max-height:400px;overflow-y:auto;overflow-x:visible;';
       svgCol.innerHTML = built.html;
       var svgEl = svgCol.querySelector('#shaft_svg');
 
+      // Burger row (button only — dropdown is on body)
+      var burgerRow = document.createElement('div');
+      burgerRow.style.cssText = 'margin-bottom:5px;';
       var burger = buildBurgerMenu(secs, svgEl);
-      wrap.appendChild(burger.el);
+      burgerRow.appendChild(burger.btn);
+      wrap.appendChild(burgerRow);
 
+      // Schema row: SVG + legend/panel
       var row = document.createElement('div');
       row.style.cssText = 'display:flex;align-items:flex-start;gap:10px;';
 
       var rightCol = document.createElement('div');
       rightCol.style.cssText = 'flex:1;display:flex;flex-direction:column;gap:6px;min-width:130px;max-width:165px;';
 
-      var legend = document.createElement('div');
-      buildLegend(secs, legend);
+      var legendEl = document.createElement('div');
+      buildLegend(secs, legendEl);
 
       var panel = document.createElement('div');
       panel.id = 'shaft_detail_panel';
@@ -300,7 +336,7 @@
       panel.innerHTML = '<span style="color:#aaa;font-style:italic;">&#8592; клікніть секцію</span>';
       panel.addEventListener('click', function (e) { e.stopPropagation(); });
 
-      rightCol.appendChild(legend);
+      rightCol.appendChild(legendEl);
       rightCol.appendChild(panel);
       row.appendChild(svgCol);
       row.appendChild(rightCol);
@@ -311,6 +347,7 @@
 
       if (!svgEl) return;
 
+      // ---- Click selection -------------------------------------------
       var curG = null;
 
       function deselect() {
@@ -324,18 +361,19 @@
         curG = g;
         g.classList.add('sel');
 
-        var key  = g.dataset.tkey;
-        var type = g.dataset.type;
-        var name = NAMES[type] || type;
+        var id    = g.dataset.id;
+        var type  = g.dataset.type;
+        var tKey  = g.dataset.tkey;
+        var name  = NAMES[type] || type;
 
-        if (!key) {
+        if (!tKey) {
           panel.innerHTML =
             '<div style="font-weight:600;color:#333;margin-bottom:3px;">' + name + '</div>' +
             '<div style="color:#999;font-style:italic;font-size:0.9em;">Фіксований елемент</div>';
           return;
         }
 
-        var cur = tVal(key);
+        var cur = tValS(id, tKey);
         var tList = typeof getAvailableThicknesses === 'function'
           ? getAvailableThicknesses()
           : [1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5];
@@ -344,16 +382,22 @@
           return '<option value="' + v + '"' + (Math.abs(v - cur) < 0.01 ? ' selected' : '') + '>' + v + ' мм</option>';
         }).join('');
 
+        // Section number label (1-based, top-to-bottom in SVG)
+        var sectionIdx = null;
+        secs.forEach(function (s, i) { if (s.id === id) sectionIdx = i; });
+        var sectionLabel = sectionIdx !== null ? ' №' + sectionIdx : '';
+
         panel.innerHTML =
-          '<div style="font-weight:600;color:#333;margin-bottom:5px;">' + name + '</div>' +
-          '<label style="color:#666;display:block;margin-bottom:3px;">Товщина:</label>' +
+          '<div style="font-weight:600;color:#333;margin-bottom:5px;">' + name + sectionLabel + '</div>' +
+          '<label style="color:#666;display:block;margin-bottom:3px;">Товщина цієї секції:</label>' +
           '<select id="ssp_sel" style="width:100%;padding:3px 5px;border-radius:3px;border:1px solid #bbb;font-size:0.95em;">' + opts + '</select>' +
-          '<div style="margin-top:4px;color:#888;font-size:0.85em;">Усі секції цього типу</div>';
+          '<div style="margin-top:4px;color:#888;font-size:0.82em;">Тільки ця секція</div>';
 
         document.getElementById('ssp_sel').addEventListener('change', function () {
           var newT = parseFloat(this.value);
-          if (window.shaft_thickness) window.shaft_thickness[key] = newT;
-          refreshBadges(svgEl, key, newT);
+          // Save individual section thickness
+          if (window.section_thickness) window.section_thickness[id] = newT;
+          refreshSectionBadge(svgEl, id, newT);
           if (typeof updateShaftsDetails === 'function') updateShaftsDetails();
           if (typeof updatePricesSummary === 'function') updatePricesSummary();
         });
@@ -363,10 +407,12 @@
         g.addEventListener('click', function (e) { e.stopPropagation(); selectSection(g); });
       });
 
+      // SVG background click → deselect
       svgEl.addEventListener('click', function (e) { e.stopPropagation(); deselect(); });
 
+      // Document click → close burger dropdown + deselect
       var docFn = function () {
-        burger.panel.style.display = 'none';
+        burger.close();
         deselect();
       };
       document.addEventListener('click', docFn);

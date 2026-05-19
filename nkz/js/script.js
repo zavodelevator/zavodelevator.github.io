@@ -208,6 +208,21 @@ const nkzTypeMap = { '5': '1', '10': '2', '25': '3', '50': '4', '100': '5', '175
 let shaft_thickness = { revision: 1.5, meter: 1.5, twometer: 1.5 };
 window.shaft_thickness = shaft_thickness;
 
+// Індивідуальна товщина кожної секції (ключ = id секції: 'rev_0', 'one_0', 'two_0', …)
+var section_thickness = {};
+window.section_thickness = section_thickness;
+
+// Сума товщин для групи секцій з урахуванням індивідуальних значень
+function __stSum(prefix, count, typeKey) {
+  var sum = 0;
+  var def = shaft_thickness[typeKey] || 1.5;
+  for (var i = 0; i < count; i++) {
+    var id = prefix + '_' + i;
+    sum += (section_thickness[id] != null) ? section_thickness[id] : def;
+  }
+  return sum;
+}
+
 // Парсинг поля thinks_mine_nkz: може бути JSON-рядком [“1,5”,”2”] або масивом
 function __parseThicknessList(raw) {
   var list = raw;
@@ -246,6 +261,8 @@ function resetShaftThickness() {
   shaft_thickness.revision = def;
   shaft_thickness.meter = def;
   shaft_thickness.twometer = def;
+  // Очистити індивідуальні товщини секцій
+  Object.keys(section_thickness).forEach(function (k) { delete section_thickness[k]; });
 }
 
 // Рендеринг трьох селекторів товщини всередині контейнера host
@@ -392,15 +409,15 @@ function updatePricesSummary() {
     var cntRev = parseInt(count_nkz_section.revision_secton, 10) || 0;
     var cntOne = parseInt(count_nkz_section.one, 10) || 0;
     var cntTwo = parseInt(count_nkz_section.two, 10) || 0;
-    var _tRev = shaft_thickness.revision || 1;
-    var _tOne = shaft_thickness.meter || 1;
-    var _tTwo = shaft_thickness.twometer || 1;
-    var wR = frame && rev ? (wFrame * 2 + wRev) * cntRev * _tRev : 0;
-    var pR = frame && rev ? (pFrame * 2 + pRev) * cntRev * _tRev : 0;
-    var wM = frame && shaft1m ? (wFrame * 2 + w1m) * cntOne * _tOne : 0;
-    var pM = frame && shaft1m ? (pFrame * 2 + p1m) * cntOne * _tOne : 0;
-    var wT = frame && shaft1m ? (wFrame * 2 + (w1m * 2)) * cntTwo * _tTwo * 2 : 0;
-    var pT = frame && shaft1m ? (pFrame * 2 + (p1m * 2)) * cntTwo * _tTwo * 2 : 0;
+    var _sumRev = __stSum('rev', cntRev, 'revision');
+    var _sumOne = __stSum('one', cntOne, 'meter');
+    var _sumTwo = __stSum('two', cntTwo, 'twometer');
+    var wR = frame && rev ? (wFrame * 2 + wRev) * _sumRev : 0;
+    var pR = frame && rev ? (pFrame * 2 + pRev) * _sumRev : 0;
+    var wM = frame && shaft1m ? (wFrame * 2 + w1m) * _sumOne : 0;
+    var pM = frame && shaft1m ? (pFrame * 2 + p1m) * _sumOne : 0;
+    var wT = frame && shaft1m ? (wFrame * 2 + (w1m * 2)) * _sumTwo * 2 : 0;
+    var pT = frame && shaft1m ? (pFrame * 2 + (p1m * 2)) * _sumTwo * 2 : 0;
     var head = __pickFirst(__noriaItemsForProductByName('Голова привідна в зборі'));
     var wH = __itemWeightKg(head), pH = __parsePrice(head);
     out.shafts = {
@@ -1013,42 +1030,39 @@ function updateShaftsDetails() {
     var cntRev = parseInt(count_nkz_section.revision_secton, 10) || 0;
     var cntOne = parseInt(count_nkz_section.one, 10) || 0;
     var cntTwo = parseInt(count_nkz_section.two, 10) || 0;
-    // Коефіцієнти товщини: значення з shaft_thickness × висота секції
-    var tRev = shaft_thickness.revision || 1;
-    var tOne = shaft_thickness.meter || 1;
-    var tTwo = shaft_thickness.twometer || 1;
-    // Ревізійна секція (1м): × T_rev × 1
+    // Суми товщин з урахуванням індивідуальних значень
+    var sumRev = __stSum('rev', cntRev, 'revision');
+    var sumOne = __stSum('one', cntOne, 'meter');
+    var sumTwo = __stSum('two', cntTwo, 'twometer');
+    // Ревізійна секція
     if (frame && rev && cntRev > 0) {
-      var wR = (wFrame * 2 + wRev) * cntRev * tRev;
-      var pR = (pFrame * 2 + pRev) * cntRev * tRev;
+      var wR = (wFrame * 2 + wRev) * sumRev;
+      var pR = (pFrame * 2 + pRev) * sumRev;
       var pr = document.createElement('p');
       pr.className = '_shaft_detail';
-      pr.textContent = 'Секція ревізійна: вага ' + wR.toFixed(2) + 'кг, ціна ' + pR.toFixed(2) + 'грн' +
-                       ' (т.' + tRev + 'мм)';
+      pr.textContent = 'Секція ревізійна: вага ' + wR.toFixed(2) + 'кг, ціна ' + pR.toFixed(2) + 'грн';
       pr.style.fontSize = '0.875em';
       pr.style.color = '#555';
       host.appendChild(pr);
     }
-    // Метрова секція (1м): × T_one × 1
+    // Метрова секція
     if (frame && shaft1m && cntOne > 0) {
-      var wM = (wFrame * 2 + w1m) * cntOne * tOne;
-      var pM = (pFrame * 2 + p1m) * cntOne * tOne;
+      var wM = (wFrame * 2 + w1m) * sumOne;
+      var pM = (pFrame * 2 + p1m) * sumOne;
       var pm = document.createElement('p');
       pm.className = '_shaft_detail';
-      pm.textContent = 'Секція метрова (' + cntOne + ' шт.): вага ' + wM.toFixed(2) + 'кг, ціна ' + pM.toFixed(2) + 'грн' +
-                       ' (т.' + tOne + 'мм)';
+      pm.textContent = 'Секція метрова (' + cntOne + ' шт.): вага ' + wM.toFixed(2) + 'кг, ціна ' + pM.toFixed(2) + 'грн';
       pm.style.fontSize = '0.875em';
       pm.style.color = '#555';
       host.appendChild(pm);
     }
-    // Двохметрова секція (2м): × T_two × 2
+    // Двохметрова секція
     if (frame && shaft1m && cntTwo > 0) {
-      var wT = (wFrame * 2 + (w1m * 2)) * cntTwo * tTwo * 2;
-      var pT = (pFrame * 2 + (p1m * 2)) * cntTwo * tTwo * 2;
+      var wT = (wFrame * 2 + (w1m * 2)) * sumTwo * 2;
+      var pT = (pFrame * 2 + (p1m * 2)) * sumTwo * 2;
       var pt = document.createElement('p');
       pt.className = '_shaft_detail';
-      pt.textContent = 'Секції двохметрові (' + cntTwo + ' шт.): вага ' + wT.toFixed(2) + 'кг, ціна ' + pT.toFixed(2) + 'грн' +
-                       ' (т.' + tTwo + 'мм)';
+      pt.textContent = 'Секції двохметрові (' + cntTwo + ' шт.): вага ' + wT.toFixed(2) + 'кг, ціна ' + pT.toFixed(2) + 'грн';
       pt.style.fontSize = '0.875em';
       pt.style.color = '#555';
       host.appendChild(pt);
