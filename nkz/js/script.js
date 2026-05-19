@@ -627,10 +627,6 @@ window.__buildPriceHTML = function() {
     '<script>window.onload=function(){window.print();}<\/script>' +
     '</body></html>';
 };
-  a.click();
-  document.body.removeChild(a);
-  setTimeout(function() { URL.revokeObjectURL(url); }, 1000);
-};
 // Дані стрічка/ланцюг: мапа, вибраний об’єкт, фільтрація та заповнення селектора
 let nkz_conv = null;
 let __convMap = new Map();
