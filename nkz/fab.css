@@ -1,0 +1,47 @@
+/* Floating Action Button (FAB) styles for NKZ pages
+   - Reusable across pages: include <link rel="stylesheet" href="./fab.css">
+   - Positions a circular button at top-right with desired offsets
+   - Provides a dropdown menu with three actions
+*/
+
+/* Main floating button positioned at top-right with offsets:
+   - 100px from top, 50px from right as requested
+*/
+.fab-btn {
+  position: fixed;
+  top: 100px;
+  right: 50px;
+  width: 56px;
+  height: 56px;
+  border-radius: 28px;
+  border: none;
+  background: #007bff; /* Bootstrap primary color */
+  color: #fff;
+  font-size: 24px;     /* glyph size for '☰' */
+  line-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+  z-index: 1100;       /* Above most content */
+  cursor: pointer;
+}
+.fab-btn:active { transform: scale(0.98); }
+
+/* Menu container positioned below the FAB button */
+.fab-menu {
+  position: fixed;
+  top: 168px;            /* 100 + button height(56) + gap(12) */
+  right: 50px;
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  padding: 10px;
+  z-index: 1099;
+  display: none;         /* Hidden by default */
+  min-width: 240px;
+}
+.fab-menu.open { display: block; }
+.fab-menu .btn { width: 100%; margin: 6px 0; }
+
