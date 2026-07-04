@@ -1,0 +1,610 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nova Poshta API Demo</title>
+<style>
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;margin:0;background:#f7f7f9;color:#111}
+.wrap{max-width:960px;margin:0 auto;padding:24px}
+h1{font-size:20px;margin:0 0 12px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:16px;margin:12px 0;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}
+.row .field{flex:1 1 220px;display:flex;flex-direction:column;gap:6px}
+label{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:#555}
+input,select,button{padding:10px 12px;border:1px solid #cfd3d8;border-radius:8px;font-size:14px;background:#fff}
+button{background:#ea1d2c;border-color:#ea1d2c;color:#fff;cursor:pointer}
+button.secondary{background:#fff;border-color:#9aa3ad;color:#111}
+button:disabled{opacity:.6;cursor:not-allowed}
+.muted{color:#666;font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.result{white-space:pre-wrap;background:#0b1021;color:#e3e7ff;border-radius:8px;padding:12px;font-family:ui-monospace,SFMono-Regular,Consolas,Monaco,monospace;font-size:13px}
+.small{font-size:12px}
+.list{max-height:180px;overflow:auto;border:1px solid #e5e7eb;border-radius:8px}
+.list-item{padding:8px 10px;border-bottom:1px solid #eee;cursor:pointer}
+.list-item:hover{background:#f2f4f8}
+.ok{color:#0c7a3d}
+.err{color:#9b1c1c}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Nova Poshta API Demo</h1>
+  <div class="card">
+    <div class="row">
+      <div class="field" style="flex:2 1 320px">
+        <label>API Key</label>
+        <input id="apiKey" type="password" placeholder="Enter your Nova Poshta API key">
+      </div>
+      <div class="field" style="flex:0 0 160px">
+        <label>&nbsp;</label>
+        <button id="saveKey" class="secondary">Save Locally</button>
+      </div>
+      <div class="field" style="flex:0 0 160px">
+        <label>&nbsp;</label>
+        <button id="clearKey" class="secondary">Clear Local Key</button>
+      </div>
+    </div>
+    <div class="muted small">The key stays in your browser storage only.</div>
+  </div>
+
+  <div class="card">
+    <h1>Find Cities</h1>
+    <div class="row">
+      <div class="field">
+        <label>Sender City</label>
+        <input id="senderQuery" placeholder="Start typing city name">
+      </div>
+      <div class="field" style="flex:0 0 140px">
+        <label>&nbsp;</label>
+        <button id="searchSender" class="secondary">Search</button>
+      </div>
+    </div>
+    <div id="senderResults" class="list" style="display:none"></div>
+    <div class="row" style="margin-top:8px">
+      <div class="field">
+        <label>Recipient City</label>
+        <input id="recipientQuery" placeholder="Start typing city name">
+      </div>
+      <div class="field" style="flex:0 0 140px">
+        <label>&nbsp;</label>
+        <button id="searchRecipient" class="secondary">Search</button>
+      </div>
+    </div>
+    <div id="recipientResults" class="list" style="display:none"></div>
+    <div class="muted small" style="margin-top:8px">Select a city from the lists to lock it in.</div>
+  </div>
+
+  <div class="card">
+    <h1>Calculate Delivery Price</h1>
+    <div class="row">
+      <div class="field">
+        <label>Weight, kg</label>
+        <input id="weight" type="number" step="0.1" min="0.1" value="1">
+      </div>
+      <div class="field">
+        <label>Declared Cost, ₴</label>
+        <input id="cost" type="number" step="1" min="0" value="500">
+      </div>
+      <div class="field">
+        <label>Service Type</label>
+        <select id="serviceType">
+          <option value="WarehouseWarehouse">Warehouse → Warehouse</option>
+          <option value="WarehouseDoors">Warehouse → Doors</option>
+          <option value="DoorsWarehouse">Doors → Warehouse</option>
+          <option value="DoorsDoors">Doors → Doors</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Cargo Type</label>
+        <select id="cargoType">
+          <option value="Cargo">Cargo</option>
+          <option value="Parcel">Parcel</option>
+          <option value="Documents">Documents</option>
+        </select>
+      </div>
+      <div class="field" style="flex:0 0 160px">
+        <label>&nbsp;</label>
+        <button id="calcPrice">Calculate</button>
+      </div>
+    </div>
+    <div id="priceOut" class="result" style="display:none;margin-top:12px"></div>
+  </div>
+
+  <div class="card">
+    <h1>Track Waybill (EW)</h1>
+    <div class="row">
+      <div class="field">
+        <label>Document Number</label>
+        <input id="ttn" placeholder="e.g. 20400000000000">
+      </div>
+      <div class="field">
+        <label>Phone (optional)</label>
+        <input id="ttnPhone" placeholder="+380...">
+      </div>
+      <div class="field" style="flex:0 0 160px">
+        <label>&nbsp;</label>
+        <button id="track">Track</button>
+      </div>
+    </div>
+    <div id="trackOut" class="result" style="display:none;margin-top:12px"></div>
+  </div>
+
+  <div class="card">
+    <h1>Останні 10 відправлень</h1>
+    <div class="row">
+      <div class="field">
+        <label>Період</label>
+        <select id="lastPeriod">
+          <option value="7">7 днів</option>
+          <option value="30" selected>30 днів</option>
+          <option value="90">90 днів</option>
+        </select>
+      </div>
+      <div class="field" style="flex:0 0 160px">
+        <label>&nbsp;</label>
+        <button id="loadLast">Оновити</button>
+      </div>
+    </div>
+    <div id="lastOut" class="list" style="display:none"></div>
+  </div>
+
+  <div class="card">
+    <h1>Відділення</h1>
+    <div class="row">
+      <div class="field" style="flex:0 0 220px">
+        <label>&nbsp;</label>
+        <button id="loadSenderWh" class="secondary">Відділення відправника</button>
+      </div>
+      <div class="field" style="flex:0 0 220px">
+        <label>&nbsp;</label>
+        <button id="loadRecipientWh" class="secondary">Відділення отримувача</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label>Відділення відправника</label>
+        <div id="senderWh" class="list" style="display:none"></div>
+      </div>
+      <div class="field">
+        <label>Відділення отримувача</label>
+        <div id="recipientWh" class="list" style="display:none"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="small muted">API: https://api.novaposhta.ua/v2.0/json/</div>
+  </div>
+</div>
+
+<script>
+const els = {
+  apiKey: document.getElementById('apiKey'),
+  saveKey: document.getElementById('saveKey'),
+  clearKey: document.getElementById('clearKey'),
+  senderQuery: document.getElementById('senderQuery'),
+  recipientQuery: document.getElementById('recipientQuery'),
+  senderResults: document.getElementById('senderResults'),
+  recipientResults: document.getElementById('recipientResults'),
+  weight: document.getElementById('weight'),
+  cost: document.getElementById('cost'),
+  serviceType: document.getElementById('serviceType'),
+  cargoType: document.getElementById('cargoType'),
+  calcPrice: document.getElementById('calcPrice'),
+  priceOut: document.getElementById('priceOut'),
+  trackBtn: document.getElementById('track'),
+  ttn: document.getElementById('ttn'),
+  ttnPhone: document.getElementById('ttnPhone'),
+  trackOut: document.getElementById('trackOut'),
+  searchSender: document.getElementById('searchSender'),
+  searchRecipient: document.getElementById('searchRecipient'),
+  lastOut: document.getElementById('lastOut'),
+  lastPeriod: document.getElementById('lastPeriod'),
+  loadLast: document.getElementById('loadLast'),
+  loadSenderWh: document.getElementById('loadSenderWh'),
+  loadRecipientWh: document.getElementById('loadRecipientWh'),
+  senderWh: document.getElementById('senderWh'),
+  recipientWh: document.getElementById('recipientWh'),
+};
+
+let state = {
+  senderCity: null,
+  recipientCity: null
+};
+
+function loadKey() {
+  const k = localStorage.getItem('np_api_key');
+  if (k) els.apiKey.value = k;
+}
+
+function saveKey() {
+  localStorage.setItem('np_api_key', els.apiKey.value || '');
+}
+
+function clearKey() {
+  localStorage.removeItem('np_api_key');
+  els.apiKey.value = '';
+}
+
+function wait(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+async function np(body, opts) {
+  const apiKey = els.apiKey.value.trim();
+  if (!apiKey) throw new Error('API key is required');
+  const maxRetries = (opts && opts.retries) || 3;
+  let attempt = 0;
+  while (true) {
+    const res = await fetch('https://api.novaposhta.ua/v2.0/json/', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ apiKey, ...body })
+    });
+    let data = null;
+    try { data = await res.json(); } catch(e) {}
+    const textErrors = data && data.errors ? String(data.errors.join ? data.errors.join(' ') : data.errors).toLowerCase() : '';
+    const rateLimited = res.status === 429 || textErrors.includes('too many');
+    if (rateLimited && attempt < maxRetries) {
+      const backoff = 700 * Math.pow(2, attempt) + Math.floor(Math.random()*250);
+      attempt++;
+      await wait(backoff);
+      continue;
+    }
+    if (!res.ok) throw new Error('Network error ' + res.status);
+    if (!data || !data.success) {
+      const msg = (data && data.errors && data.errors[0]) || 'API error';
+      throw new Error(msg);
+    }
+    return data;
+  }
+}
+
+function renderList(container, items, onPick) {
+  container.innerHTML = '';
+  if (!items.length) {
+    container.style.display = 'none';
+    return;
+  }
+  container.style.display = 'block';
+  for (const it of items) {
+    const d = document.createElement('div');
+    d.className = 'list-item';
+    d.textContent = it.Description || it.DescriptionRu || it.Present || '';
+    d.addEventListener('click', () => {
+      onPick(it);
+      container.style.display = 'none';
+    });
+    container.appendChild(d);
+  }
+}
+
+async function searchCities(query) {
+  const r = await np({
+    modelName: 'Address',
+    calledMethod: 'getCities',
+    methodProperties: { FindByString: query }
+  });
+  return r.data || [];
+}
+
+function setCity(which, city) {
+  if (which === 'sender') {
+    state.senderCity = city;
+    els.senderQuery.value = city.Description || city.DescriptionRu || city.Present || '';
+  } else {
+    state.recipientCity = city;
+    els.recipientQuery.value = city.Description || city.DescriptionRu || city.Present || '';
+  }
+}
+
+async function calcPrice() {
+  if (!state.senderCity || !state.recipientCity) {
+    showPrice({error:'Select both cities'});
+    return;
+  }
+  const weight = parseFloat(els.weight.value || '0');
+  const cost = parseFloat(els.cost.value || '0');
+  if (!(weight > 0)) {
+    showPrice({error:'Weight must be > 0'});
+    return;
+  }
+  const body = {
+    modelName: 'InternetDocument',
+    calledMethod: 'getDocumentPrice',
+    methodProperties: {
+      CitySender: state.senderCity.Ref,
+      CityRecipient: state.recipientCity.Ref,
+      Weight: weight,
+      ServiceType: els.serviceType.value,
+      Cost: cost,
+      CargoType: els.cargoType.value
+    }
+  };
+  try {
+    const r = await np(body);
+    const rows = r.data || [];
+    if (!rows.length) {
+      showPrice({error:'No price returned'});
+      return;
+    }
+    const p = rows[0];
+    const out = {
+      Cost: p.Cost,
+      AssessedCost: p.AssessedCost,
+      CostRedelivery: p.CostRedelivery,
+      CostPack: p.CostPack,
+      Weight: p.Weight,
+      ServiceType: p.ServiceType
+    };
+    showPrice({ok:true,data:out});
+  } catch(e) {
+    showPrice({error:e.message});
+  }
+}
+
+function showPrice(result) {
+  els.priceOut.style.display = 'block';
+  if (result.error) {
+    els.priceOut.innerHTML = 'Error: ' + result.error;
+    return;
+  }
+  const d = result.data;
+  const lines = [
+    'Total: ₴' + d.Cost,
+    'Assessed: ₴' + d.AssessedCost,
+    'Redelivery: ₴' + d.CostRedelivery,
+    'Packing: ₴' + d.CostPack,
+    'Weight: ' + d.Weight + ' kg',
+    'Service: ' + d.ServiceType
+  ];
+  els.priceOut.textContent = lines.join('\n');
+}
+
+async function track() {
+  const num = (els.ttn.value || '').trim();
+  if (!num) {
+    showTrack({error:'Document number required'});
+    return;
+  }
+  const phone = (els.ttnPhone.value || '').trim();
+  try {
+    const r = await np({
+      modelName: 'TrackingDocument',
+      calledMethod: 'getStatusDocuments',
+      methodProperties: {
+        Documents: [{ DocumentNumber: num, Phone: phone }]
+      }
+    });
+    const rows = r.data || [];
+    if (!rows.length) {
+      showTrack({error:'No data'});
+      return;
+    }
+    const d = rows[0];
+    const out = [
+      'Status: ' + (d.Status || ''),
+      'Warehouse: ' + (d.WarehouseSender || '') + ' → ' + (d.WarehouseRecipient || ''),
+      'Scheduled: ' + (d.ScheduledDeliveryDate || ''),
+      'Last Update: ' + (d.TrackingUpdateDate || ''),
+      'City: ' + (d.CitySender || '') + ' → ' + (d.CityRecipient || '')
+    ].join('\n');
+    showTrack({ok:true,text:out});
+  } catch(e) {
+    showTrack({error:e.message});
+  }
+}
+
+function showTrack(result) {
+  els.trackOut.style.display = 'block';
+  els.trackOut.textContent = result.error ? ('Error: ' + result.error) : result.text;
+}
+
+function dmy(dt) {
+  const dd = String(dt.getDate()).padStart(2,'0');
+  const mm = String(dt.getMonth()+1).padStart(2,'0');
+  const yy = String(dt.getFullYear());
+  return dd + '.' + mm + '.' + yy;
+}
+
+function parseNPDate(s) {
+  if (!s) return 0;
+  const datePart = s.split(' ')[0];
+  if (/^\d{2}\.\d{2}\.\d{4}$/.test(datePart)) {
+    const [dd,mm,yy] = datePart.split('.');
+    const t = new Date(Number(yy), Number(mm)-1, Number(dd)).getTime();
+    return isNaN(t) ? 0 : t;
+  }
+  const t = new Date(s).getTime();
+  return isNaN(t) ? 0 : t;
+}
+
+async function loadLastShipments() {
+  els.lastOut.style.display = 'none';
+  els.lastOut.innerHTML = '';
+  let days = parseInt(els.lastPeriod.value || '30', 10);
+  if (!(days > 0)) days = 30;
+  const now = new Date();
+  const from = new Date(now.getTime() - days*24*60*60*1000);
+  const to = new Date(now.getTime() + 24*60*60*1000);
+  els.loadLast.disabled = true;
+  const loading = document.createElement('div');
+  loading.className = 'list-item';
+  loading.textContent = 'Завантаження...';
+  els.lastOut.appendChild(loading);
+  els.lastOut.style.display = 'block';
+  try {
+    let r = await np({
+      modelName: 'InternetDocument',
+      calledMethod: 'getDocumentList',
+      methodProperties: {
+        DateTimeFrom: dmy(from),
+        DateTimeTo: dmy(to),
+        GetFullList: 1,
+        Page: 1
+      }
+    }, { retries: 3 });
+    let rows = Array.isArray(r.data) ? r.data : [];
+    if (!rows.length) {
+      r = await np({
+        modelName: 'InternetDocument',
+        calledMethod: 'getDocumentList',
+        methodProperties: {
+          DateTime: dmy(now),
+          GetFullList: 1,
+          Page: 1
+        }
+      }, { retries: 2 });
+      rows = Array.isArray(r.data) ? r.data : [];
+    }
+    els.lastOut.innerHTML = '';
+    rows.sort((a,b) => {
+      const ta = parseNPDate(a.EWDateCreated || a.DateTime);
+      const tb = parseNPDate(b.EWDateCreated || b.DateTime);
+      return tb - ta;
+    });
+    const take = rows.slice(0,10);
+    if (!take.length) {
+      const d = document.createElement('div');
+      d.className = 'list-item';
+      d.textContent = 'Немає відправлень за обраний період';
+      els.lastOut.appendChild(d);
+      els.lastOut.style.display = 'block';
+      return;
+    }
+    for (const it of take) {
+      const d = document.createElement('div');
+      d.className = 'list-item';
+      const dt = it.EWDateCreated || it.DateTime || '';
+      const line = [
+        it.IntDocNumber || '',
+        dt,
+        it.StateName || '',
+        (it.Cost ? ('₴' + it.Cost) : '')
+      ].filter(Boolean).join(' • ');
+      d.textContent = line;
+      d.title = 'Натисніть, щоб підставити в трекінг';
+      d.addEventListener('click', () => {
+        els.ttn.value = it.IntDocNumber || '';
+        els.trackBtn.click();
+      });
+      els.lastOut.appendChild(d);
+    }
+    els.lastOut.style.display = 'block';
+  } catch(e) {
+    const d = document.createElement('div');
+    d.className = 'list-item';
+    d.textContent = 'Помилка: ' + e.message;
+    els.lastOut.appendChild(d);
+    els.lastOut.style.display = 'block';
+  }
+  finally {
+    els.loadLast.disabled = false;
+  }
+}
+
+function renderWarehouses(container, items) {
+  container.innerHTML = '';
+  if (!Array.isArray(items) || !items.length) {
+    const d = document.createElement('div');
+    d.className = 'list-item';
+    d.textContent = 'Немає відділень';
+    container.appendChild(d);
+    container.style.display = 'block';
+    return;
+  }
+  for (const it of items) {
+    const d = document.createElement('div');
+    d.className = 'list-item';
+    const line = [
+      (it.Number ? ('№' + it.Number) : ''),
+      it.Description || '',
+      it.ShortAddress || it.ShortAddressRu || ''
+    ].filter(Boolean).join(' • ');
+    d.textContent = line;
+    d.title = 'Натисніть, щоб скопіювати';
+    d.addEventListener('click', async () => {
+      const txt = [it.Description || '', it.ShortAddress || ''].filter(Boolean).join(' — ');
+      try { await navigator.clipboard.writeText(txt); } catch(e) {}
+    });
+    container.appendChild(d);
+  }
+  container.style.display = 'block';
+}
+
+async function loadWarehouses(which) {
+  const city = which === 'sender' ? state.senderCity : state.recipientCity;
+  const container = which === 'sender' ? els.senderWh : els.recipientWh;
+  container.style.display = 'none';
+  container.innerHTML = '';
+  if (!city) {
+    const d = document.createElement('div');
+    d.className = 'list-item';
+    d.textContent = 'Спочатку оберіть місто';
+    container.appendChild(d);
+    container.style.display = 'block';
+    return;
+  }
+  const loading = document.createElement('div');
+  loading.className = 'list-item';
+  loading.textContent = 'Завантаження...';
+  container.appendChild(loading);
+  container.style.display = 'block';
+  try {
+    const r = await np({
+      modelName: 'Address',
+      calledMethod: 'getWarehouses',
+      methodProperties: {
+        CityRef: city.Ref,
+        Page: 1,
+        Limit: 200
+      }
+    }, { retries: 3 });
+    renderWarehouses(container, r.data || []);
+  } catch(e) {
+    container.innerHTML = '';
+    const d = document.createElement('div');
+    d.className = 'list-item';
+    d.textContent = 'Помилка: ' + e.message;
+    container.appendChild(d);
+    container.style.display = 'block';
+  }
+}
+
+function bind() {
+  els.saveKey.addEventListener('click', saveKey);
+  els.clearKey.addEventListener('click', clearKey);
+  els.searchSender.addEventListener('click', async () => {
+    els.senderResults.style.display = 'none';
+    const q = els.senderQuery.value.trim();
+    if (!q) return;
+    try {
+      const cities = await searchCities(q);
+      renderList(els.senderResults, cities, c => setCity('sender', c));
+    } catch(e) {
+      renderList(els.senderResults, [], () => {});
+    }
+  });
+  els.searchRecipient.addEventListener('click', async () => {
+    els.recipientResults.style.display = 'none';
+    const q = els.recipientQuery.value.trim();
+    if (!q) return;
+    try {
+      const cities = await searchCities(q);
+      renderList(els.recipientResults, cities, c => setCity('recipient', c));
+    } catch(e) {
+      renderList(els.recipientResults, [], () => {});
+    }
+  });
+  els.calcPrice.addEventListener('click', calcPrice);
+  els.trackBtn.addEventListener('click', track);
+  els.loadLast.addEventListener('click', loadLastShipments);
+  els.loadSenderWh.addEventListener('click', () => loadWarehouses('sender'));
+  els.loadRecipientWh.addEventListener('click', () => loadWarehouses('recipient'));
+}
+
+loadKey();
+bind();
+loadLastShipments();
+</script>
+</body>
+</html>
