@@ -328,18 +328,21 @@ function prace_vue() {
   }
   
 
+  // існуюча формула: ПДВ 15% та націнка 10%
   price_sh_transporter = parseInt(price_sh_transporter*1.15)
-  price_sh_transporter = parseInt(price_sh_transporter*1.1) 
+  price_sh_transporter = parseInt(price_sh_transporter*1.1)
 
+  // додатково +15% на вартість транспортера
+  price_sh_transporter = parseInt(price_sh_transporter*1.15)
 
-
-  
+  // націнка +10% на вартість приводу
+  var price_engine = parseInt((engine_params[2]*1)*1.1)
 
   var priceHtml = ""
     + "<p> Транспортер ₴ " + numberToSpaceString(price_sh_transporter) + ".00 з пдв </p>"
-    + "<p> Привід ₴ "  + numberToSpaceString(engine_params[2]*1) + ".00 з пдв </p>"
+    + "<p> Привід ₴ "  + numberToSpaceString(price_engine) + ".00 з пдв </p>"
     + "<hr>"
-    + "<p><b> Разом ₴ " + numberToSpaceString(price_sh_transporter + (engine_params[2]*1)) + ".00 з пдв </b></p>";
+    + "<p><b> Разом ₴ " + numberToSpaceString(price_sh_transporter + price_engine) + ".00 з пдв </b></p>";
   $(".price").html(priceHtml);
   var dbgCalc = priceDebugFormula();
   renderPriceDebug(dbgCalc);
