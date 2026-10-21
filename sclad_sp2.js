@@ -252,11 +252,11 @@ function customSort(arr) {
         };
         
         let price_rozdr = function(mass_m_spirall) {
-            return Math.round((mass_m_spirall * 1.1 * 55 * 6 * 1.1) / 3) * 3;
+            return Math.round((mass_m_spirall * 1.1 * 60 * 6 * 1.1) / 3) * 3;
         };
         
         let price_opt = function(mass_m_spirall) {
-            return Math.round((mass_m_spirall * 1.1 * 55 * 5 * 1.1) / 3) * 3;
+            return Math.round((mass_m_spirall * 1.1 * 60 * 5 * 1.1) / 3) * 3;
         };
 
         let resultArray = [];
