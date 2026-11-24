@@ -27,42 +27,69 @@
       <div class="card-header">Ремонт шнека</div>
       <div class="card-body">
         <div class="row">
-          <div class="col-md-4">
-            <form id="inputs">
+          <div class="col-md-4 col-lg-4">
+            <form id="inputs" autocomplete="off">
+              <div class="form-row">
+                <div class="form-group col-6">
+                  <label for="D">Зовнішній D, мм</label>
+                  <input type="number" step="any" class="form-control" id="D" name="D" value="110">
+                </div>
+                <div class="form-group col-6">
+                  <label for="d">Труба d, мм</label>
+                  <input type="number" step="any" class="form-control" id="d" name="d" value="42">
+                </div>
+                <div class="form-group col-6">
+                  <label for="p">Крок, мм <span class="label-title" id="p-hint">= D</span></label>
+                  <input type="number" step="any" class="form-control" id="p" name="p" value="110" title="За замовчуванням крок = D. Клікніть, щоб ввести свій.">
+                </div>
+                <div class="form-group col-6">
+                  <label for="s">Товщина s, мм</label>
+                  <input type="number" step="any" class="form-control" id="s" name="s" value="5">
+                </div>
+                <div class="form-group col-12">
+                  <label for="L">Довжина шнека L, м</label>
+                  <input type="number" step="any" class="form-control" id="L" name="L" value="2.3">
+                </div>
+              </div>
+
               <div class="form-group">
-                <label for="D">Зовнішній діаметр спіралі D, мм</label>
-                <input type="number" step="any" class="form-control" id="D" name="D" value="110">
+                <label class="d-block">Спіраль</label>
+                <div class="btn-group btn-group-toggle w-100" role="group">
+                  <label class="btn btn-outline-primary active"><input type="radio" name="kind" value="rolled" checked> Цільнотягнута</label>
+                  <label class="btn btn-outline-primary"><input type="radio" name="kind" value="segments"> Сегменти</label>
+                </div>
+              </div>
+              <div class="form-row" id="seg-fields" hidden>
+                <div class="form-group col-6">
+                  <label for="seg_qty">Сегментів, шт</label>
+                  <input type="number" step="1" class="form-control" id="seg_qty" name="seg_qty" placeholder="авто">
+                </div>
+                <div class="form-group col-6">
+                  <label for="seg_markup">Націнка, %</label>
+                  <input type="number" step="any" class="form-control" id="seg_markup" name="seg_markup" value="0">
+                </div>
               </div>
               <div class="form-group">
-                <label for="d">Діаметр труби/вала d, мм</label>
-                <input type="number" step="any" class="form-control" id="d" name="d" value="42">
+                <label for="grade">Метал спіралі</label>
+                <select class="form-control" id="grade" name="grade"></select>
               </div>
-              <div class="form-group">
-                <label for="p">Крок спіралі p, мм</label>
-                <input type="number" step="any" class="form-control" id="p" name="p" value="110">
-              </div>
-              <div class="form-group">
-                <label for="s">Товщина штрипса s, мм</label>
-                <input type="number" step="any" class="form-control" id="s" name="s" value="5">
-              </div>
-              <div class="form-group">
-                <label for="L">Довжина шнека L, м</label>
-                <input type="number" step="any" class="form-control" id="L" name="L" value="2.3">
-              </div>
-              <div class="form-group">
-                <label for="owner">Труба</label>
-                <select class="form-control" id="owner" name="owner">
-                  <option value="hzett">Нова (ХЗЕТТ)</option>
-                  <option value="customer">Замовника (знімаємо стару спіраль)</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="wall">Товщина стінки труби, мм</label>
-                <input type="number" step="any" class="form-control" id="wall" name="wall" value="6">
+
+              <div class="form-row">
+                <div class="form-group col-7">
+                  <label for="owner">Труба</label>
+                  <select class="form-control" id="owner" name="owner">
+                    <option value="hzett">Нова (ХЗЕТТ)</option>
+                    <option value="customer">Замовника</option>
+                  </select>
+                </div>
+                <div class="form-group col-5">
+                  <label for="wall">Стінка, мм</label>
+                  <input type="number" step="any" class="form-control" id="wall" name="wall" value="6">
+                </div>
               </div>
             </form>
           </div>
-          <div class="col-md-8" id="result"><div class="text-muted">Завантаження…</div></div>
+          <div class="col-md-8"><div id="viz"></div><div id="result"><div class="text-muted">Завантаження…</div></div></div>
         </div>
       </div>
     </div>

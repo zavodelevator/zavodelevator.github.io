@@ -1,11 +1,31 @@
 {
   "_note": "Ремонт шнека. Формули = Google Sheet «РЕМОНТ шнека», вкладка РШ (рішення власника 2026-11-24). Контроль: 110/42/110/5/2,3 м, стінка 6, труба ХЗЕТТ → 9 336 грн з ПДВ.",
-  "pricing": { "markup_pct": 10, "vat_pct": 20, "vat_included": true, "rounding": "round3", "subtotal_round3": true },
+  "pricing": {
+    "markup_pct": 10,
+    "vat_pct": 20,
+    "vat_included": true,
+    "rounding": "round3",
+    "subtotal_round3": true
+  },
   "density": 0.00786,
   "strip_length_factor": 1.3,
   "spiral_overhead": 1.1,
   "spiral_coef": 6,
   "tube_coef": 2.5,
   "tube_weight_k": 0.02465,
-  "rates": { "disassembly_300": 508.88, "disassembly_150": 436.43, "disassembly_small": 290.95, "assembly": 3.0, "balancing": 436.43, "priming": 92.58 }
+  "rates": {
+    "disassembly_300": 508.88,
+    "disassembly_150": 436.43,
+    "disassembly_small": 290.95,
+    "assembly": 3.0,
+    "balancing": 436.43,
+    "priming": 92.58
+  },
+  "segment": {
+    "_note": "Сегменти = CRM ScrewSegmentCalculator: маса заготовки = Do² × s × ρ; ціна шт = вгору до 3 (маса × ціна металу × коеф(s)); к-сть = round(L/крок)+1",
+    "coef_s2": 4.5,
+    "coef_s3": 3.5,
+    "coef_default": 3.0
+  },
+  "spiral_coef_wholesale": 5
 }

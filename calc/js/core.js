@@ -115,6 +115,22 @@
       '<div class="table-responsive"><table class="table table-sm table-bordered panel-table"><thead><tr>' + head + '</tr></thead><tbody>' + body + '</tbody></table></div></div>';
   }
 
+  var lastDetails = [];
+
+  // Вкладка «Розрахунок»: групи рядків { label, value, formula }
+  function detailsHtml(groups) {
+    if (!groups || !groups.length) return '<p class="small text-muted">Немає даних — перевірте введені розміри.</p>';
+    return groups.map(function (g) {
+      return '<div class="small font-weight-bold mt-2 mb-1">' + esc(g.group) + '</div>' +
+        '<table class="table table-sm small details-table mb-2"><tbody>' +
+        g.items.map(function (i) {
+          return '<tr><td>' + esc(i.label) +
+            (i.formula ? '<div class="text-muted formula">' + esc(i.formula) + '</div>' : '') +
+            '</td><td class="text-right text-nowrap align-top font-weight-bold">' + esc(i.value) + '</td></tr>';
+        }).join('') + '</tbody></table>';
+    }).join('');
+  }
+
   function renderPanel() {
     var tabs = cfg.panel(D).concat([pricingTab(cfg.pricing)]);
     var active = renderPanel.active || 0;
@@ -123,8 +139,9 @@
       return '<li class="nav-item"><a href="#" class="nav-link' + (i === active ? ' active' : '') + '" data-tab="' + i + '">' + esc(t.tab) + '</a></li>';
     }).join('');
     var pane = tabs[active];
+    renderPanel.detailsActive = !!pane.details;
     var body = (pane.note ? '<p class="small text-muted">' + esc(pane.note) + '</p>' : '') +
-      pane.fields.map(fieldHtml).join('');
+      (pane.details ? detailsHtml(lastDetails) : pane.fields.map(fieldHtml).join(''));
     document.getElementById('panel-body').innerHTML =
       '<ul class="nav nav-tabs nav-tabs-sm mb-3">' + nav + '</ul>' + body;
   }
@@ -191,6 +208,10 @@
       out = { error: err.message };
     }
     var el = document.getElementById('result');
+    var viz = document.getElementById('viz');
+    lastDetails = out.details || [];
+    if (renderPanel.detailsActive) renderPanel();
+    if (viz) viz.innerHTML = out.error ? '' : (out.viz || '');
     if (out.error) {
       el.innerHTML = '<div class="alert alert-warning mb-0">' + esc(out.error) + '</div>';
       return;
@@ -224,7 +245,8 @@
       '<tr><td colspan="3">ПДВ ' + money(t.vat_pct, 0) + '%</td><td class="text-right">' + money(t.vat) + '</td></tr>' +
       '<tr class="table-success"><th colspan="3">Ціна з ПДВ (' + (pricing.rounding === 'round3' ? 'округлено' : 'вгору') + ' до кратного 3)</th><th class="text-right">' + money(t.total, 0) + '</th></tr>' +
       '</tfoot></table></div>' +
-      (info ? '<div class="small font-weight-bold mt-3 mb-1">Розраховані параметри</div><table class="table table-sm small info-table"><tbody>' + info + '</tbody></table>' : '');
+      (info ? '<div class="small font-weight-bold mt-3 mb-1">Розраховані параметри</div><table class="table table-sm small info-table"><tbody>' + info + '</tbody></table>' : '') +
+      (out.after || '');
   }
 
   function boot(config) {
@@ -236,6 +258,7 @@
       form.addEventListener('change', recompute);
       form.addEventListener('submit', function (e) { e.preventDefault(); });
     }
+    if (config.docked && window.innerWidth >= 1400) document.body.classList.add('panel-open', 'panel-docked');
     load(config.data).then(function () {
       if (config.init) config.init(D);
       renderPanel();
@@ -247,5 +270,5 @@
     });
   }
 
-  window.Calc = { boot: boot, num: num, ceil3: ceil3, money: money, get: get, totals: totals };
+  window.Calc = { boot: boot, esc: esc, round3: round3, recompute: function () { recompute(); }, num: num, ceil3: ceil3, money: money, get: get, totals: totals };
 })();

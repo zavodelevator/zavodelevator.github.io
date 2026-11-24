@@ -26,3 +26,15 @@ body.panel-open #panel { transform: translateX(0); }
 @media (max-width: 576px) {
   .price-total { font-size: 1.6rem; }
 }
+
+/* закріплена панель на широкому екрані */
+@media (min-width: 1400px) {
+  body.panel-docked.panel-open .container { width: auto; margin-left: 16px; margin-right: 460px; max-width: none; }
+  body.panel-docked.panel-open .navbar { margin-right: 440px; }
+  body.panel-docked.panel-open #panel { box-shadow: -1px 0 0 #dee2e6; }
+}
+.details-table td { padding: .2rem .3rem; }
+.details-table .formula { font-size: .72rem; font-family: Consolas, monospace; }
+#viz svg { width: 100%; height: auto; display: block; }
+#viz { margin-bottom: 1rem; border: 1px solid #dee2e6; border-radius: 4px; background: #fff; }
+.extra-card { border: 1px solid #dee2e6; border-radius: 4px; padding: .75rem; margin-top: 1rem; background: #fdfdfe; }

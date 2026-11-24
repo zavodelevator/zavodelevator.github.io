@@ -1,11 +1,54 @@
 {
-  "_note": "Ціни металу, грн/кг без ПДВ. Штрипс і труба — з Google Sheet «РЕМОНТ шнека», вкладка РШ (Цш = 65, Цт = 130). Решта — PricingParameter material_* з CRM.",
-  "strip":   { "label": "Штрипс (спіраль), ст.3", "price": 65 },
-  "tube":    { "label": "Труба (вал шнека), ст.3", "price": 130 },
-  "st3":     { "label": "Лист/прокат ст.3", "price": 50 },
-  "09g2s":   { "label": "09Г2С", "price": 55 },
-  "st45":    { "label": "Ст.45", "price": 75 },
-  "aisi304": { "label": "AISI 304", "price": 140 },
-  "hardox":  { "label": "Hardox", "price": 125 },
-  "density": 7.85
+  "_note": "Ціни металу, грн/кг. strip/tube — з вкладки РШ (Цш 65, Цт 130). strip_grades — марки для спіралі ремонту шнека: ст.3 = Цш; нержавійка технічна 120 і AISI 304 160 — з CRM shnek_core (flight tech/food); 09Г2С — ОЦІНКА (65 × 55/50 за співвідношенням CRM), уточнити.",
+  "strip": {
+    "label": "Штрипс (спіраль), ст.3",
+    "price": 65
+  },
+  "tube": {
+    "label": "Труба (вал шнека), ст.3",
+    "price": 130
+  },
+  "st3": {
+    "label": "Лист/прокат ст.3",
+    "price": 50
+  },
+  "09g2s": {
+    "label": "09Г2С",
+    "price": 55
+  },
+  "st45": {
+    "label": "Ст.45",
+    "price": 75
+  },
+  "aisi304": {
+    "label": "AISI 304",
+    "price": 140
+  },
+  "hardox": {
+    "label": "Hardox",
+    "price": 125
+  },
+  "density": 7.85,
+  "strip_grades": [
+    {
+      "key": "st3",
+      "label": "Сталь 3",
+      "price": 65
+    },
+    {
+      "key": "09g2s",
+      "label": "09Г2С",
+      "price": 72
+    },
+    {
+      "key": "aisi_tech",
+      "label": "Нержавійка технічна",
+      "price": 120
+    },
+    {
+      "key": "aisi304",
+      "label": "Нержавійка AISI 304 (харчова)",
+      "price": 160
+    }
+  ]
 }
