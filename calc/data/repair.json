@@ -1,0 +1,7 @@
+{
+ "_note": "Ремонт шнека. Формула = CRM ScrewRepairCalculator (drawn spiral). Ставки = PricingParameter CRM.",
+ "pricing": { "markup_pct": 0, "vat_pct": 20, "vat_included": false },
+ "spiral_coef": 6,
+ "blank_factor": 1.038,
+ "rates": { "disassembly_300": 508.88, "disassembly_150": 436.43, "disassembly_small": 290.95, "assembly": 3.0, "balancing": 436.43, "priming": 92.58 }
+}

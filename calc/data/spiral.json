@@ -1,0 +1,9 @@
+{
+ "_note": "Цільнотягнута (цільнокатана) шнекова спіраль. Формула = CRM SpiralCalculator, але ПДВ 20% один раз (рішення власника 2026-11-24; у CRM було ×1,1×1,1).",
+ "pricing": { "markup_pct": 0, "vat_pct": 20, "vat_included": false },
+ "strip_length_factor": 1.3,
+ "overhead": 1.1,
+ "coef_wholesale": 5,
+ "coef_retail": 6,
+ "density": 7.86
+}

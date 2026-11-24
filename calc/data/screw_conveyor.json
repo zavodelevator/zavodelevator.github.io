@@ -1,0 +1,37 @@
+{
+  "_note": "Шнековий транспортер, простий режим. Формула = CRM ScrewConveyorSimpleCalculator (= стара calc_sh_t2). Ціни з ПДВ.",
+  "pricing": { "markup_pct": 0, "vat_pct": 20, "vat_included": true },
+  "diameters": [
+    { "d": 102, "base": 4050, "per_m": 2048 },
+    { "d": 127, "base": 4116, "per_m": 2486 },
+    { "d": 159, "base": 4512, "per_m": 2914 },
+    { "d": 219, "base": 7350, "per_m": 4384 },
+    { "d": 250, "base": 8000, "per_m": 5000 },
+    { "d": 300, "base": 9000, "per_m": 6000 }
+  ],
+  "coef": {
+    "pulleys_bearings": 4500,
+    "gear_base": 3000,
+    "meter_coef": 1.32,
+    "hopper_small": 2000,
+    "hopper_large": 3000,
+    "stand_small": 4000,
+    "stand_large": 5000,
+    "krot_coef": 0.5,
+    "trough_coef": 1.1,
+    "long_coef": 1.1,
+    "long_from": 10,
+    "small_limit": 160,
+    "overhead_coef": 1.15,
+    "markup_coef": 1.1,
+    "max_length": 20
+  },
+  "kw_table": {
+    "102": [1.1, 1.1, 1.5, 1.5, 1.5, 1.5, 2.2, 2.2, 2.2],
+    "127": [1.5, 1.5, 1.5, 1.5, 2.2, 2.2, 2.2, 2.2, 3, 3],
+    "159": [2.2, 2.2, 2.2, 2.2, 3, 3, 3, 3, 4, 4, 4, 4],
+    "219": [3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 5.5, 5.5],
+    "250": [3, 3, 3, 3, 4, 4, 4, 5, null, 7.5, 7.5, 7.5],
+    "300": [3, 3, 4, 4, 4, 4, 5.5, 5.5, 5.5, 5.5, 7.5, 7.5]
+  }
+}

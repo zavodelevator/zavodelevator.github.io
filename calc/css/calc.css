@@ -1,0 +1,28 @@
+body { background: #f8f9fa; font-family: Arial, sans-serif; }
+.container { max-width: 1200px; padding: 20px 16px; }
+.card { margin-top: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.label-title { color: gray; font-size: .9em; }
+
+.price-total { font-size: 2rem; font-weight: bold; color: #1e7e34; line-height: 1.2; margin-bottom: .5rem; }
+.breakdown td, .breakdown th { vertical-align: middle; }
+.breakdown tfoot td, .breakdown tfoot th { border-top: 1px solid #dee2e6; }
+.info-table td { padding: .15rem .3rem; }
+
+/* права панель параметрів */
+.panel-toggle { position: fixed; right: 0; top: 140px; z-index: 1040; writing-mode: vertical-rl; transform: rotate(180deg);
+  border-radius: 0 6px 6px 0; padding: 12px 6px; }
+#panel { position: fixed; top: 0; right: 0; height: 100%; width: 440px; max-width: 100%; background: #fff; z-index: 1050;
+  box-shadow: -4px 0 16px rgba(0,0,0,.2); transform: translateX(105%); transition: transform .25s ease; display: flex; flex-direction: column; }
+body.panel-open #panel { transform: translateX(0); }
+#panel .panel-head { padding: 12px 16px; border-bottom: 1px solid #dee2e6; display: flex; align-items: center; justify-content: space-between; }
+#panel-body { padding: 12px 16px; overflow-y: auto; flex: 1; }
+#panel .nav-tabs .nav-link { padding: .3rem .6rem; font-size: .85rem; }
+.panel-table input { min-width: 70px; padding: 2px 4px; }
+.panel-table th { font-size: .75rem; white-space: nowrap; }
+.panel-table td { padding: 2px; }
+.changed input, .changed select, td.changed input { background: #fff3cd; }
+.changed > label { font-weight: bold; }
+
+@media (max-width: 576px) {
+  .price-total { font-size: 1.6rem; }
+}

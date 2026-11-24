@@ -1,0 +1,17 @@
+{
+  "_note": "Шкребковий транспортер ТШ. Ціни з Google Sheet «РЕМОНТ шнека», вкладка ТШ (з ПДВ). Формула = CRM TshConveyorCalculator.",
+  "pricing": { "markup_pct": 0, "vat_pct": 20, "vat_included": true },
+  "base_length": 1.5,
+  "max_length": 60,
+  "variants": [
+    { "model": "ТШ 25",  "chain": "трд 38 гума",   "drive": 15800, "tension": 13300, "per_m": 6200,  "liner": 1200, "distrib": 2000 },
+    { "model": "ТШ 25",  "chain": "трд 38 пє 500", "drive": 15800, "tension": 13300, "per_m": 6750,  "liner": 1200, "distrib": 2000 },
+    { "model": "ТШ 25",  "chain": "M-81x пє 500",  "drive": 15800, "tension": 13300, "per_m": 11250, "liner": 1200, "distrib": 2000 },
+    { "model": "ТШ 50",  "chain": "трд 38 гума",   "drive": 18600, "tension": 15700, "per_m": 6900,  "liner": 1500, "distrib": 2200 },
+    { "model": "ТШ 50",  "chain": "трд 38 пє 500", "drive": 18600, "tension": 15700, "per_m": 7500,  "liner": 1500, "distrib": 2200 },
+    { "model": "ТШ 50",  "chain": "M-81x пє 500",  "drive": 18600, "tension": 15700, "per_m": 12500, "liner": 1500, "distrib": 2200 },
+    { "model": "ТШ 100", "chain": "трд 38 пє 500", "drive": 22320, "tension": 18840, "per_m": 8700,  "liner": 1800, "distrib": 2500 },
+    { "model": "ТШ 100", "chain": "M-81x пє 500",  "drive": 22320, "tension": 18840, "per_m": 14400, "liner": 1800, "distrib": 2500 },
+    { "model": "ТШ 200", "chain": "M-112 пє 500",  "drive": 28000, "tension": 26000, "per_m": 19800, "liner": 2100, "distrib": 3000 }
+  ]
+}

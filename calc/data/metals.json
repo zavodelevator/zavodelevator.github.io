@@ -1,0 +1,11 @@
+{
+  "_note": "Ціни металу, грн/кг без ПДВ. Штрипс і труба — з Google Sheet «РЕМОНТ шнека», вкладка РШ (Цш = 65, Цт = 130). Решта — PricingParameter material_* з CRM.",
+  "strip":   { "label": "Штрипс (спіраль), ст.3", "price": 65 },
+  "tube":    { "label": "Труба (вал шнека), ст.3", "price": 130 },
+  "st3":     { "label": "Лист/прокат ст.3", "price": 50 },
+  "09g2s":   { "label": "09Г2С", "price": 55 },
+  "st45":    { "label": "Ст.45", "price": 75 },
+  "aisi304": { "label": "AISI 304", "price": 140 },
+  "hardox":  { "label": "Hardox", "price": 125 },
+  "density": 7.85
+}

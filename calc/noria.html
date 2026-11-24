@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Норія ковшова</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/calc.css">
+  <link rel="icon" href="https://fonts.gstatic.com/s/i/materialiconsoutlined/home/v6/24px.svg">
+</head>
+<body>
+  <!-- NAV:START -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="index.html">Agrohelix · калькулятори</a>
+    <ul class="navbar-nav flex-row flex-wrap">
+      <li class="nav-item mr-3"><a class="nav-link" href="repair.html">Ремонт шнека</a></li>
+      <li class="nav-item mr-3"><a class="nav-link" href="screw.html">Шнековий транспортер</a></li>
+      <li class="nav-item mr-3 active"><a class="nav-link" href="noria.html">Норія</a></li>
+      <li class="nav-item mr-3"><a class="nav-link" href="tsh.html">ТШ</a></li>
+      <li class="nav-item mr-3"><a class="nav-link" href="spiral.html">Спіраль</a></li>
+    </ul>
+  </nav>
+  <!-- NAV:END -->
+
+  <div class="container">
+    <div class="card">
+      <div class="card-header">Норія ковшова</div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-4">
+            <form id="inputs">
+              <div class="form-group">
+                <label for="capacity">Продуктивність</label>
+                <select class="form-control" id="capacity" name="capacity"></select>
+              </div>
+              <div class="form-group">
+                <label for="height">Висота норії, м</label>
+                <input type="number" step="any" class="form-control" id="height" name="height" value="12">
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="drive" name="drive" checked>
+                <label class="form-check-label" for="drive">З мотор-редуктором</label>
+              </div>
+            </form>
+          </div>
+          <div class="col-md-8" id="result"><div class="text-muted">Завантаження…</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL:START -->
+  <button type="button" class="btn btn-primary panel-toggle" id="panel-open">⚙ Параметри</button>
+  <aside id="panel" aria-label="Параметри розрахунку">
+    <div class="panel-head">
+      <strong>Параметри</strong>
+      <div>
+        <button type="button" class="btn btn-sm btn-outline-secondary" id="panel-reset" title="Повернути значення з JSON">Скинути</button>
+        <button type="button" class="btn btn-sm btn-outline-dark" id="panel-close">✕</button>
+      </div>
+    </div>
+    <div class="small text-muted px-3 pt-2">Зміни діють лише на поточний розрахунок. Постійні ціни — у файлах <code>calc/data/*.json</code>.</div>
+    <div id="panel-body"></div>
+  </aside>
+  <!-- PANEL:END -->
+
+  <script src="js/core.js"></script>
+  <script src="js/noria.js"></script>
+</body>
+</html>

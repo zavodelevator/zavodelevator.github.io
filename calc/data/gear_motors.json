@@ -1,0 +1,16 @@
+{
+  "_note": "Мотор-редуктори: кВт → ціна, грн. Ціни поки 0 — заповнити (каталог у CRM, таблиця drive_prices). Ціни з ПДВ, як у CRM (purchase_price_vat).",
+  "items": [
+    { "kw": 0.55, "rpm": 0, "gab": "", "price": 0 },
+    { "kw": 0.75, "rpm": 0, "gab": "", "price": 0 },
+    { "kw": 1.1,  "rpm": 0, "gab": "", "price": 0 },
+    { "kw": 1.5,  "rpm": 0, "gab": "", "price": 0 },
+    { "kw": 2.2,  "rpm": 0, "gab": "", "price": 0 },
+    { "kw": 3.0,  "rpm": 0, "gab": "", "price": 0 },
+    { "kw": 4.0,  "rpm": 0, "gab": "", "price": 0 },
+    { "kw": 5.5,  "rpm": 0, "gab": "", "price": 0 },
+    { "kw": 7.5,  "rpm": 0, "gab": "", "price": 0 },
+    { "kw": 11,   "rpm": 0, "gab": "", "price": 0 },
+    { "kw": 15,   "rpm": 0, "gab": "", "price": 0 }
+  ]
+}
