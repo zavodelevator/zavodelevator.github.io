@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Склад спіралей · Спіраль цільнокатана</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <style>
+    .product-block {
+      border: 1px solid #000;
+      padding: 10px;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+<!-- Опис: Сторінка складу спіралей. Фільтрація результатів. -->
+
+<div class="container">
+
+       <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="index.html">Agrohelix · калькулятори</a>
+    <ul class="navbar-nav flex-row flex-wrap">
+      <li class="nav-item mr-3"><a class="nav-link" href="repair.html">Ремонт шнека</a></li>
+      <li class="nav-item mr-3"><a class="nav-link" href="screw.html">Шнековий транспортер</a></li>
+      <li class="nav-item mr-3"><a class="nav-link" href="noria.html">Норія</a></li>
+      <li class="nav-item mr-3"><a class="nav-link" href="tsh.html">ТШ</a></li>
+      <li class="nav-item mr-3"><a class="nav-link" href="belt.html">Стрічковий</a></li>
+      <li class="nav-item mr-3"><a class="nav-link" href="spiral.html">Спіраль</a></li>
+      <li class="nav-item mr-3 active"><a class="nav-link" href="sklad_spiral.html">Склад спіралей</a></li>
+    </ul>
+  </nav>
+
+ 
+  <!-- Основний контейнер сторінки -->
+  <form class="form-inline">
+    <div class="form-group mr-2">
+      <!-- Поле фільтрації за параметром (dd або діапазони) -->
+      <input type="text" class="form-control" id="dd" placeholder="Введіть параметр">
+    </div>
+
+    <div style="width: 10px; height: 50px;"></div>
+
+
+    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+      <label class="btn btn-outline-primary">
+        <input type="radio" name="options" id="option2" value="table" checked> table
+      </label>
+      <label class="btn btn-outline-primary active">
+        <input type="radio" name="options" id="option1" value="block"> block
+      </label>
+    </div>
+    
+    <div style="width: 10px; height: 50px;"></div>
+    
+    <div class="btn-group btn-group-toggle" data-toggle="buttons" style="display: none;">
+      <label class="btn btn-outline-primary active">
+        <input type="radio" name="options" id="option3" value="of" checked> of
+      </label>
+      <label class="btn btn-outline-primary">
+        <input type="radio" name="options" id="option4" value="Manager"> Manager
+      </label>
+    </div>
+    
+    
+
+    <div style="width: 15px; height: 50px;"></div>
+    
+
+    <!-- Кнопка запуску фільтрації -->
+    <button type="button" class="btn btn-info" onclick="displayContent()">Фільтрувати</button>
+    
+  </form>
+
+  <div class="product-container">
+    <!-- Контейнер виводу відфільтрованих результатів -->
+                    
+  </div>
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="js/sklad_spiral.js"></script>
+
+
+</body>
+</html>
