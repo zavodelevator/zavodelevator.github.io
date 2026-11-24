@@ -116,7 +116,7 @@
         ] },
         { tab: 'Потужність', note: 'кВт для ' + name + '. 0 — не задано (мотор обирається вручну). Постійно — calc/data/tsh.json.',
           fields: Dt.tsh.models[i].kw_by_length.map(function (r, j) { return { path: P + 'kw_by_length.' + j + '.kw', label: 'Звичайний, до ' + r.max_length + ' м', unit: 'кВт' }; })
-            .concat(Dt.tsh.models[i].kw_pit.map(function (r, j) { return { path: P + 'kw_pit.' + j + '.kw', label: 'Завальна яма, розподільник ' + r.distrib_m + ' м', unit: 'кВт' }; })) },
+            .concat(Dt.tsh.models[i].kw_pit.map(function (r, j) { return { path: P + 'kw_pit.' + j + '.kw', label: 'Завальна яма: доплата за розподільник ' + r.distrib_m + ' м', unit: '+кВт' }; })) },
         { tab: 'Геометрія', fields: [
           { path: 'tsh.base_length', label: 'Довжина двох головок разом', unit: 'м' },
           { path: 'tsh.chain_extra_m', label: 'Запас ланцюга', unit: 'м' },
@@ -152,9 +152,16 @@
         rows.push({ name: 'Розподільний механізм (завальна яма)', qty: dl, unit: 'м', price: m.distrib, note: f(m.distrib, 0) + ' грн/м для ' + m.model });
       }
       // потужність: яма — за довжиною розподільника, інакше — за довжиною транспортера
+      // потужність = основна за довжиною + (у ямі) доплата за розподільник — як у старій сторінці ТШ (tsh_leangth_kWt)
       var kwNeed = 0, kwSrc = '';
-      if (dl) { var pr = m.kw_pit.filter(function (r) { return r.distrib_m >= Math.ceil(dl - 1e-9) && r.kw > 0; })[0]; if (pr) { kwNeed = pr.kw; kwSrc = 'яма, розподільник до ' + pr.distrib_m + ' м'; } }
-      else { var lr = m.kw_by_length.filter(function (r) { return r.max_length >= L - 1e-9 && r.kw > 0; })[0]; if (lr) { kwNeed = lr.kw; kwSrc = 'до ' + lr.max_length + ' м'; } }
+      var lr = m.kw_by_length.filter(function (r) { return r.max_length >= L - 1e-9 && r.kw > 0; })[0];
+      if (lr) { kwNeed = lr.kw; kwSrc = 'до ' + lr.max_length + ' м: ' + lr.kw + ' кВт'; }
+      if (dl) {
+        var pr = m.kw_pit.filter(function (r) { return r.distrib_m >= Math.ceil(dl - 1e-9) && r.kw > 0; })[0];
+        if (pr) { kwNeed = Math.round((kwNeed + pr.kw) * 100) / 100; kwSrc += (kwSrc ? ' + ' : '') + 'розподільник до ' + pr.distrib_m + ' м: +' + pr.kw + ' кВт'; }
+        else kwNeed = 0;
+      }
+      if (kwNeed) { var std = Dt.noria_catalog.gear_motors.map(function (g) { return g.kw; }).filter(function (k) { return k >= kwNeed - 1e-9; }).sort(function (a, b) { return a - b; })[0]; if (std && std !== kwNeed) { kwSrc += ' → ' + std + ' кВт (найближчий стандарт)'; kwNeed = std; } }
       var motorId = inp.motor;
       if (motorId === 'auto') {
         var cands = Dt.noria_catalog.gear_motors.filter(function (g) { return g.kw === kwNeed; }).sort(function (a, b) { return a.price - b.price; });

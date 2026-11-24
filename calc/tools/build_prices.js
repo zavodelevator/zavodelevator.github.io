@@ -110,7 +110,7 @@ noria.models.forEach((m, i) => Object.keys(nf).forEach((f) => add(G9, 'НКЗ-' 
 const G10 = 'Потужності мотор-редукторів, кВт';
 tsh.models.forEach((m, i) => {
   m.kw_by_length.forEach((r, j) => add(G10, m.model + ' — звичайний', 'kw.tsh.' + m.model.replace(/\s/g, '') + '.L' + r.max_length, 'до ' + r.max_length + ' м', 'кВт', 'tsh.models.' + i + '.kw_by_length.' + j + '.kw', ['ТШ']));
-  m.kw_pit.forEach((r, j) => add(G10, m.model + ' — завальна яма', 'kw.tsh.' + m.model.replace(/\s/g, '') + '.pit' + r.distrib_m, 'розподільник ' + r.distrib_m + ' м', 'кВт', 'tsh.models.' + i + '.kw_pit.' + j + '.kw', ['ТШ']));
+  m.kw_pit.forEach((r, j) => add(G10, m.model + ' — завальна яма (доплата до основної)', 'kw.tsh.' + m.model.replace(/\s/g, '') + '.pit' + r.distrib_m, 'розподільник ' + r.distrib_m + ' м', '+кВт', 'tsh.models.' + i + '.kw_pit.' + j + '.kw', ['ТШ']));
 });
 belt.widths.forEach((w, i) => w.kw_by_length.forEach((r, j) => add(G10, 'Стрічка ' + w.width + ' мм', 'kw.belt.' + w.width + '.L' + r.max_length, 'до ' + r.max_length + ' м', 'кВт', 'belt_conveyor.widths.' + i + '.kw_by_length.' + j + '.kw', ['Стрічковий'])));
 
