@@ -164,17 +164,21 @@
   }
 
   // ---------- розрахунок і розшифровка ----------
+  function round3(x) { return Math.round(x / 3) * 3; }
+
   function totals(rows, pricing) {
     var cost = rows.reduce(function (s, r) { return s + num(r.qty) * num(r.price); }, 0);
+    var r3 = pricing.rounding === 'round3' ? round3 : ceil3;
+    if (pricing.subtotal_round3) cost = round3(cost);
     var m = num(pricing.markup_pct), v = num(pricing.vat_pct);
     var marked = cost * (1 + m / 100);
     var total, noVat;
     if (pricing.vat_included) {
-      total = ceil3(marked);
+      total = r3(marked);
       noVat = total / (1 + v / 100);
     } else {
       noVat = marked;
-      total = ceil3(marked * (1 + v / 100));
+      total = r3(marked * (1 + v / 100));
     }
     return { cost: cost, markup: marked - cost, markup_pct: m, noVat: noVat, vat: total - noVat, vat_pct: v, total: total };
   }
@@ -218,7 +222,7 @@
       '<tr><td colspan="3">Націнка ' + money(t.markup_pct, 1) + '%</td><td class="text-right">' + money(t.markup) + '</td></tr>' +
       '<tr><td colspan="3">Ціна без ПДВ</td><td class="text-right">' + money(t.noVat) + '</td></tr>' +
       '<tr><td colspan="3">ПДВ ' + money(t.vat_pct, 0) + '%</td><td class="text-right">' + money(t.vat) + '</td></tr>' +
-      '<tr class="table-success"><th colspan="3">Ціна з ПДВ (вгору до кратного 3)</th><th class="text-right">' + money(t.total, 0) + '</th></tr>' +
+      '<tr class="table-success"><th colspan="3">Ціна з ПДВ (' + (pricing.rounding === 'round3' ? 'округлено' : 'вгору') + ' до кратного 3)</th><th class="text-right">' + money(t.total, 0) + '</th></tr>' +
       '</tfoot></table></div>' +
       (info ? '<div class="small font-weight-bold mt-3 mb-1">Розраховані параметри</div><table class="table table-sm small info-table"><tbody>' + info + '</tbody></table>' : '');
   }
