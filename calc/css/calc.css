@@ -20,7 +20,9 @@ body.panel-open #panel { transform: translateX(0); }
 .panel-table input { min-width: 70px; padding: 2px 4px; }
 .panel-table th { font-size: .75rem; white-space: nowrap; }
 .panel-table td { padding: 2px; }
-.changed input, .changed select, td.changed input { background: #fff3cd; }
+.changed input, .changed select, td.changed input { background: #d6ecff; border-color: #5b9bd5; }
+.ai input, td.ai input { background: #ffe98a; border-color: #e0b400; }
+.ai-banner { background: #fff8d6; border: 1px solid #e0b400; color: #5c4400; }
 .changed > label { font-weight: bold; }
 
 @media (max-width: 576px) {

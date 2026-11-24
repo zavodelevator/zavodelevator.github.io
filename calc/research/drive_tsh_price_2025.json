@@ -1,0 +1,373 @@
+[
+ {
+  "productivity": "25",
+  "conveyor_type": "solid, collapsible",
+  "name": "натяжна секція",
+  "calk_position": "1",
+  "price": "13300"
+ },
+ {
+  "productivity": "25",
+  "conveyor_type": "solid, collapsible",
+  "name": "привідна секція",
+  "calk_position": "1",
+  "price": "15800"
+ },
+ {
+  "productivity": "25",
+  "conveyor_type": "collapsible",
+  "name": "секція розбірна",
+  "calk_position": "1, 3",
+  "price": "3600"
+ },
+ {
+  "productivity": "25",
+  "conveyor_type": "solid",
+  "name": "секція зварна",
+  "calk_position": "1, 3",
+  "price": "3500"
+ },
+ {
+  "productivity": "25",
+  "conveyor_type": "solid, collapsible",
+  "name": "футерува́ння пластиком пє 500",
+  "calk_position": "",
+  "price": "900"
+ },
+ {
+  "productivity": "25",
+  "conveyor_type": "solid, collapsible",
+  "name": "футерува́ння пластиком пє 1000",
+  "calk_position": "",
+  "price": "1100"
+ },
+ {
+  "productivity": "25",
+  "conveyor_type": "solid, collapsible",
+  "name": "розподільний механізм",
+  "calk_position": "",
+  "price": "2500"
+ },
+ {
+  "productivity": "25",
+  "conveyor_type": "solid, collapsible",
+  "name": "грунт",
+  "calk_position": "",
+  "price": "200"
+ },
+ {
+  "productivity": "25",
+  "conveyor_type": "solid, collapsible",
+  "name": "емаль",
+  "calk_position": "",
+  "price": "800"
+ },
+ {
+  "productivity": "25",
+  "conveyor_type": "solid, collapsible",
+  "name": "порошкове ",
+  "calk_position": "",
+  "price": "1000"
+ },
+ {
+  "productivity": "25",
+  "conveyor_type": "solid, collapsible",
+  "name": "цинк",
+  "calk_position": "",
+  "price": "1500"
+ },
+ {
+  "productivity": "25",
+  "conveyor_type": "solid, collapsible",
+  "name": "ланцюг трд 38 шкребок резина",
+  "calk_position": "1, 3",
+  "price": "1300"
+ },
+ {
+  "productivity": "25",
+  "conveyor_type": "solid, collapsible",
+  "name": "ланцюг трд 38 шкребок ПЄ-500",
+  "calk_position": "1, 3",
+  "price": "1500"
+ },
+ {
+  "productivity": "25",
+  "conveyor_type": "collapsible",
+  "name": "ланцюг M 81x шкребок ПЄ-500",
+  "calk_position": "1, 3",
+  "price": "1800"
+ },
+ {
+  "productivity": "25",
+  "conveyor_type": "collapsible",
+  "name": "ланцюг M112 шкребок ПЄ-500",
+  "calk_position": "1, 3",
+  "price": "2700"
+ },
+ {
+  "productivity": "50",
+  "conveyor_type": "solid, collapsible",
+  "name": "натяжна секція",
+  "calk_position": "",
+  "price": "15700"
+ },
+ {
+  "productivity": "50",
+  "conveyor_type": "solid, collapsible",
+  "name": "привідна секція",
+  "calk_position": "",
+  "price": "18600"
+ },
+ {
+  "productivity": "50",
+  "conveyor_type": "collapsible",
+  "name": "секція розбірна",
+  "calk_position": "",
+  "price": "4000"
+ },
+ {
+  "productivity": "50",
+  "conveyor_type": "solid",
+  "name": "секція зварна",
+  "calk_position": "",
+  "price": "3900"
+ },
+ {
+  "productivity": "50",
+  "conveyor_type": "solid, collapsible",
+  "name": "ланцюг трд 38 шкребок резина",
+  "calk_position": "",
+  "price": "1300"
+ },
+ {
+  "productivity": "50",
+  "conveyor_type": "solid, collapsible",
+  "name": "ланцюг трд 38 шкребок ПЄ-500",
+  "calk_position": "",
+  "price": "1500"
+ },
+ {
+  "productivity": "50",
+  "conveyor_type": "collapsible",
+  "name": "ланцюг M 81x шкребок ПЄ-500",
+  "calk_position": "",
+  "price": "1800"
+ },
+ {
+  "productivity": "50",
+  "conveyor_type": "collapsible",
+  "name": "ланцюг M112 шкребок ПЄ-500",
+  "calk_position": "",
+  "price": "2700"
+ },
+ {
+  "productivity": "50",
+  "conveyor_type": "solid, collapsible",
+  "name": "футерува́ння пластиком пє 500",
+  "calk_position": "",
+  "price": "1000"
+ },
+ {
+  "productivity": "50",
+  "conveyor_type": "solid, collapsible",
+  "name": "футерува́ння пластиком пє 1000",
+  "calk_position": "",
+  "price": "1200"
+ },
+ {
+  "productivity": "50",
+  "conveyor_type": "solid, collapsible",
+  "name": "розподільний механізм",
+  "calk_position": "",
+  "price": "2500"
+ },
+ {
+  "productivity": "50",
+  "conveyor_type": "solid, collapsible",
+  "name": "емаль",
+  "calk_position": "",
+  "price": "800"
+ },
+ {
+  "productivity": "50",
+  "conveyor_type": "solid, collapsible",
+  "name": "порошкове ",
+  "calk_position": "",
+  "price": "1000"
+ },
+ {
+  "productivity": "50",
+  "conveyor_type": "solid, collapsible",
+  "name": "цинк",
+  "calk_position": "",
+  "price": "1500"
+ },
+ {
+  "productivity": "100",
+  "conveyor_type": "collapsible",
+  "name": "натяжна секція",
+  "calk_position": "",
+  "price": "30"
+ },
+ {
+  "productivity": "100",
+  "conveyor_type": "collapsible",
+  "name": "привідна секція",
+  "calk_position": "",
+  "price": "31"
+ },
+ {
+  "productivity": "100",
+  "conveyor_type": "collapsible",
+  "name": "секція розбірна",
+  "calk_position": "",
+  "price": "32"
+ },
+ {
+  "productivity": "100",
+  "conveyor_type": "collapsible",
+  "name": "футерува́ння пластиком пє 500",
+  "calk_position": "",
+  "price": "33"
+ },
+ {
+  "productivity": "100",
+  "conveyor_type": "collapsible",
+  "name": "футерува́ння пластиком пє 1000",
+  "calk_position": "",
+  "price": "33.5"
+ },
+ {
+  "productivity": "100",
+  "conveyor_type": "collapsible",
+  "name": "розподільний механізм",
+  "calk_position": "",
+  "price": "34"
+ },
+ {
+  "productivity": "100",
+  "conveyor_type": "collapsible",
+  "name": "емаль",
+  "calk_position": "",
+  "price": "35"
+ },
+ {
+  "productivity": "100",
+  "conveyor_type": "collapsible",
+  "name": "порошкове ",
+  "calk_position": "",
+  "price": "36"
+ },
+ {
+  "productivity": "100",
+  "conveyor_type": "collapsible",
+  "name": "цинк",
+  "calk_position": "",
+  "price": "37"
+ },
+ {
+  "productivity": "100",
+  "conveyor_type": "collapsible",
+  "name": "ланцюг M 81x шкребок резина",
+  "calk_position": "",
+  "price": "38"
+ },
+ {
+  "productivity": "100",
+  "conveyor_type": "collapsible",
+  "name": "ланцюг M 81x шкребок ПЄ-500",
+  "calk_position": "",
+  "price": "39"
+ },
+ {
+  "productivity": "100",
+  "conveyor_type": "collapsible",
+  "name": "ланцюг M112 шкребок ПЄ-500",
+  "calk_position": "",
+  "price": "40"
+ },
+ {
+  "productivity": "200",
+  "conveyor_type": "collapsible",
+  "name": "натяжна секція",
+  "calk_position": "",
+  "price": "41"
+ },
+ {
+  "productivity": "200",
+  "conveyor_type": "collapsible",
+  "name": "привідна секція",
+  "calk_position": "",
+  "price": "42"
+ },
+ {
+  "productivity": "200",
+  "conveyor_type": "collapsible",
+  "name": "секція розбірна",
+  "calk_position": "",
+  "price": "43"
+ },
+ {
+  "productivity": "200",
+  "conveyor_type": "collapsible",
+  "name": "футерува́ння пластиком пє 500",
+  "calk_position": "",
+  "price": "45"
+ },
+ {
+  "productivity": "200",
+  "conveyor_type": "collapsible",
+  "name": "футерува́ння пластиком пє 1000",
+  "calk_position": "",
+  "price": "45.5"
+ },
+ {
+  "productivity": "200",
+  "conveyor_type": "collapsible",
+  "name": "розподільний механізм",
+  "calk_position": "",
+  "price": "46"
+ },
+ {
+  "productivity": "200",
+  "conveyor_type": "collapsible",
+  "name": "емаль",
+  "calk_position": "",
+  "price": "47"
+ },
+ {
+  "productivity": "200",
+  "conveyor_type": "collapsible",
+  "name": "порошкове ",
+  "calk_position": "",
+  "price": "48"
+ },
+ {
+  "productivity": "200",
+  "conveyor_type": "collapsible",
+  "name": "цинк",
+  "calk_position": "",
+  "price": "49"
+ },
+ {
+  "productivity": "200",
+  "conveyor_type": "collapsible",
+  "name": "ланцюг M 81x шкребок резина",
+  "calk_position": "",
+  "price": "50"
+ },
+ {
+  "productivity": "200",
+  "conveyor_type": "collapsible",
+  "name": "ланцюг M 81x шкребок ПЄ-500",
+  "calk_position": "",
+  "price": "51"
+ },
+ {
+  "productivity": "200",
+  "conveyor_type": "collapsible",
+  "name": "ланцюг M112 шкребок ПЄ-500",
+  "calk_position": "",
+  "price": "52"
+ }
+]

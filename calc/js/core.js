@@ -41,12 +41,12 @@
   }
 
   // ---------- завантаження ----------
-  var priceInfo = null;
+  var priceInfo = null, aiPaths = {};
   function showPriceInfo() {
     var el = document.getElementById('price-file');
     if (!el || !priceInfo) return;
     el.innerHTML = priceInfo.file
-      ? 'Ціни: <a href="prices.html">' + esc(priceInfo.file.replace(/^prices_|\.json$/g, '').replace('_', ' ').replace(/-(\d\d)$/, ':$1')) + '</a>'
+      ? 'Ціни: <a href="prices.html">' + esc(priceInfo.file.replace(/^prices_/, '').replace('.json', '').replace(/(\d{4}-\d\d-\d\d)_(\d\d)-(\d\d)/, '$1 $2:$3')) + '</a>'
       : '<span class="text-danger">Файл цін не знайдено — ціни з data/*.json</span>';
   }
 
@@ -55,11 +55,16 @@
       return fetch('data/' + n + '.json', { cache: 'no-store' }).then(function (r) {
         if (!r.ok) throw new Error('data/' + n + '.json: HTTP ' + r.status);
         return r.json();
+      }).catch(function (e) {
+        var B = window.CALC_BUNDLE;  // відкрито з файлу (file://) — беремо вбудований пакет
+        if (B && B.data && B.data[n]) return JSON.parse(JSON.stringify(B.data[n]));
+        throw e;
       }).then(function (j) { original[n] = j; });
     })).then(function () {
       if (!window.Prices) return;
       return window.Prices.latest('prices/').then(function (pr) {
         var n = window.Prices.apply(original, pr.data);
+        (pr.data.items || []).forEach(function (it) { if (it.ai) (it.paths || []).forEach(function (p) { aiPaths[p] = it; }); });
         priceInfo = { file: pr.file, applied: n };
       }).catch(function (e) { priceInfo = { error: e.message }; });
     }).then(function () { D = clone(original); showPriceInfo(); });
@@ -109,7 +114,8 @@
         }).join('') + '</select></div>';
     }
     if (f.type === 'table') return tableHtml(f);
-    return '<div class="form-group mb-2 row no-gutters align-items-center' + (changed ? ' changed' : '') + '">' +
+    var aiIt = aiPaths[f.path];
+    return '<div class="form-group mb-2 row no-gutters align-items-center' + (changed ? ' changed' : '') + (aiIt && !changed ? ' ai' : '') + '"' + (aiIt ? ' title="Заповнив Claude: ' + esc(aiIt.note || '') + '"' : '') + '>' +
       '<label class="col-7 mb-0 small" for="' + id + '">' + esc(f.label) + (f.unit ? ', <span class="text-muted">' + esc(f.unit) + '</span>' : '') + '</label>' +
       '<div class="col-5"><input type="number" step="any" class="form-control form-control-sm text-right" id="' + id + '" data-path="' + f.path + '" value="' + esc(v) + '"></div></div>';
   }
@@ -123,7 +129,8 @@
         var p = f.path + '.' + i + '.' + c.key;
         if (c.readonly) return '<td class="text-nowrap">' + esc(r[c.key]) + '</td>';
         var changed = orows[i] && JSON.stringify(r[c.key]) !== JSON.stringify(orows[i][c.key]);
-        return '<td' + (changed ? ' class="changed"' : '') + '><input type="number" step="any" class="form-control form-control-sm text-right" data-path="' + p + '" value="' + esc(r[c.key]) + '"></td>';
+        var aiIt = aiPaths[p];
+        return '<td class="' + (changed ? 'changed' : (aiIt ? 'ai' : '')) + '"' + (aiIt ? ' title="Заповнив Claude: ' + esc(aiIt.note || '') + '"' : '') + '><input type="number" step="any" class="form-control form-control-sm text-right" data-path="' + p + '" value="' + esc(r[c.key]) + '"></td>';
       }).join('') + '</tr>';
     }).join('');
     return '<div class="mb-2">' + (f.label ? '<div class="small font-weight-bold mb-1">' + esc(f.label) + '</div>' : '') +
@@ -244,6 +251,8 @@
     var info = (out.info || []).map(function (i) {
       return '<tr><td>' + esc(i.label) + '</td><td class="text-right">' + esc(i.value) + '</td></tr>';
     }).join('');
+    var nAi = Object.keys(aiPaths).filter(function (p) { return original[p.split('.')[0]] !== undefined; }).length;
+    var aiBanner = nAi ? '<div class="alert py-1 px-2 small mb-2 ai-banner">✎ ' + nAi + ' цін на цій сторінці заповнив Claude (з ваших таблиць, інтернету або оцінка) — вони <b>жовті</b> в «⚙ Параметри» і в <a href="prices.html">⚙ Ціни</a>. Перевірте перед відправкою клієнту.</div>' : '';
     var warn = (out.warnings || []).map(function (w) {
       return '<div class="alert alert-warning py-1 px-2 small mb-2">' + esc(w) + '</div>';
     }).join('');
@@ -251,7 +260,7 @@
     el.innerHTML =
       '<div class="price-total">' + money(t.total, 0) + ' грн <span class="small text-muted">з ПДВ</span></div>' +
       (out.title ? '<div class="mb-3 font-weight-bold">' + esc(out.title) + '</div>' : '') +
-      warn +
+      aiBanner + warn +
       '<div class="table-responsive"><table class="table table-sm breakdown"><thead><tr><th>Складова</th><th class="text-right">К-сть</th><th class="text-right">Ціна, грн</th><th class="text-right">Сума, грн</th></tr></thead><tbody>' +
       rowsHtml + '</tbody><tfoot>' +
       '<tr><th colspan="3">Собівартість' + esc(vatNote) + '</th><th class="text-right">' + money(t.cost) + '</th></tr>' +

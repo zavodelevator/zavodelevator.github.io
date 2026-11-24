@@ -63,6 +63,10 @@
       if (!best) throw new Error('Немає файлів prices_*.json');
       return fetch(base + best, { cache: 'no-store' }).then(function (r) { return r.json(); })
         .then(function (data) { return { file: best, time: bestT, data: data }; });
+    }).catch(function (e) {
+      var B = window.CALC_BUNDLE;  // відкрито з файлу (file://) — вбудований пакет
+      if (B && B.prices) return { file: B.prices.file + ' (вбудований)', time: stamp(B.prices.file), data: JSON.parse(JSON.stringify(B.prices.data)) };
+      throw e;
     });
   }
 

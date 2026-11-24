@@ -16,6 +16,7 @@ for (const [id, p] of Object.entries(patch)) {
   if (p.value !== undefined && p.value !== it.value) changes.push({ id, label: it.group + ' · ' + (it.sub ? it.sub + ' · ' : '') + it.label, from: it.value, to: p.value });
   if (p.value !== undefined) it.value = p.value;
   if (p.note) it.note = p.note;
+  if (p.ai !== undefined) { if (p.ai) it.ai = p.ai; else delete it.ai; }
 }
 if (missing.length) { console.error('Невідомі id:', missing.join(', ')); process.exit(1); }
 const d = new Date(), pad = (x) => String(x).padStart(2, '0');

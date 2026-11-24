@@ -9,11 +9,14 @@
   <link rel="icon" href="https://fonts.gstatic.com/s/i/materialiconsoutlined/settings/v6/24px.svg">
   <style>
     .pe-group > .card-header { cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-    .pe-group .badge-changed { background: #ffc107; }
     .pe-sub { font-weight: bold; font-size: .9rem; margin: .75rem 0 .25rem; }
     .pe-table td { vertical-align: middle; padding: .25rem .4rem; }
     .pe-table input { max-width: 130px; margin-left: auto; text-align: right; }
-    .pe-table tr.changed input { background: #fff3cd; font-weight: bold; }
+    .pe-table tr.ai td { background: #fff8d6; }
+    .pe-table tr.ai input { background: #ffe98a; border-color: #e0b400; }
+    .pe-table tr.changed input { background: #d6ecff; border-color: #5b9bd5; font-weight: bold; }
+    .pe-ai-badge { background: #ffd43b; color: #5c4400; font-weight: normal; }
+    .pe-group .badge-changed { background: #5b9bd5; color: #fff; }
     .pe-used .badge { font-weight: normal; margin: 0 2px 2px 0; }
     .pe-note { font-size: .75rem; color: #6c757d; }
     .pe-was { font-size: .72rem; color: #6c757d; white-space: nowrap; }
@@ -50,11 +53,13 @@
             <li>Змініть ціни нижче (змінені поля підсвічуються жовтим) і натисніть <b>«Завантажити JSON»</b> — файл збережеться з поточною датою й часом у назві.</li>
             <li>Покладіть файл на GitHub у папку <a href="https://github.com/zavodelevator/zavodelevator.github.io/tree/master/calc/prices" target="_blank" rel="noopener">calc/prices</a> (Add file → Upload files → Commit). Старі файли не видаляйте — це історія цін.</li>
             <li>Однакові ціни (той самий товар у кількох калькуляторах) показано <b>один раз</b>; під ціною видно, де вона використовується.</li>
+            <li><span class="badge pe-ai-badge">✎ жовті</span> — ціни, які заповнив Claude (з ваших таблиць, з інтернету або оцінка). Неточні: перевірте й виправте або натисніть «✓ підтвердити». Синім — змінені вами.</li>
             <li>Ціни норії з каталогу НКЗ (головки, башмаки, шахти, ковші, стрічки, ланцюги) змінюються в Google-таблиці НКЗ, не тут.</li>
           </ol>
         </details>
         <div id="pe-bar" class="d-flex flex-wrap align-items-center">
           <input type="search" class="form-control form-control-sm mr-2 mb-1" id="pe-search" placeholder="Пошук: сталь, ТШ 50, підвіс…" style="max-width:280px">
+          <button class="btn btn-sm btn-outline-warning mr-2 mb-1" id="pe-only-ai">Лише неточні ✎</button>
           <button class="btn btn-sm btn-outline-secondary mr-2 mb-1" id="pe-only-changed">Лише змінені</button>
           <button class="btn btn-sm btn-outline-secondary mr-2 mb-1" id="pe-expand">Розгорнути все</button>
           <label class="btn btn-sm btn-outline-secondary mr-2 mb-1">Відкрити файл…<input type="file" id="pe-open" accept=".json" hidden></label>
@@ -66,6 +71,7 @@
       </div>
     </div>
   </div>
+  <script src="js/data_bundle.js"></script>
   <script src="js/prices.js"></script>
   <script src="js/prices_editor.js"></script>
 </body>
