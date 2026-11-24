@@ -22,8 +22,8 @@
    "label": "М-81х, пластикові шкребки"
   },
   {
-   "key": "m125_plastic",
-   "label": "М-125, пластикові шкребки"
+   "key": "m112_plastic",
+   "label": "М-112, пластикові шкребки"
   }
  ],
  "models": [
@@ -39,7 +39,7 @@
     "trd38_rubber": 0,
     "trd38_plastic": 0,
     "m81x_plastic": 0,
-    "m125_plastic": 0
+    "m112_plastic": 0
    }
   },
   {
@@ -54,7 +54,7 @@
     "trd38_rubber": 0,
     "trd38_plastic": 0,
     "m81x_plastic": 0,
-    "m125_plastic": 0
+    "m112_plastic": 0
    }
   },
   {
@@ -69,7 +69,7 @@
     "trd38_rubber": 0,
     "trd38_plastic": 0,
     "m81x_plastic": 0,
-    "m125_plastic": 0
+    "m112_plastic": 0
    }
   },
   {
@@ -84,7 +84,7 @@
     "trd38_rubber": 0,
     "trd38_plastic": 0,
     "m81x_plastic": 0,
-    "m125_plastic": 0
+    "m112_plastic": 0
    }
   }
  ],

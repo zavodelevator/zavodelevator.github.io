@@ -107,7 +107,7 @@
           { path: P + 'chain.trd38_rubber', label: 'Ланцюг ТРД-38 + гумові шкребки, 1 м', unit: 'грн/м' },
           { path: P + 'chain.trd38_plastic', label: 'Ланцюг ТРД-38 + пластикові шкребки, 1 м', unit: 'грн/м' },
           { path: P + 'chain.m81x_plastic', label: 'Ланцюг М-81х + пластикові шкребки, 1 м', unit: 'грн/м' },
-          { path: P + 'chain.m125_plastic', label: 'Ланцюг М-125 + пластикові шкребки, 1 м', unit: 'грн/м' },
+          { path: P + 'chain.m112_plastic', label: 'Ланцюг М-112 + пластикові шкребки, 1 м', unit: 'грн/м' },
           { path: P + 'liner_pe500', label: 'Футування ПЕ-500, за 1 м', unit: 'грн/м' },
           { path: P + 'liner_pe1000', label: 'Футування ПЕ-1000, за 1 м', unit: 'грн/м' },
           { path: P + 'distrib', label: 'Розподільник, за 1 м', unit: 'грн/м' }
@@ -156,7 +156,7 @@
         (motor ? ', мотор-редуктор ' + motor.kw + ' кВт' : '');
 
       // довідково: стара таблиця «за м/пог»
-      var oldKey = { trd38_rubber: /трд 38 гума/i, trd38_plastic: /трд 38 п/i, m81x_plastic: /M-81x/i, m125_plastic: /M-11|M-12/i }[ch.key];
+      var oldKey = { trd38_rubber: /трд 38 гума/i, trd38_plastic: /трд 38 п/i, m81x_plastic: /M-81x/i, m112_plastic: /M-112/i }[ch.key];
       var old = T.old_variants.filter(function (v) { return v.model === m.model && oldKey.test(v.chain); })[0];
       var oldTotal = old ? (L - T.base_length) * old.per_m + old.drive + old.tension + (inp.liner !== 'none' ? old.liner * L : 0) + (dl ? old.distrib * dl : 0) : 0;
       var details = [
