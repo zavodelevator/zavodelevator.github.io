@@ -38,3 +38,4 @@ body.panel-open #panel { transform: translateX(0); }
 #viz svg { width: 100%; height: auto; display: block; }
 #viz { margin-bottom: 1rem; border: 1px solid #dee2e6; border-radius: 4px; background: #fff; }
 .extra-card { border: 1px solid #dee2e6; border-radius: 4px; padding: .75rem; margin-top: 1rem; background: #fdfdfe; }
+body.panel-open .panel-toggle { display: none; }
