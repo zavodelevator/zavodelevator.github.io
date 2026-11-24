@@ -270,5 +270,5 @@
     });
   }
 
-  window.Calc = { boot: boot, esc: esc, round3: round3, recompute: function () { recompute(); }, num: num, ceil3: ceil3, money: money, get: get, totals: totals };
+  window.Calc = { boot: boot, renderPanel: function () { renderPanel(); }, esc: esc, round3: round3, recompute: function () { recompute(); }, num: num, ceil3: ceil3, money: money, get: get, totals: totals };
 })();

@@ -31,6 +31,8 @@
         if (r.name === 'type') fillSizes(cfg);
       });
     });
+    ['size', 'preset'].forEach(function (id) { $(id).addEventListener('change', function () { Calc.renderPanel(); }); });
+    document.querySelectorAll('input[name="type"]').forEach(function (r) { r.addEventListener('change', function () { Calc.renderPanel(); }); });
     $('stand').addEventListener('change', function () { $('chassis-fields').hidden = $('stand').value !== 'chassis'; });
     $('drive').addEventListener('change', function () { $('kw').disabled = $('drive').value === 'none'; });
 
@@ -138,6 +140,56 @@
       s.join('') + '</svg>';
   }
 
+
+  // ---------- за секціями ----------
+  var SEC_FIELDS = [
+    ['casing_2m', 'Кожух (метал), секція 2 м'], ['shaft_2m', 'Трубовал, секція 2 м'], ['spiral_2m', 'Спіраль, секція 2 м'],
+    ['hanger', 'Підвіс (кронштейн + втулка + змащення), шт'], ['end_plate', 'Торцева плита з підшипником і цапфою, шт'],
+    ['drive_gear', 'Привідна секція під мотор-редуктор'], ['drive_motor', 'Привідна секція ремінна (натяг, шківи, паси)'],
+    ['nozzles', 'Патрубки завантаження + вивантаження'], ['consum_pct', 'Витратні, % від суми']
+  ];
+  function currentSel() {
+    var t = document.querySelector('input[name="type"]:checked');
+    return { type: t ? t.value : 'tube', size: num($('size').value), preset: $('preset').value || 'black' };
+  }
+  function sectionIdx(Dt, sel) {
+    var list = ((Dt.sections.items[sel.preset] || {})[sel.type]) || [];
+    for (var i = 0; i < list.length; i++) if (list[i].size === sel.size) return i;
+    return -1;
+  }
+  function sectionsTab(Dt) {
+    var sel = currentSel(), i = sectionIdx(Dt, sel);
+    var lbl = (Dt.shnek_core.presets[sel.preset] || {}).label || sel.preset;
+    if (i < 0) return { tab: 'Секції', note: 'Немає цін секцій для цього типорозміру.', fields: [] };
+    var base = 'sections.items.' + sel.preset + '.' + sel.type + '.' + i + '.';
+    return { tab: 'Секції', note: 'Режим «За секціями». ' + (sel.type === 'tube' ? 'Труба Ø' : 'Жолоб ') + sel.size + ', ' + lbl +
+      '. Ціни без ПДВ, з коеф. виготовлення; початкові — з детального розрахунку. Постійно — calc/data/sections.json.',
+      fields: SEC_FIELDS.map(function (x) { return { path: base + x[0], label: x[1], unit: x[0] === 'consum_pct' ? '%' : 'грн' }; }) };
+  }
+  var CORE_IDS = ['casing', 'flange', 'cover', 'ribs', 'shaft', 'flight', 'stub', 'endplate', 'bearing', 'gland', 'inlet', 'outlet',
+    'hanger', 'hangerBush', 'greaseTube', 'gearplate', 'coupling', 'tension', 'pulleys', 'feet', 'consum'];
+  function sectionRows(Dt, sel, L, drive, q, extraOpts) {
+    var i = sectionIdx(Dt, sel);
+    if (i < 0) return null;
+    var it = Dt.sections.items[sel.preset][sel.type][i], secM = Dt.sections.section_m;
+    var nSec = L / secM, nHang = Math.max(0, Math.ceil(L * 1000 / Dt.shnek_core.hanger_spacing) - 1);
+    var rows = [
+      { name: 'Кожух (метал)', qty: nSec, unit: 'секц.', price: it.casing_2m, note: 'секція ' + secM + ' м' },
+      { name: 'Трубовал', qty: nSec, unit: 'секц.', price: it.shaft_2m, note: 'секція ' + secM + ' м' },
+      { name: 'Спіраль', qty: nSec, unit: 'секц.', price: it.spiral_2m, note: 'секція ' + secM + ' м' },
+      { name: 'Підвіс', qty: nHang, unit: 'шт', qtyDigits: 0, price: it.hanger, note: 'кожні ' + Dt.shnek_core.hanger_spacing / 1000 + ' м' },
+      { name: 'Торцева плита з підшипником', qty: 2, unit: 'шт', qtyDigits: 0, price: it.end_plate },
+      { name: drive === 'motor' ? 'Привідна секція (ремінна)' : 'Привідна секція (під МР)', qty: 1, unit: 'шт', qtyDigits: 0, price: drive === 'motor' ? it.drive_motor : it.drive_gear },
+      { name: 'Патрубки завантаження/вивантаження', qty: 1, unit: 'компл.', qtyDigits: 0, price: it.nozzles }
+    ];
+    if (q && !q.error) q.parts.forEach(function (p) {
+      if (CORE_IDS.indexOf(p.id) < 0 && !p.off && p.cost > 0) rows.push({ name: p.name, qty: p.qty, unit: p.unit, qtyDigits: p.unit === 'м' ? 2 : 0, price: p.cost / (p.qty || 1), note: 'опція, з детального розрахунку' });
+    });
+    var sub = rows.reduce(function (a, r) { return a + r.qty * r.price; }, 0);
+    rows.push({ name: 'Витратні (дріт, газ, ґрунт, фарба)', qty: 1, unit: 'компл.', qtyDigits: 0, price: sub * it.consum_pct / 100, note: it.consum_pct + '% від суми' });
+    return { rows: rows, it: it, nSec: nSec, nHang: nHang };
+  }
+
   // ---------- простий прайс ----------
   function simpleRows(Dt, type, size, L, opt, kw, drivePrice, drive) {
     var S = Dt.screw_conveyor, c = S.coef;
@@ -158,7 +210,7 @@
   }
 
   Calc.boot({
-    data: ['screw_conveyor', 'shnek_core', 'gear_motors'],
+    data: ['screw_conveyor', 'shnek_core', 'gear_motors', 'sections'],
     pricing: 'screw_conveyor',
     docked: true,
     init: initInputs,
@@ -172,6 +224,7 @@
       Object.keys(cfg.buy).forEach(function (b) { buy.push({ path: 'shnek_core.buy.' + b + '.price', label: b + (cfg.buy[b].src ? ' · ' + cfg.buy[b].src : ''), unit: 'грн' }); });
       return [
         { tab: 'Розрахунок', details: true, note: 'Продуктивність, потужність, вузли й маси — за розрахунком CRM (shnek_core). Оновлюється під час вводу.' },
+        sectionsTab(Dt),
         { tab: 'Метал', note: 'Детальний режим: ціна металу за класом і маркою, грн/кг.', fields: metal },
         { tab: 'Покупні', note: 'Підшипники, муфти, шківи, колеса тощо (ціни з 1С).', fields: buy },
         { tab: 'Коефіцієнти', fields: [
@@ -234,8 +287,15 @@
       if (simple && inp.preset !== 'black') warnings.push('Простий прайс — лише для чорної сталі; для нержавійки перемкніть на «Детальний».');
       if (!simple && q.error) return { error: q.error };
 
+      var sec = mode === 'sections' ? sectionRows(Dt, { type: type, size: size, preset: inp.preset }, L, drive, q) : null;
+      if (mode === 'sections' && !sec) warnings.push('Немає цін секцій для цього типорозміру — показано детальний розрахунок.');
       var rows, pricing, mt;
-      if (simple) {
+      if (sec) {
+        rows = sec.rows;
+        if (driveObj) rows.push({ name: driveObj.name, qty: 1, unit: 'шт', qtyDigits: 0, price: drivePrice / cfg.vat, note: 'ціна приводу з ПДВ ' + f(drivePrice, 0) });
+        pricing = { markup_pct: Dt.screw_conveyor.pricing.markup_pct, vat_pct: Math.round((cfg.vat - 1) * 1000) / 10, vat_included: false };
+        mt = 'за секціями';
+      } else if (simple) {
         rows = simple.rows; pricing = Dt.screw_conveyor.pricing; mt = 'простий прайс';
       } else {
         rows = q.parts.filter(function (p) { return !p.off && p.cost > 0; }).map(function (p) {
@@ -275,6 +335,11 @@
         { label: 'Кінцеві вузли / за метр', formula: 'таблиця за Ø', value: simple.row.base + ' / ' + simple.row.per_m + ' грн' },
         { label: 'Коефіцієнт K', formula: (type === 'trough' ? 'жолоб × ' : '') + (L >= Dt.screw_conveyor.coef.long_from ? 'L≥10 × ' : '') + '1,15 × 1,1', value: f(simple.K, 4) },
         { label: 'кВт за старою таблицею', formula: 'Ø' + size + ', ' + Math.ceil(L) + ' м', value: ((Dt.screw_conveyor.kw_table[size] || [])[Math.ceil(L) - 1] || '—') + '' }
+      ] });
+      if (sec) details.push({ group: 'За секціями', items: [
+        { label: 'Секцій по ' + Dt.sections.section_m + ' м', formula: f(L, 2) + ' / ' + Dt.sections.section_m, value: f(sec.nSec, 2) },
+        { label: 'Секція 2 м разом', formula: 'кожух ' + f(sec.it.casing_2m, 0) + ' + вал ' + f(sec.it.shaft_2m, 0) + ' + спіраль ' + f(sec.it.spiral_2m, 0), value: money(sec.it.casing_2m + sec.it.shaft_2m + sec.it.spiral_2m) },
+        { label: 'Підвісів', formula: 'ceil(L / 2 м) − 1', value: sec.nHang + ' шт' }
       ] });
       if (engineOk) details.push({ group: 'Вузли (детальний)', items: q.parts.filter(function (p) { return !p.off; }).map(function (p) {
         return { label: p.name, formula: p.code + ' · ' + f(p.qty, p.unit === 'м' ? 2 : 0) + ' ' + p.unit + (p.total_w ? ' · ' + f(p.total_w, 1) + ' кг' : '') + (p.mat ? ' · ' + p.mat : ''), value: money(p.cost) };
