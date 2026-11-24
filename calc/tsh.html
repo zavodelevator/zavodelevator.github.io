@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Шкребковий транспортер ТШ</title>
+  <title>Скребковий транспортер ТШ</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="css/calc.css">
   <link rel="icon" href="https://fonts.gstatic.com/s/i/materialiconsoutlined/home/v6/24px.svg">
@@ -24,42 +24,49 @@
 
   <div class="container">
     <div class="card">
-      <div class="card-header">Транспортер шкребковий (ТШ)</div>
+      <div class="card-header">Транспортер скребковий (ТШ)</div>
       <div class="card-body">
         <div class="row">
-          <div class="col-md-4">
-            <form id="inputs">
-              <div class="form-group">
-                <label for="model">Модель</label>
-                <select class="form-control" id="model" name="model"></select>
+          <div class="col-md-4 col-lg-4">
+            <form id="inputs" autocomplete="off">
+              <div class="form-row">
+                <div class="form-group col-6">
+                  <label for="model">Модель</label>
+                  <select class="form-control" id="model" name="model"></select>
+                </div>
+                <div class="form-group col-6">
+                  <label for="length">Довжина L, м</label>
+                  <input type="number" step="any" class="form-control" id="length" name="length" value="10">
+                </div>
               </div>
               <div class="form-group">
-                <label for="chain">Ланцюг</label>
+                <label for="chain">Ланцюг і шкребки</label>
                 <select class="form-control" id="chain" name="chain"></select>
               </div>
               <div class="form-group">
-                <label for="length">Довжина транспортера, м</label>
-                <input type="number" step="any" class="form-control" id="length" name="length" value="10">
+                <label for="liner">Футування короба</label>
+                <select class="form-control" id="liner" name="liner">
+                  <option value="none">Без футування</option>
+                  <option value="pe500">Пластик ПЕ-500</option>
+                  <option value="pe1000">Пластик ПЕ-1000</option>
+                </select>
               </div>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="liner" name="liner">
-                <label class="form-check-label" for="liner">Футування короба</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="distributor" name="distributor">
-                <label class="form-check-label" for="distributor">Розподільний механізм</label>
-              </div>
-              <div class="form-group mt-2">
-                <label for="distributor_length" class="label-title">Довжина розподільника, м (порожньо = вся довжина)</label>
-                <input type="number" step="any" class="form-control" id="distributor_length" name="distributor_length">
+              <div class="form-row">
+                <div class="form-group col-6 d-flex align-items-end">
+                  <div class="form-check mb-2"><input class="form-check-input" type="checkbox" id="distributor" name="distributor"><label class="form-check-label" for="distributor">Розподільник</label></div>
+                </div>
+                <div class="form-group col-6">
+                  <label for="distributor_length" class="label-title">його довжина, м</label>
+                  <input type="number" step="any" class="form-control" id="distributor_length" name="distributor_length" placeholder="= L">
+                </div>
               </div>
               <div class="form-group">
-                <label for="kw">Мотор-редуктор</label>
-                <select class="form-control" id="kw" name="kw"></select>
+                <label for="motor">Мотор-редуктор</label>
+                <select class="form-control" id="motor" name="motor"></select>
               </div>
             </form>
           </div>
-          <div class="col-md-8" id="result"><div class="text-muted">Завантаження…</div></div>
+          <div class="col-md-8"><div id="viz"></div><div id="result"><div class="text-muted">Завантаження…</div></div></div>
         </div>
       </div>
     </div>

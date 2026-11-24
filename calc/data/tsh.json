@@ -1,17 +1,174 @@
 {
-  "_note": "Шкребковий транспортер ТШ. Ціни з Google Sheet «РЕМОНТ шнека», вкладка ТШ (з ПДВ). Формула = CRM TshConveyorCalculator.",
-  "pricing": { "markup_pct": 0, "vat_pct": 20, "vat_included": true },
-  "base_length": 1.5,
-  "max_length": 60,
-  "variants": [
-    { "model": "ТШ 25",  "chain": "трд 38 гума",   "drive": 15800, "tension": 13300, "per_m": 6200,  "liner": 1200, "distrib": 2000 },
-    { "model": "ТШ 25",  "chain": "трд 38 пє 500", "drive": 15800, "tension": 13300, "per_m": 6750,  "liner": 1200, "distrib": 2000 },
-    { "model": "ТШ 25",  "chain": "M-81x пє 500",  "drive": 15800, "tension": 13300, "per_m": 11250, "liner": 1200, "distrib": 2000 },
-    { "model": "ТШ 50",  "chain": "трд 38 гума",   "drive": 18600, "tension": 15700, "per_m": 6900,  "liner": 1500, "distrib": 2200 },
-    { "model": "ТШ 50",  "chain": "трд 38 пє 500", "drive": 18600, "tension": 15700, "per_m": 7500,  "liner": 1500, "distrib": 2200 },
-    { "model": "ТШ 50",  "chain": "M-81x пє 500",  "drive": 18600, "tension": 15700, "per_m": 12500, "liner": 1500, "distrib": 2200 },
-    { "model": "ТШ 100", "chain": "трд 38 пє 500", "drive": 22320, "tension": 18840, "per_m": 8700,  "liner": 1800, "distrib": 2500 },
-    { "model": "ТШ 100", "chain": "M-81x пє 500",  "drive": 22320, "tension": 18840, "per_m": 14400, "liner": 1800, "distrib": 2500 },
-    { "model": "ТШ 200", "chain": "M-112 пє 500",  "drive": 28000, "tension": 26000, "per_m": 19800, "liner": 2100, "distrib": 3000 }
-  ]
+ "_note": "Скребковий транспортер ТШ за вузлами. Головки, розподільник і футування (стовпчик «футування», тип пластику не вказано — поставлено як ПЕ-500) — з вкладки ТШ. Секція й ланцюг — 0, заповнити з PDF «Ціни для калькулятора ТШ». Ланцюг за 1 м разом зі шкребками. old_variants — стара таблиця «за м/пог» (короб+ланцюг), довідково.",
+ "pricing": {
+  "markup_pct": 0,
+  "vat_pct": 20,
+  "vat_included": true
+ },
+ "base_length": 1.5,
+ "max_length": 60,
+ "chain_extra_m": 1,
+ "chains": [
+  {
+   "key": "trd38_rubber",
+   "label": "ТРД-38, гумові шкребки"
+  },
+  {
+   "key": "trd38_plastic",
+   "label": "ТРД-38, пластикові шкребки"
+  },
+  {
+   "key": "m81x_plastic",
+   "label": "М-81х, пластикові шкребки"
+  },
+  {
+   "key": "m125_plastic",
+   "label": "М-125, пластикові шкребки"
+  }
+ ],
+ "models": [
+  {
+   "model": "ТШ 25",
+   "drive_head": 15800,
+   "tension_head": 13300,
+   "section_per_m": 0,
+   "liner_pe500": 1200,
+   "liner_pe1000": 0,
+   "distrib": 2000,
+   "chain": {
+    "trd38_rubber": 0,
+    "trd38_plastic": 0,
+    "m81x_plastic": 0,
+    "m125_plastic": 0
+   }
+  },
+  {
+   "model": "ТШ 50",
+   "drive_head": 18600,
+   "tension_head": 15700,
+   "section_per_m": 0,
+   "liner_pe500": 1500,
+   "liner_pe1000": 0,
+   "distrib": 2200,
+   "chain": {
+    "trd38_rubber": 0,
+    "trd38_plastic": 0,
+    "m81x_plastic": 0,
+    "m125_plastic": 0
+   }
+  },
+  {
+   "model": "ТШ 100",
+   "drive_head": 22320,
+   "tension_head": 18840,
+   "section_per_m": 0,
+   "liner_pe500": 1800,
+   "liner_pe1000": 0,
+   "distrib": 2500,
+   "chain": {
+    "trd38_rubber": 0,
+    "trd38_plastic": 0,
+    "m81x_plastic": 0,
+    "m125_plastic": 0
+   }
+  },
+  {
+   "model": "ТШ 200",
+   "drive_head": 28000,
+   "tension_head": 26000,
+   "section_per_m": 0,
+   "liner_pe500": 2100,
+   "liner_pe1000": 0,
+   "distrib": 3000,
+   "chain": {
+    "trd38_rubber": 0,
+    "trd38_plastic": 0,
+    "m81x_plastic": 0,
+    "m125_plastic": 0
+   }
+  }
+ ],
+ "old_variants": [
+  {
+   "model": "ТШ 25",
+   "chain": "трд 38 гума",
+   "drive": 15800,
+   "tension": 13300,
+   "per_m": 6200,
+   "liner": 1200,
+   "distrib": 2000
+  },
+  {
+   "model": "ТШ 25",
+   "chain": "трд 38 пє 500",
+   "drive": 15800,
+   "tension": 13300,
+   "per_m": 6750,
+   "liner": 1200,
+   "distrib": 2000
+  },
+  {
+   "model": "ТШ 25",
+   "chain": "M-81x пє 500",
+   "drive": 15800,
+   "tension": 13300,
+   "per_m": 11250,
+   "liner": 1200,
+   "distrib": 2000
+  },
+  {
+   "model": "ТШ 50",
+   "chain": "трд 38 гума",
+   "drive": 18600,
+   "tension": 15700,
+   "per_m": 6900,
+   "liner": 1500,
+   "distrib": 2200
+  },
+  {
+   "model": "ТШ 50",
+   "chain": "трд 38 пє 500",
+   "drive": 18600,
+   "tension": 15700,
+   "per_m": 7500,
+   "liner": 1500,
+   "distrib": 2200
+  },
+  {
+   "model": "ТШ 50",
+   "chain": "M-81x пє 500",
+   "drive": 18600,
+   "tension": 15700,
+   "per_m": 12500,
+   "liner": 1500,
+   "distrib": 2200
+  },
+  {
+   "model": "ТШ 100",
+   "chain": "трд 38 пє 500",
+   "drive": 22320,
+   "tension": 18840,
+   "per_m": 8700,
+   "liner": 1800,
+   "distrib": 2500
+  },
+  {
+   "model": "ТШ 100",
+   "chain": "M-81x пє 500",
+   "drive": 22320,
+   "tension": 18840,
+   "per_m": 14400,
+   "liner": 1800,
+   "distrib": 2500
+  },
+  {
+   "model": "ТШ 200",
+   "chain": "M-112 пє 500",
+   "drive": 28000,
+   "tension": 26000,
+   "per_m": 19800,
+   "liner": 2100,
+   "distrib": 3000
+  }
+ ]
 }
