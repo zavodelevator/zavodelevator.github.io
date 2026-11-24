@@ -51,13 +51,15 @@
                   <option value="pe1000">Пластик ПЕ-1000</option>
                 </select>
               </div>
-              <div class="form-row">
-                <div class="form-group col-6 d-flex align-items-end">
-                  <div class="form-check mb-2"><input class="form-check-input" type="checkbox" id="distributor" name="distributor"><label class="form-check-label" for="distributor">Розподільник</label></div>
+              <div class="form-check"><input class="form-check-input" type="checkbox" id="distributor" name="distributor"><label class="form-check-label" for="distributor">Розподільний механізм <span class="label-title">(транспортер у завальній ямі)</span></label></div>
+              <div class="form-row mt-1" id="distrib-fields" hidden>
+                <div class="form-group col-6">
+                  <label for="distributor_length">Довжина, м <span class="label-title">(1–10)</span></label>
+                  <input type="number" step="any" min="1" max="10" class="form-control" id="distributor_length" name="distributor_length" value="4">
                 </div>
                 <div class="form-group col-6">
-                  <label for="distributor_length" class="label-title">його довжина, м</label>
-                  <input type="number" step="any" class="form-control" id="distributor_length" name="distributor_length" placeholder="= L">
+                  <label class="label-title">Ціна за 1 м</label>
+                  <div class="form-control-plaintext font-weight-bold" id="distrib-price"></div>
                 </div>
               </div>
               <div class="form-group">

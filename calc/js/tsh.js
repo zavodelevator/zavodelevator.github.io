@@ -21,9 +21,11 @@
     $('model').innerHTML = Dt.tsh.models.map(function (m) { return '<option>' + esc(m.model) + '</option>'; }).join('');
     $('model').value = 'ТШ 50';
     fillChains(Dt);
-    $('motor').innerHTML = '<option value="none">Без мотор-редуктора</option>' + Dt.noria_catalog.gear_motors.slice().sort(function (a, b) { return a.kw - b.kw || a.price - b.price; })
+    $('motor').innerHTML = '<option value="auto">Авто (за таблицею кВт)</option><option value="none">Без мотор-редуктора</option>' + Dt.noria_catalog.gear_motors.slice().sort(function (a, b) { return a.kw - b.kw || a.price - b.price; })
       .map(function (g) { return '<option value="' + esc(g.id) + '">' + g.kw + ' кВт · ' + esc(g.type) + ' габ.' + esc(g.gab) + ' · ' + esc(g.saler) + ' — ' + f(g.price, 0) + '</option>'; }).join('');
     $('model').addEventListener('change', function () { fillChains(D0); Calc.renderPanel(); Calc.recompute(); });
+    $('distributor').addEventListener('change', function () { $('distrib-fields').hidden = !$('distributor').checked; });
+    $('motor').addEventListener('change', function () { $('motor').dataset.touched = $('motor').value === 'auto' ? '' : '1'; });
     document.addEventListener('click', function (e) {
       var b = e.target.closest('[data-copy]');
       if (!b) return;
@@ -112,6 +114,9 @@
           { path: P + 'liner_pe1000', label: 'Футування ПЕ-1000, за 1 м', unit: 'грн/м' },
           { path: P + 'distrib', label: 'Розподільник, за 1 м', unit: 'грн/м' }
         ] },
+        { tab: 'Потужність', note: 'кВт для ' + name + '. 0 — не задано (мотор обирається вручну). Постійно — calc/data/tsh.json.',
+          fields: Dt.tsh.models[i].kw_by_length.map(function (r, j) { return { path: P + 'kw_by_length.' + j + '.kw', label: 'Звичайний, до ' + r.max_length + ' м', unit: 'кВт' }; })
+            .concat(Dt.tsh.models[i].kw_pit.map(function (r, j) { return { path: P + 'kw_pit.' + j + '.kw', label: 'Завальна яма, розподільник ' + r.distrib_m + ' м', unit: 'кВт' }; })) },
         { tab: 'Геометрія', fields: [
           { path: 'tsh.base_length', label: 'Довжина двох головок разом', unit: 'м' },
           { path: 'tsh.chain_extra_m', label: 'Запас ланцюга', unit: 'м' },
@@ -138,16 +143,29 @@
         rows.push({ name: 'Футування короба ' + (inp.liner === 'pe500' ? 'ПЕ-500' : 'ПЕ-1000'), qty: L, unit: 'м', price: lp });
         if (!lp) warnings.push('Ціна футування ' + (inp.liner === 'pe500' ? 'ПЕ-500' : 'ПЕ-1000') + ' для ' + m.model + ' не задана.');
       }
-      var dl = 0;
+      var dl = 0, rng = T.distrib_range || [1, 10];
+      $('distrib-price').textContent = money(m.distrib) + ' грн/м (' + m.model + ')';
       if (inp.distributor) {
-        dl = num(inp.distributor_length) > 0 ? Math.min(num(inp.distributor_length), L) : L;
-        rows.push({ name: 'Розподільний механізм', qty: dl, unit: 'м', price: m.distrib });
+        dl = num(inp.distributor_length);
+        if (dl < rng[0] || dl > rng[1]) warnings.push('Розподільний механізм буває від ' + rng[0] + ' до ' + rng[1] + ' м — взято ' + Math.min(Math.max(dl, rng[0]), rng[1]) + ' м.');
+        dl = Math.min(Math.max(dl, rng[0]), rng[1], L);
+        rows.push({ name: 'Розподільний механізм (завальна яма)', qty: dl, unit: 'м', price: m.distrib, note: f(m.distrib, 0) + ' грн/м для ' + m.model });
       }
-      var motor = Dt.noria_catalog.gear_motors.filter(function (g) { return g.id === inp.motor; })[0];
+      // потужність: яма — за довжиною розподільника, інакше — за довжиною транспортера
+      var kwNeed = 0, kwSrc = '';
+      if (dl) { var pr = m.kw_pit.filter(function (r) { return r.distrib_m >= Math.ceil(dl - 1e-9) && r.kw > 0; })[0]; if (pr) { kwNeed = pr.kw; kwSrc = 'яма, розподільник до ' + pr.distrib_m + ' м'; } }
+      else { var lr = m.kw_by_length.filter(function (r) { return r.max_length >= L - 1e-9 && r.kw > 0; })[0]; if (lr) { kwNeed = lr.kw; kwSrc = 'до ' + lr.max_length + ' м'; } }
+      var motorId = inp.motor;
+      if (motorId === 'auto') {
+        var cands = Dt.noria_catalog.gear_motors.filter(function (g) { return g.kw === kwNeed; }).sort(function (a, b) { return a.price - b.price; });
+        motorId = cands.length ? cands[0].id : 'none';
+      }
+      var motor = Dt.noria_catalog.gear_motors.filter(function (g) { return g.id === motorId; })[0];
       if (motor) rows.push({ name: 'Мотор-редуктор ' + motor.kw + ' кВт ' + motor.type + ' габ.' + motor.gab, qty: 1, unit: 'шт', qtyDigits: 0, price: motor.price, note: motor.saler + ' (каталог НКЗ)' });
       if (!m.section_per_m) warnings.push('Ціна секції короба для ' + m.model + ' не задана.');
       if (!m.chain[ch.key]) warnings.push('Ціна ланцюга «' + ch.label + '» для ' + m.model + ' не задана.');
-      if (!motor) warnings.push('Мотор-редуктор не обрано (таблиці кВт за довжиною для ТШ поки немає — оберіть вручну).');
+      if (!motor && inp.motor === 'auto') warnings.push('Потужність для ' + m.model + (dl ? ' у завальній ямі (' + f(dl, 1) + ' м)' : ' довжиною ' + f(L, 2) + ' м') + ' не задана — оберіть мотор-редуктор вручну або заповніть панель «Потужність».');
+      if (motor && kwNeed && motor.kw < kwNeed) warnings.push('Обрано ' + motor.kw + ' кВт, а за таблицею потрібно ' + kwNeed + ' кВт.');
       if (L > T.max_length) warnings.push('Довжина більша за ' + T.max_length + ' м — перевірте з конструктором.');
 
       var tot = Calc.totals(rows, T.pricing);
@@ -163,7 +181,9 @@
         { group: 'Розміри', items: [
           { label: 'Секції короба', formula: f(L, 2) + ' − ' + T.base_length, value: f(secLen, 2) + ' м' },
           { label: 'Ланцюг', formula: '2 × ' + f(L, 2) + ' + ' + T.chain_extra_m, value: f(chainLen, 2) + ' м' },
-          { label: 'Шкребки', formula: /rubber/.test(ch.key) ? 'гумові' : 'пластикові', value: ch.label.split(',')[0] }
+          { label: 'Шкребки', formula: /rubber/.test(ch.key) ? 'гумові' : 'пластикові', value: ch.label.split(',')[0] },
+          { label: 'Потужність мотор-редуктора', formula: kwSrc ? 'таблиця: ' + kwSrc : 'таблиця не заповнена', value: kwNeed ? kwNeed + ' кВт' : '—' },
+          { label: 'Режим', formula: dl ? 'розподільний механізм ' + f(dl, 1) + ' м' : '', value: dl ? 'завальна яма' : 'звичайний' }
         ] },
         { group: 'Вартість вузлів', items: rows.map(function (r) {
           return { label: r.name, formula: f(r.qty, r.qtyDigits == null ? 2 : r.qtyDigits) + ' ' + r.unit + ' × ' + money(r.price), value: money(r.qty * r.price) };

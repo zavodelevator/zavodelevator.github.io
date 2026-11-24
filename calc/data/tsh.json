@@ -40,7 +40,75 @@
     "trd38_plastic": 0,
     "m81x_plastic": 0,
     "m112_plastic": 0
-   }
+   },
+   "kw_by_length": [
+    {
+     "max_length": 10,
+     "kw": 0
+    },
+    {
+     "max_length": 20,
+     "kw": 0
+    },
+    {
+     "max_length": 30,
+     "kw": 0
+    },
+    {
+     "max_length": 40,
+     "kw": 0
+    },
+    {
+     "max_length": 50,
+     "kw": 0
+    },
+    {
+     "max_length": 60,
+     "kw": 0
+    }
+   ],
+   "kw_pit": [
+    {
+     "distrib_m": 1,
+     "kw": 0
+    },
+    {
+     "distrib_m": 2,
+     "kw": 0
+    },
+    {
+     "distrib_m": 3,
+     "kw": 0
+    },
+    {
+     "distrib_m": 4,
+     "kw": 0
+    },
+    {
+     "distrib_m": 5,
+     "kw": 0
+    },
+    {
+     "distrib_m": 6,
+     "kw": 0
+    },
+    {
+     "distrib_m": 7,
+     "kw": 0
+    },
+    {
+     "distrib_m": 8,
+     "kw": 0
+    },
+    {
+     "distrib_m": 9,
+     "kw": 0
+    },
+    {
+     "distrib_m": 10,
+     "kw": 0
+    }
+   ]
   },
   {
    "model": "ТШ 50",
@@ -55,7 +123,75 @@
     "trd38_plastic": 0,
     "m81x_plastic": 0,
     "m112_plastic": 0
-   }
+   },
+   "kw_by_length": [
+    {
+     "max_length": 10,
+     "kw": 0
+    },
+    {
+     "max_length": 20,
+     "kw": 0
+    },
+    {
+     "max_length": 30,
+     "kw": 0
+    },
+    {
+     "max_length": 40,
+     "kw": 0
+    },
+    {
+     "max_length": 50,
+     "kw": 0
+    },
+    {
+     "max_length": 60,
+     "kw": 0
+    }
+   ],
+   "kw_pit": [
+    {
+     "distrib_m": 1,
+     "kw": 0
+    },
+    {
+     "distrib_m": 2,
+     "kw": 0
+    },
+    {
+     "distrib_m": 3,
+     "kw": 0
+    },
+    {
+     "distrib_m": 4,
+     "kw": 0
+    },
+    {
+     "distrib_m": 5,
+     "kw": 0
+    },
+    {
+     "distrib_m": 6,
+     "kw": 0
+    },
+    {
+     "distrib_m": 7,
+     "kw": 0
+    },
+    {
+     "distrib_m": 8,
+     "kw": 0
+    },
+    {
+     "distrib_m": 9,
+     "kw": 0
+    },
+    {
+     "distrib_m": 10,
+     "kw": 0
+    }
+   ]
   },
   {
    "model": "ТШ 100",
@@ -70,7 +206,75 @@
     "trd38_plastic": 0,
     "m81x_plastic": 0,
     "m112_plastic": 0
-   }
+   },
+   "kw_by_length": [
+    {
+     "max_length": 10,
+     "kw": 0
+    },
+    {
+     "max_length": 20,
+     "kw": 0
+    },
+    {
+     "max_length": 30,
+     "kw": 0
+    },
+    {
+     "max_length": 40,
+     "kw": 0
+    },
+    {
+     "max_length": 50,
+     "kw": 0
+    },
+    {
+     "max_length": 60,
+     "kw": 0
+    }
+   ],
+   "kw_pit": [
+    {
+     "distrib_m": 1,
+     "kw": 0
+    },
+    {
+     "distrib_m": 2,
+     "kw": 0
+    },
+    {
+     "distrib_m": 3,
+     "kw": 0
+    },
+    {
+     "distrib_m": 4,
+     "kw": 0
+    },
+    {
+     "distrib_m": 5,
+     "kw": 0
+    },
+    {
+     "distrib_m": 6,
+     "kw": 0
+    },
+    {
+     "distrib_m": 7,
+     "kw": 0
+    },
+    {
+     "distrib_m": 8,
+     "kw": 0
+    },
+    {
+     "distrib_m": 9,
+     "kw": 0
+    },
+    {
+     "distrib_m": 10,
+     "kw": 0
+    }
+   ]
   },
   {
    "model": "ТШ 200",
@@ -85,7 +289,75 @@
     "trd38_plastic": 0,
     "m81x_plastic": 0,
     "m112_plastic": 0
-   }
+   },
+   "kw_by_length": [
+    {
+     "max_length": 10,
+     "kw": 0
+    },
+    {
+     "max_length": 20,
+     "kw": 0
+    },
+    {
+     "max_length": 30,
+     "kw": 0
+    },
+    {
+     "max_length": 40,
+     "kw": 0
+    },
+    {
+     "max_length": 50,
+     "kw": 0
+    },
+    {
+     "max_length": 60,
+     "kw": 0
+    }
+   ],
+   "kw_pit": [
+    {
+     "distrib_m": 1,
+     "kw": 0
+    },
+    {
+     "distrib_m": 2,
+     "kw": 0
+    },
+    {
+     "distrib_m": 3,
+     "kw": 0
+    },
+    {
+     "distrib_m": 4,
+     "kw": 0
+    },
+    {
+     "distrib_m": 5,
+     "kw": 0
+    },
+    {
+     "distrib_m": 6,
+     "kw": 0
+    },
+    {
+     "distrib_m": 7,
+     "kw": 0
+    },
+    {
+     "distrib_m": 8,
+     "kw": 0
+    },
+    {
+     "distrib_m": 9,
+     "kw": 0
+    },
+    {
+     "distrib_m": 10,
+     "kw": 0
+    }
+   ]
   }
  ],
  "old_variants": [
@@ -170,5 +442,10 @@
    "liner": 2100,
    "distrib": 3000
   }
+ ],
+ "kw_note": "Потужність мотор-редуктора, кВт. kw_by_length: max_length → kW (звичайний транспортер). kw_pit: довжина розподільника 1..10 м → kW (завальна яма). 0 = не задано — мотор обирається вручну. Заповнити з PDF «Потужності мотор-редукторів».",
+ "distrib_range": [
+  1,
+  10
  ]
 }
