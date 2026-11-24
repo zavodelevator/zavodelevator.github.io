@@ -13,6 +13,10 @@
       return '<option value="' + i + '">' + Calc.esc(x.label) + ' — ' + x.price + ' грн/кг</option>';
     }).join('');
 
+    var tp = document.getElementById('tube_price'), owner = document.getElementById('owner');
+    tp.value = Dt.metals.tube.price;
+    owner.addEventListener('change', function () { document.getElementById('tube-price-group').hidden = owner.value !== 'hzett'; });
+
     var D = document.getElementById('D'), p = document.getElementById('p'), hint = document.getElementById('p-hint');
     function syncHint() { hint.textContent = pitchManual ? '(свій)' : '= D'; }
     D.addEventListener('input', function () { if (!pitchManual) p.value = D.value; });
@@ -141,7 +145,6 @@
         { tab: 'Розрахунок', details: true, note: 'Усі проміжні величини, як у вкладці РШ. Оновлюються під час вводу.' },
         { tab: 'Метал', note: 'Ціна марки — грн/кг. Список марок і ціни — calc/data/metals.json → strip_grades.', fields: [
           { type: 'table', path: 'metals.strip_grades', columns: [{ key: 'label', label: 'Марка', readonly: true }, { key: 'price', label: 'грн/кг' }] },
-          { path: 'metals.tube.price', label: 'Труба (Цт)', unit: 'грн/кг' },
           { path: 'repair.density', label: 'Питома вага ρ', unit: 'г/мм³' }
         ] },
         { tab: 'Коефіцієнти', fields: [
@@ -173,7 +176,7 @@
       if (d >= D) return { error: 'Діаметр труби d має бути меншим за D' };
       if (wall >= d / 2) return { error: 'Стінка труби завелика для d' };
       var grade = M.strip_grades[num(inp.grade)] || M.strip_grades[0];
-      var Cs = grade.price, Ct = M.tube.price, hzett = inp.owner === 'hzett', segments = inp.kind === 'segments';
+      var Cs = grade.price, Ct = num(inp.tube_price) > 0 ? num(inp.tube_price) : M.tube.price, hzett = inp.owner === 'hzett', segments = inp.kind === 'segments';
       var g = geometry(R, D, d, t, s, L);
       var tubeArea = Math.PI * d * L / 1000;
       var tubeMass = wall * R.tube_weight_k * (d - wall) * L;
