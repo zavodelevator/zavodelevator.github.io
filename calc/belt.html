@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Стрічковий транспортер</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/calc.css">
+  <link rel="icon" href="https://fonts.gstatic.com/s/i/materialiconsoutlined/home/v6/24px.svg">
+</head>
+<body>
+  <!-- NAV:START -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="index.html">Agrohelix · калькулятори</a>
+    <ul class="navbar-nav flex-row flex-wrap">
+      <li class="nav-item mr-3"><a class="nav-link" href="repair.html">Ремонт шнека</a></li>
+      <li class="nav-item mr-3"><a class="nav-link" href="screw.html">Шнековий транспортер</a></li>
+      <li class="nav-item mr-3"><a class="nav-link" href="noria.html">Норія</a></li>
+      <li class="nav-item mr-3"><a class="nav-link" href="tsh.html">ТШ</a></li>
+      <li class="nav-item mr-3 active"><a class="nav-link" href="belt.html">Стрічковий</a></li>
+      <li class="nav-item mr-3"><a class="nav-link" href="spiral.html">Спіраль</a></li>
+    </ul>
+  </nav>
+  <!-- NAV:END -->
+
+  <div class="container">
+    <div class="card">
+      <div class="card-header">Транспортер стрічковий</div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-4 col-lg-4">
+            <form id="inputs" autocomplete="off">
+              <div class="form-row">
+                <div class="form-group col-6">
+                  <label for="width">Ширина стрічки</label>
+                  <select class="form-control" id="width" name="width"></select>
+                </div>
+                <div class="form-group col-6">
+                  <label for="length">Довжина L, м</label>
+                  <input type="number" step="any" class="form-control" id="length" name="length" value="20" title="Між осями приводного і натяжного барабанів">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="d-block">Робоча роликоопора (верхня)</label>
+                <div class="btn-group btn-group-toggle w-100" role="group" data-toggle-group="idler">
+                  <label class="btn btn-outline-primary active"><input type="radio" name="idler" value="trough" checked> Жолобчаста (3 ролики)</label>
+                  <label class="btn btn-outline-primary"><input type="radio" name="idler" value="flat"> Пряма (1 ролик)</label>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-6">
+                  <label for="top_pitch">Крок верхніх, м</label>
+                  <input type="number" step="any" class="form-control" id="top_pitch" name="top_pitch" placeholder="1,2">
+                </div>
+                <div class="form-group col-6">
+                  <label for="bottom_pitch">Крок нижніх, м</label>
+                  <input type="number" step="any" class="form-control" id="bottom_pitch" name="bottom_pitch" placeholder="3,0">
+                </div>
+              </div>
+              <div class="form-check mb-3"><input class="form-check-input" type="checkbox" id="lagging" name="lagging" checked><label class="form-check-label" for="lagging">Футування приводного барабана</label></div>
+              <div class="form-group">
+                <label for="motor">Мотор-редуктор</label>
+                <select class="form-control" id="motor" name="motor"></select>
+              </div>
+            </form>
+          </div>
+          <div class="col-md-8"><div id="viz"></div><div id="result"><div class="text-muted">Завантаження…</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL:START -->
+  <button type="button" class="btn btn-primary panel-toggle" id="panel-open">⚙ Параметри</button>
+  <aside id="panel" aria-label="Параметри розрахунку">
+    <div class="panel-head">
+      <strong>Параметри</strong>
+      <div>
+        <button type="button" class="btn btn-sm btn-outline-secondary" id="panel-reset" title="Повернути значення з JSON">Скинути</button>
+        <button type="button" class="btn btn-sm btn-outline-dark" id="panel-close">✕</button>
+      </div>
+    </div>
+    <div class="small text-muted px-3 pt-2">Зміни діють лише на поточний розрахунок. Постійні ціни — у файлах <code>calc/data/*.json</code>.</div>
+    <div id="panel-body"></div>
+  </aside>
+  <!-- PANEL:END -->
+
+  <script src="js/core.js"></script>
+  <script src="js/belt.js"></script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+{
+ "_note": "Стрічковий транспортер за вузлами. Ціни 0 — заповнити з PDF «Ціни для калькулятора стрічкового транспортера». Стрічка 400 і 600 мм — з каталогу НКЗ (найдешевший варіант). Ціни з ПДВ.",
+ "pricing": {
+  "markup_pct": 0,
+  "vat_pct": 20,
+  "vat_included": true
+ },
+ "stations_length": 2.0,
+ "belt_extra_m": 2.0,
+ "top_pitch": 1.2,
+ "bottom_pitch": 3.0,
+ "max_length": 60,
+ "widths": [
+  {
+   "width": 400,
+   "drive_station": 0,
+   "tail_station": 0,
+   "frame_per_m": 0,
+   "idler_trough": 0,
+   "idler_flat": 0,
+   "idler_return": 0,
+   "belt_per_m": 639.64,
+   "belt_note": "каталог НКЗ: Стрічка конвеєрна БКНЛ 400 мм, 6 пр.",
+   "lagging": 0,
+   "kw_by_length": [
+    {
+     "max_length": 10,
+     "kw": 0
+    },
+    {
+     "max_length": 20,
+     "kw": 0
+    },
+    {
+     "max_length": 30,
+     "kw": 0
+    },
+    {
+     "max_length": 40,
+     "kw": 0
+    },
+    {
+     "max_length": 50,
+     "kw": 0
+    },
+    {
+     "max_length": 60,
+     "kw": 0
+    }
+   ]
+  },
+  {
+   "width": 500,
+   "drive_station": 0,
+   "tail_station": 0,
+   "frame_per_m": 0,
+   "idler_trough": 0,
+   "idler_flat": 0,
+   "idler_return": 0,
+   "belt_per_m": 0,
+   "belt_note": "",
+   "lagging": 0,
+   "kw_by_length": [
+    {
+     "max_length": 10,
+     "kw": 0
+    },
+    {
+     "max_length": 20,
+     "kw": 0
+    },
+    {
+     "max_length": 30,
+     "kw": 0
+    },
+    {
+     "max_length": 40,
+     "kw": 0
+    },
+    {
+     "max_length": 50,
+     "kw": 0
+    },
+    {
+     "max_length": 60,
+     "kw": 0
+    }
+   ]
+  },
+  {
+   "width": 600,
+   "drive_station": 0,
+   "tail_station": 0,
+   "frame_per_m": 0,
+   "idler_trough": 0,
+   "idler_flat": 0,
+   "idler_return": 0,
+   "belt_per_m": 653.86,
+   "belt_note": "каталог НКЗ: Стрічка конвеєрна БКНЛ 600 мм, 2 2/0 пр.",
+   "lagging": 0,
+   "kw_by_length": [
+    {
+     "max_length": 10,
+     "kw": 0
+    },
+    {
+     "max_length": 20,
+     "kw": 0
+    },
+    {
+     "max_length": 30,
+     "kw": 0
+    },
+    {
+     "max_length": 40,
+     "kw": 0
+    },
+    {
+     "max_length": 50,
+     "kw": 0
+    },
+    {
+     "max_length": 60,
+     "kw": 0
+    }
+   ]
+  },
+  {
+   "width": 800,
+   "drive_station": 0,
+   "tail_station": 0,
+   "frame_per_m": 0,
+   "idler_trough": 0,
+   "idler_flat": 0,
+   "idler_return": 0,
+   "belt_per_m": 0,
+   "belt_note": "",
+   "lagging": 0,
+   "kw_by_length": [
+    {
+     "max_length": 10,
+     "kw": 0
+    },
+    {
+     "max_length": 20,
+     "kw": 0
+    },
+    {
+     "max_length": 30,
+     "kw": 0
+    },
+    {
+     "max_length": 40,
+     "kw": 0
+    },
+    {
+     "max_length": 50,
+     "kw": 0
+    },
+    {
+     "max_length": 60,
+     "kw": 0
+    }
+   ]
+  }
+ ]
+}
