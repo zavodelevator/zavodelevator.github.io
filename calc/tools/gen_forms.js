@@ -8,6 +8,20 @@ const S = require(path.join(root, 'js', 'shnek_core.js'));
 const cfg = J('shnek_core'), metals = J('metals'), repair = J('repair'), sc = J('screw_conveyor'), sections = J('sections'),
   gm = J('gear_motors'), noria = J('noria'), tsh = J('tsh'), spiral = J('spiral'), bc = J('belt_conveyor');
 
+// Режим «заповнено»: FILL=1 node calc/tools/gen_forms.js calc → пропозиції з calc/forms/proposals.json
+const FILL = process.env.FILL === '1';
+const P = FILL ? JSON.parse(fs.readFileSync(path.join(root, 'forms', 'proposals.json'), 'utf8')) : {};
+let CUR = '';
+const secOf = (title) => (String(title).match(/^(\d+)\./) || [])[1] || '';
+function prop(title, row, col) {
+  const s = ((P[CUR] || {})[secOf(title)] || {})[row];
+  return s ? s[col] : null;
+}
+function fillHtml(x) {
+  if (!x) return '';
+  return (x.v !== undefined && x.v !== '' ? '<div class="fill">' + esc(x.v) + '</div>' : '') +
+    (x.src ? '<div class="fsrc">' + esc(x.src) + '</div>' : '') + (x.alt ? '<div class="alt">(' + esc(x.alt) + ')</div>' : '');
+}
 const fmt = (x, d = 0) => x === '' || x === null || x === undefined ? '' : Number(x).toLocaleString('uk-UA', { minimumFractionDigits: d, maximumFractionDigits: d });
 const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 const vatBox = '<span class="vat">ціни: ☐ з ПДВ &nbsp; ☐ без ПДВ</span>';
@@ -16,14 +30,14 @@ const vatBox = '<span class="vat">ціни: ☐ з ПДВ &nbsp; ☐ без ПД
 function list(title, rows, opts = {}) {
   return `<h2>${esc(title)}${opts.vat === false ? '' : vatBox}</h2>${opts.note ? `<p class="note">${esc(opts.note)}</p>` : ''}
   <table class="list"><thead><tr><th class="n">№</th><th>Позиція</th><th class="u">Од.</th><th class="cur">Зараз у калькуляторі</th><th class="new">Нова ціна</th></tr></thead><tbody>
-  ${rows.map((r, i) => `<tr><td class="n">${i + 1}</td><td>${esc(r[0])}${r[3] ? `<div class="src">${esc(r[3])}</div>` : ''}</td><td class="u">${esc(r[1])}</td><td class="cur">${r[2]}</td><td class="new"></td></tr>`).join('')}
+  ${rows.map((r, i) => `<tr><td class="n">${i + 1}</td><td>${esc(r[0])}${r[3] ? `<div class="src">${esc(r[3])}</div>` : ''}</td><td class="u">${esc(r[1])}</td><td class="cur">${r[2]}</td><td class="new">${fillHtml(prop(title, r[0], 'v'))}</td></tr>`).join('')}
   </tbody></table>`;
 }
 // сітка «рядок × колонки»: у кожній клітинці дрібно поточне значення + місце для запису
 function grid(title, colHeads, rows, opts = {}) {
   return `<h2>${esc(title)}${opts.vat === false ? '' : vatBox}</h2>${opts.note ? `<p class="note">${esc(opts.note)}</p>` : ''}
   <table class="grid"><thead><tr><th>${esc(opts.first || '')}</th>${colHeads.map((h) => `<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>
-  ${rows.map((r) => `<tr><th>${esc(r[0])}</th>${r[1].map((v) => `<td><span class="was">${v === '' ? '' : 'зараз ' + v}</span></td>`).join('')}</tr>`).join('')}
+  ${rows.map((r) => `<tr><th>${esc(r[0])}</th>${r[1].map((v, j) => `<td><span class="was">${v === '' ? '' : 'зараз ' + v}</span>${fillHtml(prop(title, r[0], String(j)))}</td>`).join('')}</tr>`).join('')}
   </tbody></table>`;
 }
 
@@ -45,6 +59,9 @@ function page(title, subtitle, body) {
   .grid th, .grid td { text-align: center; } .grid tbody th { white-space: nowrap; font-size: 9.5pt; width: 22mm; }
   .grid td { height: 11mm; vertical-align: top; text-align: left; position: relative; } .grid thead th { font-size: 8pt; }
   .was { font-size: 6.8pt; color: #666; }
+  .fill { font: 600 10.5pt 'Segoe Print', 'Comic Sans MS', cursive; color: #1a3d9e; line-height: 1.15; }
+  .fsrc { font-size: 6.3pt; color: #1a3d9e; opacity: .8; }
+  .alt { font-size: 6.8pt; color: #8a8a8a; font-style: italic; }
   .sign { margin-top: 8mm; display: flex; gap: 10mm; font-size: 10pt; } .sign span { flex: 1; border-bottom: 1px solid #000; padding-top: 8mm; }
   .pb { break-before: page; }
   </style></head><body>
@@ -71,7 +88,7 @@ function hopperCost(v) {
 // ================= Форма 1: шнекові =================
 const mats = { black: 'чорна ст.3', tech: 'нерж. технічна', food: 'нерж. харчова AISI 304' };
 const cls = { flight: 'Штрипс на спіраль', sheet: 'Лист', tube_body: 'Труба корпусу', shaft_tube: 'Труба вала (трубовал)', bar: 'Пруток (цапфи)' };
-let f1 = '';
+let f1 = ''; CUR = 'screw';
 f1 += list('1. Метал для ремонту шнека і спіралі', [
   ...metals.strip_grades.map((g) => ['Штрипс — ' + g.label, 'грн/кг', fmt(g.price, 2)]),
   ['Труба вала шнека (нова труба при ремонті)', 'грн/кг', fmt(metals.tube.price, 2)]
@@ -125,7 +142,7 @@ const motorTable = (n) => grid(n + '. Мотор-редуктори і двиг�
 
 // ================= Форма 3: норія =================
 const nc = J('noria_catalog');
-let f3 = '';
+let f3 = ''; CUR = 'noria';
 const caps = noria.models.map((m) => m.capacity);
 const manRow = (cols) => noria.models.map((m) => ['НКЗ-' + m.capacity, cols.map((c) => (c[2] && !c[2].includes(m.capacity)) ? '—' : (m[c[0]] ? fmt(m[c[0]], 0) : ''))]);
 f3 += grid('1. Ціни, яких немає в каталозі НКЗ', ['Футування привідного барабана', 'Стрічка маслостійка, за 1 м', 'Зірочка (ланцюгова), шт', 'Муфта зворотного ходу', "З'єднувальна муфта"],
@@ -149,7 +166,7 @@ f3 += grid('7. Геометрія — перевірте', ['Висота гол
   { first: 'Норія', vat: false });
 
 // ================= Форма 2: скребковий транспортер ТШ =================
-let f2 = '';
+let f2 = ''; CUR = 'tsh';
 const tm = tsh.models;
 f2 += grid('1. Головки і секції', ['Приводна головка, шт', 'Натяжна головка, шт', 'Секція короба, за 1 м'],
   tm.map((m) => [m.model, [fmt(m.drive_head, 0), fmt(m.tension_head, 0), m.section_per_m ? fmt(m.section_per_m, 0) : '']]),
@@ -165,7 +182,7 @@ f2 += list('4. Довідково', [
 ], { vat: false });
 
 // ================= Форма 4: потужності мотор-редукторів =================
-let f4 = '';
+let f4 = ''; CUR = 'power';
 const lens = ['до 10 м', 'до 20 м', 'до 30 м', 'до 40 м', 'до 50 м', 'до 60 м'];
 f4 += grid('1. Скребкові ТШ — звичайний транспортер, кВт', lens, tsh.models.map((m) => [m.model, m.kw_by_length.map((r) => r.kw ? fmt(r.kw, 1) : '')]),
   { first: 'Модель', vat: false, note: 'Потужність мотор-редуктора за довжиною транспортера.' });
@@ -182,7 +199,7 @@ f4 += grid('5. Стрічкові транспортери — оберти, ш�
   note: 'Довідково з вкладки «Прод Шт»: барабан 300 мм — 0,2 м/с → 13 об/хв, 1,1 м/с → 72 об/хв.' });
 
 // ================= Форма 5: стрічковий транспортер =================
-let f5 = '';
+let f5 = ''; CUR = 'belt';
 const bw = bc.widths;
 const bcell = (v) => v ? fmt(v, 0) : '';
 f5 += grid('1. Станції і став', ['Приводна станція (барабан, рама), шт', 'Натяжна станція (барабан, натяжний пристрій), шт', 'Став (рама), за 1 м', 'Футування приводного барабана, шт'],
@@ -212,7 +229,9 @@ const forms = [
   fs.mkdirSync(outDir, { recursive: true });
   const b = await chromium.launch();
   const p = await b.newPage();
-  for (const [name, html] of forms) {
+  for (const [name0, html0] of forms) {
+    const name = FILL ? name0.replace('.pdf', ' (заповнено).pdf') : name0;
+    const html = FILL ? html0.replace('<p class="sub">', '<p class="sub"><b style="color:#1a3d9e">Пропозиція: синім — ціна з ваших джерел (або інтернету, якщо своїх немає), під нею джерело; сірим у дужках — порада.</b><br>') : html0;
     fs.writeFileSync(path.join(outDir, name.replace('.pdf', '.html')), html);
     await p.setContent(html, { waitUntil: 'load' });
     await p.pdf({ path: path.join(outDir, name), format: 'A4', printBackground: true, displayHeaderFooter: true,
