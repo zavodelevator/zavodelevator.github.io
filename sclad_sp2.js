@@ -229,6 +229,9 @@ function customSort(arr) {
     const productContainer = document.querySelector('.product-container');
     const option1 = document.getElementById('option1');
 
+    // Ціна металу для спіралі, грн/кг (міняти тут)
+    const SPIRAL_PRICE_PER_KG = 65;
+
     // Define spiral_calculation function
     function spiral_calculation(data) {
         let length_inner_line = function(sp_d, sp_p) { 
@@ -252,11 +255,11 @@ function customSort(arr) {
         };
         
         let price_rozdr = function(mass_m_spirall) {
-            return Math.round((mass_m_spirall * 1.1 * 60 * 6 * 1.1) / 3) * 3;
+            return Math.round((mass_m_spirall * 1.1 * SPIRAL_PRICE_PER_KG * 6 * 1.1) / 3) * 3;
         };
         
         let price_opt = function(mass_m_spirall) {
-            return Math.round((mass_m_spirall * 1.1 * 60 * 5 * 1.1) / 3) * 3;
+            return Math.round((mass_m_spirall * 1.1 * SPIRAL_PRICE_PER_KG * 5 * 1.1) / 3) * 3;
         };
 
         let resultArray = [];
