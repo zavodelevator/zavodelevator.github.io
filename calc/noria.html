@@ -31,43 +31,44 @@
             <form id="inputs" autocomplete="off">
               <div class="form-row">
                 <div class="form-group col-6">
-                  <label for="capacity">Продуктивність</label>
+                  <label for="capacity">Норія НКЗ</label>
                   <select class="form-control" id="capacity" name="capacity"></select>
                 </div>
                 <div class="form-group col-6">
                   <label for="height">Висота H, м</label>
-                  <input type="number" step="any" class="form-control" id="height" name="height" value="12" title="Загальна висота норії: від низу башмака до верху головки">
+                  <input type="number" step="any" class="form-control" id="height" name="height" value="12" title="Загальна висота: від низу башмака до верху головки">
                 </div>
               </div>
               <div class="form-group">
-                <label class="d-block">Ковші</label>
-                <div class="btn-group btn-group-toggle w-100" role="group" data-toggle-group="bucket">
-                  <label class="btn btn-outline-primary active"><input type="radio" name="bucket" value="metal" checked> Металеві</label>
-                  <label class="btn btn-outline-primary"><input type="radio" name="bucket" value="plastic"> Пластикові</label>
+                <div class="btn-group btn-group-toggle w-100" role="group" data-toggle-group="conv">
+                  <label class="btn btn-outline-primary active"><input type="radio" name="conv" value="belt" checked> Стрічкова</label>
+                  <label class="btn btn-outline-primary" id="conv-chain-btn"><input type="radio" name="conv" value="chain"> Ланцюгова</label>
                 </div>
               </div>
-              <div class="form-group">
-                <label for="lagging">Футування барабана</label>
-                <select class="form-control" id="lagging" name="lagging">
-                  <option value="0">Без футування</option>
-                  <option value="1" selected>Привідний барабан</option>
-                  <option value="2">Привідний і натяжний</option>
-                </select>
+              <div class="form-group" id="belt-group">
+                <label for="belt">Стрічка</label>
+                <select class="form-control" id="belt" name="belt"></select>
               </div>
-              <div class="form-check"><input class="form-check-input" type="checkbox" id="coupling" name="coupling" checked><label class="form-check-label" for="coupling">З'єднувальна муфта</label></div>
-              <div class="form-check mb-3"><input class="form-check-input" type="checkbox" id="backstop" name="backstop"><label class="form-check-label" for="backstop">Муфта зворотного ходу</label></div>
+              <div class="form-group">
+                <label for="bucket">Ківш</label>
+                <select class="form-control" id="bucket" name="bucket"></select>
+              </div>
               <div class="form-row">
-                <div class="form-group col-7">
-                  <label for="drive">Привід</label>
-                  <select class="form-control" id="drive" name="drive">
-                    <option value="gear">Мотор-редуктор</option>
-                    <option value="none">Без приводу</option>
-                  </select>
+                <div class="form-group col-6">
+                  <label for="thick">Шахта, товщина</label>
+                  <select class="form-control" id="thick" name="thick"></select>
                 </div>
-                <div class="form-group col-5">
-                  <label for="kw">кВт</label>
-                  <select class="form-control" id="kw" name="kw"></select>
+                <div class="form-group col-6">
+                  <label for="coupling">З'єднувальна муфта</label>
+                  <select class="form-control" id="coupling" name="coupling"></select>
                 </div>
+              </div>
+              <div class="form-check"><input class="form-check-input" type="checkbox" id="lagging" name="lagging" checked><label class="form-check-label" for="lagging">Футування привідного барабана</label></div>
+              <div class="form-check"><input class="form-check-input" type="checkbox" id="backstop" name="backstop"><label class="form-check-label" for="backstop">Муфта зворотного ходу</label></div>
+              <div class="form-check mb-3"><input class="form-check-input" type="checkbox" id="sensors" name="sensors"><label class="form-check-label" for="sensors">Датчики (обертів, підпору<span id="sensor-belt">, сходу стрічки</span>)</label></div>
+              <div class="form-group">
+                <label for="motor">Мотор-редуктор <span class="label-title" id="kw-hint"></span></label>
+                <select class="form-control" id="motor" name="motor"></select>
               </div>
             </form>
           </div>

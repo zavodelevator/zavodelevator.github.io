@@ -1,0 +1,972 @@
+{
+ "_note": "Знімок каталогу норій НКЗ (Google Sheets, та сама таблиця, що й CRM). Не редагуйте вручну — перезапустіть calc/tools/sync_noria.js. Ціни sale_price, грн.",
+ "synced": "2026-11-24",
+ "models": [
+  {
+   "capacity": 5,
+   "buckets_per_m": 5,
+   "chain_available": false,
+   "chain_buckets_per_m": 0,
+   "thickness": [
+    1.5,
+    2
+   ],
+   "boot": 10000,
+   "head": 12000,
+   "shaft_1m": 1715.75,
+   "shaft_chain_1m": 1715.75,
+   "shaft_rev": 2027.7,
+   "shaft_drive": 2027.7,
+   "frame": 405.54
+  },
+  {
+   "capacity": 10,
+   "buckets_per_m": 5,
+   "chain_available": true,
+   "chain_buckets_per_m": 6.6,
+   "thickness": [
+    1.5,
+    2
+   ],
+   "boot": 10000,
+   "head": 12000,
+   "shaft_1m": 1715.75,
+   "shaft_chain_1m": 1715.75,
+   "shaft_rev": 2027.7,
+   "shaft_drive": 2027.7,
+   "frame": 405.54
+  },
+  {
+   "capacity": 25,
+   "buckets_per_m": 5,
+   "chain_available": true,
+   "chain_buckets_per_m": 6.6,
+   "thickness": [
+    1.5,
+    2
+   ],
+   "boot": 18400,
+   "head": 18200,
+   "shaft_1m": 2464.43,
+   "shaft_chain_1m": 0,
+   "shaft_rev": 2651.61,
+   "shaft_drive": 2651.61,
+   "frame": 673.82
+  },
+  {
+   "capacity": 50,
+   "buckets_per_m": 5,
+   "chain_available": true,
+   "chain_buckets_per_m": 6.6,
+   "thickness": [
+    2,
+    3
+   ],
+   "boot": 25000,
+   "head": 21000,
+   "shaft_1m": 3119.54,
+   "shaft_chain_1m": 0,
+   "shaft_rev": 3431.49,
+   "shaft_drive": 3431.49,
+   "frame": 764.29
+  },
+  {
+   "capacity": 100,
+   "buckets_per_m": 6,
+   "chain_available": false,
+   "chain_buckets_per_m": 0,
+   "thickness": [
+    2,
+    3
+   ],
+   "boot": 38900,
+   "head": 28000,
+   "shaft_1m": 3431.49,
+   "shaft_chain_1m": 0,
+   "shaft_rev": 3743.44,
+   "shaft_drive": 0,
+   "frame": 935.86
+  },
+  {
+   "capacity": 175,
+   "buckets_per_m": 5,
+   "chain_available": false,
+   "chain_buckets_per_m": 0,
+   "thickness": [
+    3,
+    4
+   ],
+   "boot": 43000,
+   "head": 31200,
+   "shaft_1m": 3899.42,
+   "shaft_chain_1m": 0,
+   "shaft_rev": 4055.4,
+   "shaft_drive": 0,
+   "frame": 1013.85
+  },
+  {
+   "capacity": 200,
+   "buckets_per_m": 4.5,
+   "chain_available": false,
+   "chain_buckets_per_m": 0,
+   "thickness": [
+    3,
+    4
+   ],
+   "boot": 48000,
+   "head": 36000,
+   "shaft_1m": 4367.35,
+   "shaft_chain_1m": 0,
+   "shaft_rev": 4679.31,
+   "shaft_drive": 0,
+   "frame": 1091.84
+  }
+ ],
+ "buckets": [
+  {
+   "id": "busket-1-1-1:110/110 S-1",
+   "name": "Ківш металевий зварний 110/110 S-1",
+   "type": "metal",
+   "price": 108.4,
+   "caps": [
+    5
+   ],
+   "volume_l": 0.6,
+   "bolts": 2,
+   "bolt": "М8"
+  },
+  {
+   "id": "busket-1-1-2:125/110 S-1",
+   "name": "Ківш металевий зварний 125/110 S-1",
+   "type": "metal",
+   "price": 108.4,
+   "caps": [
+    10
+   ],
+   "volume_l": 0.68,
+   "bolts": 2,
+   "bolt": "М8"
+  },
+  {
+   "id": "busket-1-1-3:160/125 S-1",
+   "name": "Ківш металевий зварний 160/125 S-1",
+   "type": "metal",
+   "price": 102.56,
+   "caps": [
+    25
+   ],
+   "volume_l": 1.35,
+   "bolts": 2,
+   "bolt": "М10"
+  },
+  {
+   "id": "busket-1-1-4:260/125 S-1,5",
+   "name": "Ківш металевий зварний 260/125 S-1,5",
+   "type": "metal",
+   "price": 144.13,
+   "caps": [
+    50
+   ],
+   "volume_l": 2.2,
+   "bolts": 3,
+   "bolt": "М10"
+  },
+  {
+   "id": "busket-1-2-1:120/113 S-5",
+   "name": "Ківш поліетиленовий 120/113 S-5",
+   "type": "plastic",
+   "price": 106.14,
+   "caps": [
+    10
+   ],
+   "volume_l": 0.88,
+   "bolts": 2,
+   "bolt": "М8"
+  },
+  {
+   "id": "busket-1-2-2:160/133 S-5",
+   "name": "Ківш поліетиленовий 160/133 S-5",
+   "type": "plastic",
+   "price": 106.14,
+   "caps": [
+    25
+   ],
+   "volume_l": 1.35,
+   "bolts": 2,
+   "bolt": "М8"
+  },
+  {
+   "id": "busket-1-2-3:260/125 S-8",
+   "name": "Ківш поліетиленовий 260/125 S-8",
+   "type": "plastic",
+   "price": 181.44,
+   "caps": [
+    50
+   ],
+   "volume_l": 3.4,
+   "bolts": 3,
+   "bolt": "М10"
+  },
+  {
+   "id": "busket-1-2-3:260/157 S-8",
+   "name": "Ківш поліетиленовий 260/157 S-8",
+   "type": "plastic",
+   "price": 201.85,
+   "caps": [
+    100
+   ],
+   "volume_l": 3.4,
+   "bolts": 3,
+   "bolt": "М10"
+  },
+  {
+   "id": "busket-1-2-4:395/178 S-8",
+   "name": "Ківш поліетиленовий 395/178 S-8",
+   "type": "plastic",
+   "price": 408.23,
+   "caps": [
+    175
+   ],
+   "volume_l": 6.5,
+   "bolts": 4,
+   "bolt": "М10"
+  },
+  {
+   "id": "busket-1-2-5:430/253 S-9",
+   "name": "Ківш поліетиленовий 430/253 S-9",
+   "type": "plastic",
+   "price": 476.27,
+   "caps": [
+    200
+   ],
+   "volume_l": 9.2,
+   "bolts": 4,
+   "bolt": "М10"
+  }
+ ],
+ "belts": [
+  {
+   "id": "conv_belt-1-1-1",
+   "name": "Стрічка конвеєрна БКНЛ 125 мм, 3 пр.",
+   "width": 125,
+   "ply": "3",
+   "price": 153.99,
+   "caps": [
+    5
+   ]
+  },
+  {
+   "id": "conv_belt-1-1-2",
+   "name": "Стрічка конвеєрна БКНЛ 125 мм, 5 пр.",
+   "width": 125,
+   "ply": "5",
+   "price": 189.52,
+   "caps": [
+    5
+   ]
+  },
+  {
+   "id": "conv_belt-1-1-3",
+   "name": "Стрічка конвеєрна БКНЛ 125 мм, 6 пр.",
+   "width": 125,
+   "ply": "6",
+   "price": 216.77,
+   "caps": [
+    5
+   ]
+  },
+  {
+   "id": "conv_belt-1-1-4",
+   "name": "Стрічка конвеєрна БКНЛ 150 мм, 4 пр.",
+   "width": 150,
+   "ply": "4",
+   "price": 188.34,
+   "caps": [
+    10
+   ]
+  },
+  {
+   "id": "conv_belt-1-1-5",
+   "name": "Стрічка конвеєрна БКНЛ 150 мм, 6 пр.",
+   "width": 150,
+   "ply": "6",
+   "price": 284.29,
+   "caps": [
+    10
+   ]
+  },
+  {
+   "id": "conv_belt-1-1-6",
+   "name": "Стрічка конвеєрна БКНЛ 150 мм, 8 пр.",
+   "width": 150,
+   "ply": "8",
+   "price": 376.68,
+   "caps": [
+    10
+   ]
+  },
+  {
+   "id": "conv_belt-1-1-7",
+   "name": "Стрічка конвеєрна БКНЛ 175 мм, 5 пр.",
+   "width": 175,
+   "ply": "5",
+   "price": 248.75,
+   "caps": [
+    25
+   ]
+  },
+  {
+   "id": "conv_belt-1-1-8",
+   "name": "Стрічка конвеєрна БКНЛ 175 мм, 6 пр.",
+   "width": 175,
+   "ply": "6",
+   "price": 291.39,
+   "caps": [
+    25
+   ]
+  },
+  {
+   "id": "conv_belt-1-1-9",
+   "name": "Стрічка конвеєрна БКНЛ 175 мм, 8 пр.",
+   "width": 175,
+   "ply": "8",
+   "price": 390.89,
+   "caps": [
+    25
+   ]
+  },
+  {
+   "id": "conv_belt-1-1-10",
+   "name": "Стрічка конвеєрна БКНЛ 200 мм, 4 пр.",
+   "width": 200,
+   "ply": "4",
+   "price": 252.3,
+   "caps": []
+  },
+  {
+   "id": "conv_belt-1-1-11",
+   "name": "Стрічка конвеєрна БКНЛ 200 мм, 6 пр.",
+   "width": 200,
+   "ply": "6",
+   "price": 344.7,
+   "caps": []
+  },
+  {
+   "id": "conv_belt-1-1-12",
+   "name": "Стрічка конвеєрна БКНЛ 300 мм, 5 пр.",
+   "width": 300,
+   "ply": "5",
+   "price": 426.43,
+   "caps": [
+    50,
+    100
+   ]
+  },
+  {
+   "id": "conv_belt-1-1-13",
+   "name": "Стрічка конвеєрна БКНЛ 300 мм, 6 пр.",
+   "width": 300,
+   "ply": "6",
+   "price": 490.39,
+   "caps": [
+    50,
+    100
+   ]
+  },
+  {
+   "id": "conv_belt-1-1-14",
+   "name": "Стрічка конвеєрна БКНЛ 300 мм, 8 пр.",
+   "width": 300,
+   "ply": "8",
+   "price": 639.64,
+   "caps": [
+    50,
+    100
+   ]
+  },
+  {
+   "id": "conv_belt-1-1-15",
+   "name": "Стрічка конвеєрна БКНЛ 400 мм, 6 пр.",
+   "width": 400,
+   "ply": "6",
+   "price": 639.64,
+   "caps": []
+  },
+  {
+   "id": "conv_belt-1-1-16",
+   "name": "Стрічка конвеєрна БКНЛ 400 мм, 8 пр.",
+   "width": 400,
+   "ply": "8",
+   "price": 1140.69,
+   "caps": []
+  },
+  {
+   "id": "conv_belt-1-1-17",
+   "name": "Стрічка конвеєрна БКНЛ 600 мм, 2 2/0 пр.",
+   "width": 600,
+   "ply": "2 2/0",
+   "price": 653.86,
+   "caps": []
+  }
+ ],
+ "chains": [
+  {
+   "id": "conv_chain-1-1-1",
+   "name": "Ланцюг ТРД-38",
+   "price": 1066.07,
+   "caps": [
+    10,
+    25,
+    50
+   ]
+  },
+  {
+   "id": "conv_chain-1-1-2",
+   "name": "Ланцюг М-66",
+   "price": 1895.23,
+   "caps": []
+  },
+  {
+   "id": "conv_chain-1-1-3",
+   "name": "Ланцюг М-80",
+   "price": 2842.85,
+   "caps": []
+  },
+  {
+   "id": "conv_chain-1-1-4",
+   "name": "Ланцюг М-112",
+   "price": 3079.75,
+   "caps": []
+  }
+ ],
+ "couplings": [
+  {
+   "id": "att_equip-1-1-1",
+   "name": "Муфта зєднувальна PHE FRC 130RSB SKF",
+   "price": 10033.9,
+   "caps": [
+    10,
+    25,
+    50,
+    100
+   ]
+  },
+  {
+   "id": "att_equip-1-1-2",
+   "name": "Муфта зєднувальна PHE FRC 180RSB SKF",
+   "price": 5254.12,
+   "caps": [
+    10,
+    25,
+    50,
+    100
+   ]
+  }
+ ],
+ "backstops": [
+  {
+   "id": "att_equip-1-1-3",
+   "name": "Обгонна муфта GV 60",
+   "price": 18243.11,
+   "caps": [
+    100,
+    200
+   ]
+  }
+ ],
+ "sensors": [
+  {
+   "id": "att_equip-1-1-4",
+   "name": "Датчик сходу стрічки",
+   "price": 1824.35,
+   "caps": [
+    100,
+    200
+   ]
+  },
+  {
+   "id": "att_equip-1-1-5",
+   "name": "Датчик обертів",
+   "price": 9121.73,
+   "caps": [
+    5,
+    10,
+    25,
+    50,
+    100,
+    200
+   ]
+  },
+  {
+   "id": "att_equip-1-1-6",
+   "name": "Датчик підпору",
+   "price": 1824.35,
+   "caps": [
+    5,
+    10,
+    25,
+    50,
+    100,
+    200
+   ]
+  }
+ ],
+ "metiz": {
+  "bolt_M8": {
+   "price_kg": 204.12,
+   "weight_kg": 0.0155
+  },
+  "bolt_M10": {
+   "price_kg": 204.12,
+   "weight_kg": 0.03
+  },
+  "nut_M8": {
+   "price_kg": 204.12,
+   "weight_kg": 0.0045
+  },
+  "nut_M10": {
+   "price_kg": 204.12,
+   "weight_kg": 0.0105
+  },
+  "washer": {
+   "price_kg": 251.29,
+   "weight_kg": 0.0045
+  }
+ },
+ "gear_motors": [
+  {
+   "id": "g_motor-1-1-1:techno_privod:63",
+   "kw": 1.1,
+   "type": "Черв'ячний",
+   "gab": "63",
+   "saler": "techno_privod",
+   "price": 14630.67
+  },
+  {
+   "id": "g_motor-1-1-2:techno_privod:75",
+   "kw": 1.1,
+   "type": "Черв'ячний",
+   "gab": "75",
+   "saler": "techno_privod",
+   "price": 17257.54
+  },
+  {
+   "id": "g_motor-1-1-3:techno_privod:63",
+   "kw": 1.5,
+   "type": "Черв'ячний",
+   "gab": "63",
+   "saler": "techno_privod",
+   "price": 16210.12
+  },
+  {
+   "id": "g_motor-1-1-4:techno_privod:75",
+   "kw": 1.5,
+   "type": "Черв'ячний",
+   "gab": "75",
+   "saler": "techno_privod",
+   "price": 18587.6
+  },
+  {
+   "id": "g_motor-1-1-5:techno_privod:75",
+   "kw": 2.2,
+   "type": "Черв'ячний",
+   "gab": "75",
+   "saler": "techno_privod",
+   "price": 21905.37
+  },
+  {
+   "id": "g_motor-1-1-6:techno_privod:90",
+   "kw": 2.2,
+   "type": "Черв'ячний",
+   "gab": "90",
+   "saler": "techno_privod",
+   "price": 24846.28
+  },
+  {
+   "id": "g_motor-1-1-7:techno_privod:90",
+   "kw": 3,
+   "type": "Черв'ячний",
+   "gab": "90",
+   "saler": "techno_privod",
+   "price": 26628.93
+  },
+  {
+   "id": "g_motor-1-1-8:techno_privod:110",
+   "kw": 3,
+   "type": "Черв'ячний",
+   "gab": "110",
+   "saler": "techno_privod",
+   "price": 35357.46
+  },
+  {
+   "id": "g_motor-1-1-9:techno_privod:90",
+   "kw": 4,
+   "type": "Черв'ячний",
+   "gab": "90",
+   "saler": "techno_privod",
+   "price": 28901.12
+  },
+  {
+   "id": "g_motor-1-1-10:techno_privod:110",
+   "kw": 4,
+   "type": "Черв'ячний",
+   "gab": "110",
+   "saler": "techno_privod",
+   "price": 37629.64
+  },
+  {
+   "id": "g_motor-1-1-11:techno_privod:110",
+   "kw": 5.5,
+   "type": "Черв'ячний",
+   "gab": "110",
+   "saler": "techno_privod",
+   "price": 42432.64
+  },
+  {
+   "id": "g_motor-1-1-12:techno_privod:130",
+   "kw": 5.5,
+   "type": "Черв'ячний",
+   "gab": "130",
+   "saler": "techno_privod",
+   "price": 49082.95
+  },
+  {
+   "id": "g_motor-1-1-13:techno_privod:110",
+   "kw": 7.5,
+   "type": "Черв'ячний",
+   "gab": "110",
+   "saler": "techno_privod",
+   "price": 49618.67
+  },
+  {
+   "id": "g_motor-1-1-14:techno_privod:130",
+   "kw": 7.5,
+   "type": "Черв'ячний",
+   "gab": "130",
+   "saler": "techno_privod",
+   "price": 56268.97
+  },
+  {
+   "id": "g_motor-1-1-15:techno_privod:150",
+   "kw": 7.5,
+   "type": "Черв'ячний",
+   "gab": "150",
+   "saler": "techno_privod",
+   "price": 70973.53
+  },
+  {
+   "id": "g_motor-1-1-16:techno_privod:130",
+   "kw": 9.2,
+   "type": "Черв'ячний",
+   "gab": "130",
+   "saler": "techno_privod",
+   "price": 61626.16
+  },
+  {
+   "id": "g_motor-1-1-17:techno_privod:150",
+   "kw": 9.2,
+   "type": "Черв'ячний",
+   "gab": "150",
+   "saler": "techno_privod",
+   "price": 76349.2
+  },
+  {
+   "id": "g_motor-1-1-18:techno_privod:150",
+   "kw": 11,
+   "type": "Черв'ячний",
+   "gab": "150",
+   "saler": "techno_privod",
+   "price": 79360.31
+  },
+  {
+   "id": "g_motor-1-1-19:techno_privod:150",
+   "kw": 15,
+   "type": "Черв'ячний",
+   "gab": "150",
+   "saler": "techno_privod",
+   "price": 98202.84
+  },
+  {
+   "id": "g_motor-1-2-1:techno_privod:63",
+   "kw": 2.2,
+   "type": "Конічно-циліндричний IRKPM",
+   "gab": "63",
+   "saler": "techno_privod",
+   "price": 46818.19
+  },
+  {
+   "id": "g_motor-1-2-2:techno_privod:63",
+   "kw": 3,
+   "type": "Конічно-циліндричний IRKPM",
+   "gab": "63",
+   "saler": "techno_privod",
+   "price": 50490.2
+  },
+  {
+   "id": "g_motor-1-2-3:techno_privod:73",
+   "kw": 4,
+   "type": "Конічно-циліндричний IRKPM",
+   "gab": "73",
+   "saler": "techno_privod",
+   "price": 74541.9
+  },
+  {
+   "id": "g_motor-1-2-4:techno_privod:83",
+   "kw": 5.5,
+   "type": "Конічно-циліндричний IRKPM",
+   "gab": "83",
+   "saler": "techno_privod",
+   "price": 105570.43
+  },
+  {
+   "id": "g_motor-1-2-5:techno_privod:83",
+   "kw": 7.5,
+   "type": "Конічно-циліндричний IRKPM",
+   "gab": "83",
+   "saler": "techno_privod",
+   "price": 111445.65
+  },
+  {
+   "id": "g_motor-1-2-6:techno_privod:83",
+   "kw": 9.2,
+   "type": "Конічно-циліндричний IRKPM",
+   "gab": "83",
+   "saler": "techno_privod",
+   "price": 118789.68
+  },
+  {
+   "id": "g_motor-1-2-7:techno_privod:93",
+   "kw": 11,
+   "type": "Конічно-циліндричний IRKPM",
+   "gab": "93",
+   "saler": "techno_privod",
+   "price": 164322.67
+  },
+  {
+   "id": "g_motor-1-2-8:techno_privod:93",
+   "kw": 15,
+   "type": "Конічно-циліндричний IRKPM",
+   "gab": "93",
+   "saler": "techno_privod",
+   "price": 167994.68
+  },
+  {
+   "id": "g_motor-1-2-9:techno_privod:103",
+   "kw": 18.5,
+   "type": "Конічно-циліндричний IRKPM",
+   "gab": "103",
+   "saler": "techno_privod",
+   "price": 200124.81
+  },
+  {
+   "id": "g_motor-1-2-10:techno_privod:103",
+   "kw": 22,
+   "type": "Конічно-циліндричний IRKPM",
+   "gab": "103",
+   "saler": "techno_privod",
+   "price": 205632.83
+  },
+  {
+   "id": "g_motor-1-2-11:techno_privod:123",
+   "kw": 30,
+   "type": "Конічно-циліндричний IRKPM",
+   "gab": "123",
+   "saler": "techno_privod",
+   "price": 449821.82
+  },
+  {
+   "id": "g_motor-1-3-1:Sew evro-drive:",
+   "kw": 2.2,
+   "type": "Конічно-циліндричний IRKPM",
+   "gab": "",
+   "saler": "Sew evro-drive",
+   "price": 89402.57
+  },
+  {
+   "id": "g_motor-1-3-2:Sew evro-drive:",
+   "kw": 3,
+   "type": "Конічно-циліндричний IRKPM",
+   "gab": "",
+   "saler": "Sew evro-drive",
+   "price": 52051.34
+  },
+  {
+   "id": "g_motor-1-3-3:Sew evro-drive:",
+   "kw": 4,
+   "type": "Конічно-циліндричний IRKPM",
+   "gab": "",
+   "saler": "Sew evro-drive",
+   "price": 121391.49
+  },
+  {
+   "id": "g_motor-1-3-4:Sew evro-drive:",
+   "kw": 5.5,
+   "type": "Конічно-циліндричний IRKPM",
+   "gab": "",
+   "saler": "Sew evro-drive",
+   "price": 155784.2
+  },
+  {
+   "id": "g_motor-1-3-5:Sew evro-drive:",
+   "kw": 7.5,
+   "type": "Конічно-циліндричний IRKPM",
+   "gab": "",
+   "saler": "Sew evro-drive",
+   "price": 174274.91
+  },
+  {
+   "id": "g_motor-1-3-6:Sew evro-drive:",
+   "kw": 9.2,
+   "type": "Конічно-циліндричний IRKPM",
+   "gab": "",
+   "saler": "Sew evro-drive",
+   "price": 201548.7
+  },
+  {
+   "id": "g_motor-1-3-7:Sew evro-drive:",
+   "kw": 11,
+   "type": "Конічно-циліндричний IRKPM",
+   "gab": "",
+   "saler": "Sew evro-drive",
+   "price": 251843.42
+  },
+  {
+   "id": "g_motor-1-3-8:Sew evro-drive:",
+   "kw": 15,
+   "type": "Конічно-циліндричний IRKPM",
+   "gab": "",
+   "saler": "Sew evro-drive",
+   "price": 284109.7
+  },
+  {
+   "id": "g_motor-1-3-8:motovario:",
+   "kw": 15,
+   "type": "Конічно-циліндричний IRKPM",
+   "gab": "",
+   "saler": "motovario",
+   "price": 284109.7
+  }
+ ],
+ "kw_by_h": {
+  "10": [
+   {
+    "max_h": 6,
+    "kw": 1.1
+   },
+   {
+    "max_h": 11,
+    "kw": 1.5
+   },
+   {
+    "max_h": 16,
+    "kw": 2.2
+   },
+   {
+    "max_h": 25,
+    "kw": 3
+   }
+  ],
+  "25": [
+   {
+    "max_h": 6,
+    "kw": 1.5
+   },
+   {
+    "max_h": 16,
+    "kw": 2.2
+   },
+   {
+    "max_h": 20,
+    "kw": 3
+   },
+   {
+    "max_h": 23,
+    "kw": 4
+   },
+   {
+    "max_h": 27,
+    "kw": 5.5
+   },
+   {
+    "max_h": 30,
+    "kw": 7.5
+   }
+  ],
+  "50": [
+   {
+    "max_h": 7,
+    "kw": 3
+   },
+   {
+    "max_h": 10,
+    "kw": 4
+   },
+   {
+    "max_h": 20,
+    "kw": 5.5
+   },
+   {
+    "max_h": 27,
+    "kw": 7.5
+   }
+  ],
+  "100": [
+   {
+    "max_h": 9,
+    "kw": 5.5
+   },
+   {
+    "max_h": 15,
+    "kw": 7.5
+   },
+   {
+    "max_h": 22,
+    "kw": 11
+   },
+   {
+    "max_h": 30,
+    "kw": 15
+   }
+  ],
+  "175": [
+   {
+    "max_h": 9,
+    "kw": 7.5
+   },
+   {
+    "max_h": 15,
+    "kw": 11
+   },
+   {
+    "max_h": 22,
+    "kw": 15
+   },
+   {
+    "max_h": 30,
+    "kw": 18
+   }
+  ],
+  "200": [
+   {
+    "max_h": 5,
+    "kw": 7.5
+   },
+   {
+    "max_h": 9,
+    "kw": 11
+   },
+   {
+    "max_h": 15,
+    "kw": 15
+   },
+   {
+    "max_h": 22,
+    "kw": 18
+   },
+   {
+    "max_h": 30,
+    "kw": 22
+   }
+  ]
+ }
+}
