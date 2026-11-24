@@ -24,46 +24,121 @@
 
   <div class="container">
     <div class="card">
-      <div class="card-header">Шнековий транспортер (простий режим)</div>
+      <div class="card-header">Транспортер шнековий</div>
       <div class="card-body">
         <div class="row">
-          <div class="col-md-4">
-            <form id="inputs">
+          <div class="col-md-4 col-lg-4">
+            <form id="inputs" autocomplete="off">
               <div class="form-group">
-                <label for="diameter">Діаметр труби</label>
-                <select class="form-control" id="diameter" name="diameter"></select>
+                <div class="btn-group btn-group-toggle w-100" role="group" data-toggle-group="type">
+                  <label class="btn btn-outline-primary active"><input type="radio" name="type" value="tube" checked> Труба</label>
+                  <label class="btn btn-outline-primary"><input type="radio" name="type" value="trough"> Жолоб</label>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-6">
+                  <label for="size">Типорозмір, мм</label>
+                  <select class="form-control" id="size" name="size"></select>
+                </div>
+                <div class="form-group col-6">
+                  <label for="length">Довжина L, м</label>
+                  <input type="number" step="any" class="form-control" id="length" name="length" value="6">
+                </div>
               </div>
               <div class="form-group">
-                <label for="length">Довжина, м</label>
-                <input type="number" step="any" class="form-control" id="length" name="length" value="6">
+                <label for="preset">Виконання (метал)</label>
+                <select class="form-control" id="preset" name="preset"></select>
               </div>
+              <div class="form-row">
+                <div class="form-group col-7">
+                  <label for="profile">Продукт</label>
+                  <select class="form-control" id="profile" name="profile"></select>
+                </div>
+                <div class="form-group col-5">
+                  <label for="slope">Нахил, °</label>
+                  <input type="number" step="any" min="0" max="20" class="form-control" id="slope" name="slope" value="0">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-7">
+                  <label for="drive">Привід</label>
+                  <select class="form-control" id="drive" name="drive">
+                    <option value="gear">Мотор-редуктор</option>
+                    <option value="motor">Двигун + ремінь</option>
+                    <option value="none">Без приводу</option>
+                  </select>
+                </div>
+                <div class="form-group col-5">
+                  <label for="kw">кВт</label>
+                  <select class="form-control" id="kw" name="kw"></select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-4">
+                  <label for="hopper">Бункер, м³</label>
+                  <input type="number" step="any" min="0" class="form-control" id="hopper" name="hopper" value="0" title="0 — без бункера">
+                </div>
+                <div class="form-group col-4">
+                  <label for="krot">Крот, м</label>
+                  <input type="number" step="any" min="0" class="form-control" id="krot" name="krot" value="0" title="Довжина відкритої приймальної частини; 0 — без крота">
+                </div>
+                <div class="form-group col-4">
+                  <label for="stand">Опора</label>
+                  <select class="form-control" id="stand" name="stand">
+                    <option value="none">—</option>
+                    <option value="stand">Підставка</option>
+                    <option value="chassis">Шасі</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row" id="chassis-fields" hidden>
+                <div class="form-group col-8">
+                  <label for="wheels">Колеса</label>
+                  <select class="form-control" id="wheels" name="wheels"></select>
+                </div>
+                <div class="form-group col-4 d-flex align-items-end">
+                  <div class="form-check mb-2"><input class="form-check-input" type="checkbox" id="winch" name="winch"><label class="form-check-label" for="winch">Лебідка</label></div>
+                </div>
+              </div>
+
               <div class="form-group">
-                <label for="drive">Привід</label>
-                <select class="form-control" id="drive" name="drive">
-                  <option value="none">без приводу</option>
-                  <option value="motor">електродвигун (ремінна передача)</option>
-                  <option value="gear" selected>мотор-редуктор</option>
-                </select>
+                <label class="d-block">Ціна</label>
+                <div class="btn-group btn-group-toggle w-100" role="group" data-toggle-group="mode">
+                  <label class="btn btn-outline-success active"><input type="radio" name="mode" value="simple" checked> Простий прайс</label>
+                  <label class="btn btn-outline-success"><input type="radio" name="mode" value="detailed"> Детальний</label>
+                </div>
               </div>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="hopper" name="hopper">
-                <label class="form-check-label" for="hopper">Бункер</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="stand" name="stand">
-                <label class="form-check-label" for="stand">Підставка</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="krot" name="krot">
-                <label class="form-check-label" for="krot">Крот (прохідний)</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="trough" name="trough">
-                <label class="form-check-label" for="trough">Жолоб (відкритий)</label>
-              </div>
+
+              <details class="mb-3">
+                <summary class="label-title">Додатково (спіраль, крок, продуктивність)</summary>
+                <div class="form-row mt-2">
+                  <div class="form-group col-6">
+                    <label for="flight_tech">Спіраль</label>
+                    <select class="form-control" id="flight_tech" name="flight_tech">
+                      <option value="solid">Цільнотягнута</option>
+                      <option value="segment">Сегменти</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-6">
+                    <label for="pitch_ratio">Крок, × D</label>
+                    <input type="number" step="any" class="form-control" id="pitch_ratio" name="pitch_ratio" placeholder="1,0">
+                  </div>
+                  <div class="form-group col-6">
+                    <label for="q">Потрібно, т/год</label>
+                    <input type="number" step="any" class="form-control" id="q" name="q" placeholder="макс.">
+                  </div>
+                  <div class="form-group col-6">
+                    <label for="price_type">Тип ціни</label>
+                    <select class="form-control" id="price_type" name="price_type">
+                      <option value="retail">Роздріб</option>
+                      <option value="wholesale">Опт</option>
+                    </select>
+                  </div>
+                </div>
+              </details>
             </form>
           </div>
-          <div class="col-md-8" id="result"><div class="text-muted">Завантаження…</div></div>
+          <div class="col-md-8"><div id="viz"></div><div id="result"><div class="text-muted">Завантаження…</div></div></div>
         </div>
       </div>
     </div>
@@ -85,6 +160,7 @@
   <!-- PANEL:END -->
 
   <script src="js/core.js"></script>
+  <script src="js/shnek_core.js"></script>
   <script src="js/screw.js"></script>
 </body>
 </html>

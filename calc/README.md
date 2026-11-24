@@ -4,8 +4,8 @@
 
 | Сторінка | Дані | Джерело формули |
 |---|---|---|
-| `repair.html` — ремонт шнека | `data/repair.json`, `data/metals.json` | CRM `ScrewRepairCalculator` |
-| `screw.html` — шнековий транспортер | `data/screw_conveyor.json`, `data/gear_motors.json` | CRM `ScrewConveyorSimpleCalculator` (= стара `calc_sh_t2`) |
+| `repair.html` — ремонт шнека | `data/repair.json`, `data/metals.json` | Google Sheet «РЕМОНТ шнека», вкладка РШ (контроль 9 336) + сегменти з CRM |
+| `screw.html` — шнековий транспортер | `data/screw_conveyor.json` (простий прайс), `data/shnek_core.json` (детальний), `data/gear_motors.json` | простий: CRM `ScrewConveyorSimpleCalculator`; детальний: `js/shnek_core.js` = порт CRM `app/javascript/lib/shnek_core.js`, звірено з 57 golden-кейсами CRM |
 | `noria.html` — норія | `data/noria.json`, `data/gear_motors.json` | вузли (ціни ще 0) + паперовий прайс довідково |
 | `tsh.html` — шкребковий ТШ | `data/tsh.json`, `data/gear_motors.json` | Google Sheet «РЕМОНТ шнека», вкладка ТШ = CRM `TshConveyorCalculator` |
 | `spiral.html` — цільнотягнута спіраль | `data/spiral.json`, `data/metals.json` | CRM `SpiralCalculator`, ПДВ 20% один раз |

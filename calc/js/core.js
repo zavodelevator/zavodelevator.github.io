@@ -216,7 +216,7 @@
       el.innerHTML = '<div class="alert alert-warning mb-0">' + esc(out.error) + '</div>';
       return;
     }
-    var pricing = get(D, cfg.pricing + '.pricing');
+    var pricing = out.pricing || get(D, cfg.pricing + '.pricing');
     var t = totals(out.rows, pricing);
     var rowsHtml = out.rows.map(function (r) {
       var sum = num(r.qty) * num(r.price);
