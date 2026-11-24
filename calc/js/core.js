@@ -41,13 +41,28 @@
   }
 
   // ---------- завантаження ----------
+  var priceInfo = null;
+  function showPriceInfo() {
+    var el = document.getElementById('price-file');
+    if (!el || !priceInfo) return;
+    el.innerHTML = priceInfo.file
+      ? 'Ціни: <a href="prices.html">' + esc(priceInfo.file.replace(/^prices_|\.json$/g, '').replace('_', ' ').replace(/-(\d\d)$/, ':$1')) + '</a>'
+      : '<span class="text-danger">Файл цін не знайдено — ціни з data/*.json</span>';
+  }
+
   function load(names) {
     return Promise.all(names.map(function (n) {
       return fetch('data/' + n + '.json', { cache: 'no-store' }).then(function (r) {
         if (!r.ok) throw new Error('data/' + n + '.json: HTTP ' + r.status);
         return r.json();
       }).then(function (j) { original[n] = j; });
-    })).then(function () { D = clone(original); });
+    })).then(function () {
+      if (!window.Prices) return;
+      return window.Prices.latest('prices/').then(function (pr) {
+        var n = window.Prices.apply(original, pr.data);
+        priceInfo = { file: pr.file, applied: n };
+      }).catch(function (e) { priceInfo = { error: e.message }; });
+    }).then(function () { D = clone(original); showPriceInfo(); });
   }
 
   // ---------- вхідні поля сторінки ----------

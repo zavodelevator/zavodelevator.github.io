@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Ціни калькуляторів</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/calc.css">
+  <link rel="icon" href="https://fonts.gstatic.com/s/i/materialiconsoutlined/settings/v6/24px.svg">
+  <style>
+    .pe-group > .card-header { cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+    .pe-group .badge-changed { background: #ffc107; }
+    .pe-sub { font-weight: bold; font-size: .9rem; margin: .75rem 0 .25rem; }
+    .pe-table td { vertical-align: middle; padding: .25rem .4rem; }
+    .pe-table input { max-width: 130px; margin-left: auto; text-align: right; }
+    .pe-table tr.changed input { background: #fff3cd; font-weight: bold; }
+    .pe-used .badge { font-weight: normal; margin: 0 2px 2px 0; }
+    .pe-note { font-size: .75rem; color: #6c757d; }
+    .pe-was { font-size: .72rem; color: #6c757d; white-space: nowrap; }
+    #pe-bar { position: sticky; top: 0; z-index: 10; background: #f8f9fa; padding: .5rem 0; border-bottom: 1px solid #dee2e6; }
+    @media (max-width: 576px) { .pe-table .pe-used { display: none; } }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="index.html">Agrohelix · калькулятори</a>
+    <ul class="navbar-nav flex-row flex-wrap">
+      <li class="nav-item mr-3"><a class="nav-link" href="repair.html">Ремонт шнека</a></li>
+      <li class="nav-item mr-3"><a class="nav-link" href="screw.html">Шнековий транспортер</a></li>
+      <li class="nav-item mr-3"><a class="nav-link" href="noria.html">Норія</a></li>
+      <li class="nav-item mr-3"><a class="nav-link" href="tsh.html">ТШ</a></li>
+      <li class="nav-item mr-3"><a class="nav-link" href="belt.html">Стрічковий</a></li>
+      <li class="nav-item mr-3"><a class="nav-link" href="spiral.html">Спіраль</a></li>
+      <li class="nav-item mr-3"><a class="nav-link" href="sklad_spiral.html">Склад спіралей</a></li>
+      <li class="nav-item mr-3 active"><a class="nav-link" href="prices.html" title="Ціни">⚙ Ціни</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <div class="card">
+      <div class="card-header d-flex flex-wrap justify-content-between align-items-center">
+        <span>⚙ Ціни калькуляторів</span>
+        <span class="small text-muted" id="pe-file">Завантаження…</span>
+      </div>
+      <div class="card-body">
+        <details class="mb-3">
+          <summary><b>Як це працює</b></summary>
+          <ol class="small mt-2 mb-0">
+            <li>Усі ціни калькуляторів лежать в одному файлі <code>calc/prices/prices_РРРР-ММ-ДД_ГГ-ХХ.json</code>. Кожен калькулятор бере файл з <b>найпізнішою датою, не пізніше сьогодні</b>.</li>
+            <li>Змініть ціни нижче (змінені поля підсвічуються жовтим) і натисніть <b>«Завантажити JSON»</b> — файл збережеться з поточною датою й часом у назві.</li>
+            <li>Покладіть файл на GitHub у папку <a href="https://github.com/zavodelevator/zavodelevator.github.io/tree/master/calc/prices" target="_blank" rel="noopener">calc/prices</a> (Add file → Upload files → Commit). Старі файли не видаляйте — це історія цін.</li>
+            <li>Однакові ціни (той самий товар у кількох калькуляторах) показано <b>один раз</b>; під ціною видно, де вона використовується.</li>
+            <li>Ціни норії з каталогу НКЗ (головки, башмаки, шахти, ковші, стрічки, ланцюги) змінюються в Google-таблиці НКЗ, не тут.</li>
+          </ol>
+        </details>
+        <div id="pe-bar" class="d-flex flex-wrap align-items-center">
+          <input type="search" class="form-control form-control-sm mr-2 mb-1" id="pe-search" placeholder="Пошук: сталь, ТШ 50, підвіс…" style="max-width:280px">
+          <button class="btn btn-sm btn-outline-secondary mr-2 mb-1" id="pe-only-changed">Лише змінені</button>
+          <button class="btn btn-sm btn-outline-secondary mr-2 mb-1" id="pe-expand">Розгорнути все</button>
+          <label class="btn btn-sm btn-outline-secondary mr-2 mb-1">Відкрити файл…<input type="file" id="pe-open" accept=".json" hidden></label>
+          <button class="btn btn-sm btn-outline-danger mr-2 mb-1" id="pe-reset">Скинути зміни</button>
+          <button class="btn btn-sm btn-success mb-1" id="pe-download">⬇ Завантажити JSON <span class="badge badge-light" id="pe-count">0</span></button>
+        </div>
+        <textarea class="form-control form-control-sm mt-2" id="pe-note" rows="1" placeholder="Що змінено (необов'язково, потрапить у файл)"></textarea>
+        <div id="pe-groups" class="mt-3"></div>
+      </div>
+    </div>
+  </div>
+  <script src="js/prices.js"></script>
+  <script src="js/prices_editor.js"></script>
+</body>
+</html>

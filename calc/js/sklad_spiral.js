@@ -1,5 +1,10 @@
 // Копія sclad_sp2.js (склад спіралей) — ціна штрипса 65 грн/кг замість 60 (рішення власника 2026-11-24).
 var STRIP_PRICE = 65;
+// ціна штрипса з найсвіжішого файлу цін (calc/prices), якщо він доступний
+if (window.Prices) window.Prices.latest('prices/').then(function (pr) {
+  var v = window.Prices.get(pr.data, 'metal.strip.st3');
+  if (v > 0) STRIP_PRICE = v;
+}).catch(function () {});
 // alert("Hello 38");
 
 // Ініціалізація: перемикачі, Enter, завантаження даних

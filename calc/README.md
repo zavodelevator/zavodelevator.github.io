@@ -34,3 +34,9 @@ python -m http.server 8000
 - `panel(D)` — вкладки правої панелі: `{ tab, note, fields: [{ path, label, unit, type: number|checkbox|select|table, columns }] }`.
 - `compute(D, inputs)` → `{ title, rows: [{ name, qty, unit, price, note }], info: [{ label, value }], warnings: [] }` або `{ error }`.
 Новий калькулятор = HTML за зразком `tsh.html` + `js/<name>.js` + `data/<name>.json`.
+
+## Файл цін (⚙ Ціни)
+- Усі ціни — в одному файлі `calc/prices/prices_РРРР-ММ-ДД_ГГ-ХХ.json`. Калькулятори беруть файл з **найпізнішою датою, не пізніше «зараз»** (список файлів: GitHub API на github.io → список каталогу локального сервера → `prices/index.json`) і накладають ціни поверх `data/*.json`.
+- Редагування: сторінка `prices.html` (пункт «⚙ Ціни» в меню). Однакові ціни (той самий товар у кількох калькуляторах) зведено в одну позицію з кількома `paths`. «Завантажити JSON» зберігає новий файл з поточною датою й часом — покладіть його в `calc/prices/` на GitHub. Старі файли не видаляйте.
+- Перший файл згенеровано: `TZ=Europe/Kyiv node calc/tools/build_prices.js calc`. Нові позиції додаються в `tools/build_prices.js`.
+- Ціни норії з каталогу НКЗ (головки, башмаки, шахти, ковші, стрічки) — у Google-таблиці НКЗ (`tools/sync_noria.js`), у файл цін не входять.
