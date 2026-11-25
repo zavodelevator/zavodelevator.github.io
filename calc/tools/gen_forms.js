@@ -54,28 +54,28 @@ function grid(title, colHeads, rows, opts = {}) {
 
 function page(title, subtitle, body) {
   return `<!doctype html><html lang="uk"><head><meta charset="utf-8"><title>${esc(title)}</title><style>
-  @page { size: A4; margin: 12mm 11mm 14mm; }
-  body { font: 10.5pt Arial, sans-serif; color: #000; }
-  h1 { font-size: 16pt; margin: 0 0 2mm; } .sub { margin: 0 0 4mm; font-size: 9.5pt; }
-  .meta { display: flex; gap: 10mm; font-size: 10pt; margin-bottom: 5mm; } .meta span { flex: 1; border-bottom: 1px solid #000; padding-bottom: 1mm; }
-  h2 { font-size: 12pt; margin: 6mm 0 1.5mm; padding: 1mm 2mm; background: #e9e9e9; border-left: 3px solid #000; display: flex; justify-content: space-between; break-after: avoid; }
-  .vat { font-weight: normal; font-size: 9pt; }
-  .note { margin: 0 0 1.5mm; font-size: 8.5pt; color: #333; }
+  @page { size: A4; margin: 14mm 12mm 16mm; }
+  body { font: 11.5pt Arial, sans-serif; color: #000; }
+  h1 { font-size: 18pt; margin: 0 0 2mm; } .sub { margin: 0 0 4mm; font-size: 10.5pt; }
+  .meta { display: flex; gap: 10mm; font-size: 11pt; margin-bottom: 6mm; } .meta span { flex: 1; border-bottom: 1px solid #000; padding-bottom: 1.5mm; }
+  h2 { font-size: 14pt; margin: 0 0 2mm; padding: 2mm 3mm; background: #e9e9e9; border-left: 4px solid #000; display: flex; justify-content: space-between; align-items: center; break-before: page; break-after: avoid; }
+  .meta + h2, .meta + h2 + * { break-before: auto; }
+  .vat { font-weight: normal; font-size: 10pt; }
+  .note { margin: 0 0 3mm; font-size: 10pt; color: #333; }
   table { width: 100%; border-collapse: collapse; break-inside: auto; } tr { break-inside: avoid; }
-  th, td { border: 1px solid #000; padding: 1mm 1.5mm; vertical-align: middle; }
-  thead th { background: #f2f2f2; font-size: 8.5pt; } thead { display: table-header-group; }
-  .list td { height: 8.5mm; } .list .n { width: 7mm; text-align: center; } .list .u { width: 16mm; text-align: center; font-size: 9pt; }
-  .list .cur { width: 30mm; text-align: right; color: #555; font-size: 9pt; } .list .new { width: 36mm; }
-  .src { font-size: 7.5pt; color: #555; }
-  .grid th, .grid td { text-align: center; } .grid tbody th { white-space: nowrap; font-size: 9.5pt; width: 22mm; }
-  .grid td { height: 11mm; vertical-align: top; text-align: left; position: relative; } .grid thead th { font-size: 8pt; }
-  .was { font-size: 6.8pt; color: #666; }
-  .all td { height: 7.5mm; } .all .subrow td { background: #f2f2f2; font-weight: bold; font-size: 9pt; height: auto; }
+  th, td { border: 1px solid #000; padding: 1.5mm 2mm; vertical-align: middle; }
+  thead th { background: #f2f2f2; font-size: 9.5pt; } thead { display: table-header-group; }
+  .list td { height: 12mm; } .list .n { width: 8mm; text-align: center; } .list .u { width: 17mm; text-align: center; font-size: 10pt; }
+  .list .cur { width: 28mm; text-align: right; color: #444; font-size: 10.5pt; } .list .new { width: 48mm; }
+  .src { font-size: 8pt; color: #555; margin-top: .5mm; }
+  .grid th, .grid td { text-align: center; } .grid tbody th { white-space: nowrap; font-size: 10.5pt; width: 26mm; }
+  .grid td { height: 15mm; vertical-align: top; text-align: left; } .grid thead th { font-size: 9pt; }
+  .was { font-size: 7.5pt; color: #555; }
+  .all td { height: 12mm; } .all .subrow td { background: #f2f2f2; font-weight: bold; font-size: 10.5pt; height: 7mm; padding: 1.5mm 2mm; }
   .airow td { background: #fff3b0; } .airow td.new { background: #fff; }
-  .fill { font: 600 10.5pt 'Segoe Print', 'Comic Sans MS', cursive; color: #1a3d9e; line-height: 1.15; }
-  .fsrc { font-size: 6.3pt; color: #1a3d9e; opacity: .8; }
-  .alt { font-size: 6.8pt; color: #8a8a8a; font-style: italic; }
-  .sign { margin-top: 8mm; display: flex; gap: 10mm; font-size: 10pt; } .sign span { flex: 1; border-bottom: 1px solid #000; padding-top: 8mm; }
+  .fill { font: 600 11pt 'Segoe Print', 'Comic Sans MS', cursive; color: #1a3d9e; line-height: 1.15; }
+  .fsrc { font-size: 7pt; color: #1a3d9e; } .alt { font-size: 7.5pt; color: #8a8a8a; font-style: italic; }
+  .sign { margin-top: 10mm; display: flex; gap: 10mm; font-size: 11pt; } .sign span { flex: 1; border-bottom: 1px solid #000; padding-top: 10mm; }
   .pb { break-before: page; }
   </style></head><body>
   <h1>${esc(title)}</h1><p class="sub">${esc(subtitle)}</p>
@@ -130,7 +130,7 @@ f1 += list('4. Коефіцієнти (вписати нове значення,
 const secCols = [['casing_2m', 'Кожух, секція 2 м'], ['shaft_2m', 'Трубовал, секція 2 м'], ['spiral_2m', 'Спіраль, секція 2 м'], ['hanger', 'Підвіс, шт'],
   ['end_plate', 'Торцева плита з підшипн., шт'], ['drive_gear', 'Привідна секція під МР'], ['drive_motor', 'Привідна секція ремінна'], ['nozzles', 'Патрубки, компл.']];
 const secRows = (type) => sections.items.black[type].map((it) => [(type === 'tube' ? 'Труба Ø' : 'Жолоб ') + it.size, secCols.map((c) => fmt(it[c[0]] * cfg.vat, 0))]);
-f1 += '<div class="pb"></div>' + grid('5. Шнековий транспортер — вузли «За секціями», труба (чорна сталь)', secCols.map((c) => c[1]), secRows('tube'),
+f1 += grid('5. Шнековий транспортер — вузли «За секціями», труба (чорна сталь)', secCols.map((c) => c[1]), secRows('tube'),
   { first: 'Типорозмір', note: '«Зараз» — з ПДВ, з детального розрахунку CRM. Для нержавійки — окремо, якщо відрізняється.' });
 f1 += grid('6. Шнековий транспортер — вузли «За секціями», жолоб (чорна сталь)', secCols.map((c) => c[1]), secRows('trough'), { first: 'Типорозмір' });
 
@@ -164,7 +164,7 @@ f3 += grid('1. Ціни, яких немає в каталозі НКЗ', ['Фу
 f3 += grid('2. Барабани (запчастини, довідково)', ['Барабан стрічковий', 'Барабан ланцюговий'],
   noria.models.map((m) => ['НКЗ-' + m.capacity, [m.drum ? fmt(m.drum, 0) : '', [5, 10, 25, 50].includes(m.capacity) ? (m.drum_chain ? fmt(m.drum_chain, 0) : '') : '—']]),
   { first: 'Норія', note: 'Голова й башмак «в зборі» в каталозі вже з барабанами — ці ціни для окремого продажу.' });
-f3 += '<div class="pb"></div>' + grid('3. Каталог НКЗ — перевірте ціни вузлів', ['Голова в зборі', 'Башмак в зборі', 'Шахта 1 м (за 1 мм)', 'Оглядова 1 м (за 1 мм)', 'Рамка (за 1 мм)', 'Товщина, мм'],
+f3 += grid('3. Каталог НКЗ — перевірте ціни вузлів', ['Голова в зборі', 'Башмак в зборі', 'Шахта 1 м (за 1 мм)', 'Оглядова 1 м (за 1 мм)', 'Рамка (за 1 мм)', 'Товщина, мм'],
   nc.models.map((m) => ['НКЗ-' + m.capacity, [fmt(m.head, 0), fmt(m.boot, 0), fmt(m.shaft_1m, 0), fmt(m.shaft_rev, 0), fmt(m.frame, 0), m.thickness.join(' / ')]]),
   { first: 'Норія', note: 'Синхронізовано з таблиці НКЗ ' + nc.synced + '. Правки вносьте в таблицю НКЗ (тоді оновиться і CRM).' });
 f3 += list('4. Ковші (каталог НКЗ)', nc.buckets.map((b) => [b.name + ' — для НКЗ-' + b.caps.join('/'), 'шт', fmt(b.price, 2), b.volume_l + ' л, ' + b.bolts + ' гвинти ' + b.bolt])
@@ -204,7 +204,7 @@ f4 += grid('2. Скребкові ТШ — у завальній ямі (з ро
   { first: 'Модель', vat: false, note: 'Колонки — довжина розподільного механізму від 1 до 10 м.' });
 f4 += grid('3. Скребкові ТШ — оберти і тип редуктора', ['Оберти на виході, об/хв', 'Тип редуктора', 'Габарит', 'Примітка'],
   tsh.models.map((m) => [m.model, ['', '', '', '']]), { first: 'Модель', vat: false });
-f4 += '<div class="pb"></div>' + grid('4. Стрічкові транспортери — потужність за довжиною, кВт', lens,
+f4 += grid('4. Стрічкові транспортери — потужність за довжиною, кВт', lens,
   bc.widths.map((w) => ['Стрічка ' + w.width + ' мм', w.kw_by_length.map((r) => r.kw ? fmt(r.kw, 1) : '')]),
   { first: 'Стрічка', vat: false, note: 'Довідково з «НКЗ Price»: ТС-40, ТС-60, ТС-80, ТС-100 (жолобоподібні), ТК-200 (стрічка 600×3) — вкажіть ширину стрічки кожного: ___________' });
 f4 += grid('5. Стрічкові транспортери — оберти, швидкість, тип редуктора', ['Діаметр приводного барабана, мм', 'Швидкість стрічки, м/с', 'Оберти на виході, об/хв', 'Тип / габарит редуктора'],
@@ -247,8 +247,9 @@ for (const g of groups) {
     if (s.name) f6 += `<tr class="subrow"><td colspan="5">${esc(s.name)}</td></tr>`;
     for (const it of s.items) {
       n++;
-      const src = (it.ai ? '✎ ' + AI[it.ai] + (it.note ? ': ' : '') : '') + (it.note || '');
-      f6 += `<tr${it.ai ? ' class="airow"' : ''}><td class="n">${n}</td><td>${esc(it.label)}${it.used && it.used.length ? `<div class="src">${esc(it.used.join(', '))}${it.paths.length > 1 ? ' · спільна ×' + it.paths.length : ''}</div>` : ''}${src ? `<div class="src">${esc(src)}</div>` : ''}</td><td class="u">${esc(it.unit)}</td><td class="cur">${esc(fnum(it.value))}</td><td class="new"></td></tr>`;
+      const short = (it.note || '').split(/\s[·(]|\. /)[0];
+      const src = (it.ai ? '✎ ' + AI[it.ai] + (short ? ': ' : '') : '') + (it.ai ? short : '');
+      f6 += `<tr${it.ai ? ' class="airow"' : ''}><td class="n">${n}</td><td>${esc(it.label)}${src ? `<div class="src">${esc(src)}</div>` : ''}${it.paths.length > 1 ? `<div class="src">спільна для: ${esc(it.used.join(', '))}</div>` : ''}</td><td class="u">${esc(it.unit)}</td><td class="cur">${esc(fnum(it.value))}</td><td class="new"></td></tr>`;
     }
   }
   f6 += '</tbody></table>';
@@ -259,7 +260,7 @@ const secHead = ['Кожух 2 м', 'Трубовал 2 м', 'Спіраль 2 �
 const presetLbl = { black: 'чорна', ss_screw_black_body: 'нерж. шнек + чорний корпус', food_full: 'харчова нерж.', tech_full: 'технічна нерж.' };
 for (const pr of Object.keys(sections.items)) {
   gi++;
-  f6 += '<div class="pb"></div>' + grid(gi + '. Шнековий — за секціями (без ПДВ), ' + presetLbl[pr], secHead,
+  f6 += grid(gi + '. Шнековий — за секціями (без ПДВ), ' + presetLbl[pr], secHead,
     ['tube', 'trough'].flatMap((t) => sections.items[pr][t].map((it) => [(t === 'tube' ? 'Труба Ø' : 'Жолоб ') + it.size, secFields.map((f) => fmt(it[f], f === 'consum_pct' ? 2 : 0))])),
     { first: 'Типорозмір', note: 'Ціни вузлів без ПДВ, з коеф. виготовлення; початково згенеровано з детального розрахунку CRM.' });
 }
