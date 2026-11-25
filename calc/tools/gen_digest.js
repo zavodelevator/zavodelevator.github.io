@@ -4,8 +4,10 @@ const path = require('path');
 const fs = require('fs');
 
 const root = path.join(__dirname, '..');
-const FILE = fs.readdirSync(path.join(root, 'prices')).filter((f) => /^prices_\d{4}-\d{2}-\d{2}_\d{2}-\d{2}\.json$/.test(f)).sort().pop();
-const PR = JSON.parse(fs.readFileSync(path.join(root, 'prices', FILE), 'utf8'));
+// аргумент — шлях до файлу цін; без нього — найсвіжіший у calc/prices/
+const ARG = process.argv[2];
+const FILE = ARG ? path.basename(ARG).replace(/^.*?(prices_\d{4}-\d{2}-\d{2}_\d{2}-\d{2}\.json)$/, '$1') : fs.readdirSync(path.join(root, 'prices')).filter((f) => /^prices_\d{4}-\d{2}-\d{2}_\d{2}-\d{2}\.json$/.test(f)).sort().pop();
+const PR = JSON.parse(fs.readFileSync(ARG || path.join(root, 'prices', FILE), 'utf8'));
 const stamp = FILE.replace(/^prices_(\d{4})-(\d{2})-(\d{2})_(\d{2})-(\d{2})\.json$/, '$3.$2.$1 $4:$5');
 
 const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
