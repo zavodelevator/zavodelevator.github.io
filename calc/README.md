@@ -9,7 +9,6 @@
 | `noria.html` — норія | `data/noria.json`, `data/gear_motors.json` | вузли (ціни ще 0) + паперовий прайс довідково |
 | `tsh.html` — шкребковий ТШ | `data/tsh.json`, `data/gear_motors.json` | Google Sheet «РЕМОНТ шнека», вкладка ТШ = CRM `TshConveyorCalculator` |
 | `sklad_spiral.html` — склад спіралей | Google Apps Script (як стара `sclad_sp2`) | копія `sclad_sp2.html/js`, штрипс 65 грн/кг замість 60 |
-| `spiral.html` — спіраль цільнотягнута / сегменти | `data/spiral.json`, `data/metals.json` | вкладка РШ (як «спіраль окремо» в ремонті; D110/42/110/5 → 1 281 роздріб, 1 068 опт), штрипс 65 грн/кг |
 
 ## Як відкрити
 JSON читається через `fetch`, тому подвійний клік по файлу не спрацює. Потрібен веб-сервер:

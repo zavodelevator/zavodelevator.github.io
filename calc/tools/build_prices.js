@@ -5,9 +5,9 @@ const fs = require('fs');
 const path = require('path');
 const root = path.resolve(process.argv[2] || 'calc');
 const J = (n) => JSON.parse(fs.readFileSync(path.join(root, 'data', n + '.json'), 'utf8'));
-const metals = J('metals'), repair = J('repair'), spiral = J('spiral'), sc = J('screw_conveyor'), core = J('shnek_core'),
+const metals = J('metals'), repair = J('repair'), sc = J('screw_conveyor'), core = J('shnek_core'),
   sections = J('sections'), gm = J('gear_motors'), tsh = J('tsh'), belt = J('belt_conveyor'), noria = J('noria');
-const ROOTS = { metals, repair, spiral, screw_conveyor: sc, shnek_core: core, sections, gear_motors: gm, tsh, belt_conveyor: belt, noria };
+const ROOTS = { metals, repair, screw_conveyor: sc, shnek_core: core, sections, gear_motors: gm, tsh, belt_conveyor: belt, noria };
 const get = (o, p) => p.split('.').reduce((a, k) => (a == null ? a : a[k]), ROOTS);
 
 const items = [];
@@ -21,29 +21,28 @@ function add(group, sub, id, label, unit, paths, used, note) {
 
 // ---- Метал
 const G1 = 'Метал, грн/кг';
-add(G1, 'Штрипс для спіралі', 'metal.strip.st3', 'Сталь 3', 'грн/кг', ['metals.strip.price', 'metals.strip_grades.0.price'], ['Ремонт шнека', 'Спіраль', 'Склад спіралей'],
+add(G1, 'Штрипс для спіралі', 'metal.strip.st3', 'Сталь 3', 'грн/кг', ['metals.strip.price', 'metals.strip_grades.0.price'], ['Ремонт шнека', 'Склад спіралей'],
   'Склад спіралей бере цю ціну замість зашитих 65.');
-add(G1, 'Штрипс для спіралі', 'metal.strip.09g2s', '09Г2С', 'грн/кг', 'metals.strip_grades.1.price', ['Ремонт шнека', 'Спіраль']);
-add(G1, 'Штрипс для спіралі', 'metal.strip.tech', 'Нержавійка технічна', 'грн/кг', ['metals.strip_grades.2.price', 'shnek_core.prices.flight.tech'], ['Ремонт шнека', 'Спіраль', 'Шнековий (детальний)']);
-add(G1, 'Штрипс для спіралі', 'metal.strip.food', 'Нержавійка AISI 304 (харчова)', 'грн/кг', ['metals.strip_grades.3.price', 'shnek_core.prices.flight.food'], ['Ремонт шнека', 'Спіраль', 'Шнековий (детальний)']);
+add(G1, 'Штрипс для спіралі', 'metal.strip.09g2s', '09Г2С', 'грн/кг', 'metals.strip_grades.1.price', ['Ремонт шнека']);
+add(G1, 'Штрипс для спіралі', 'metal.strip.tech', 'Нержавійка технічна', 'грн/кг', ['metals.strip_grades.2.price', 'shnek_core.prices.flight.tech'], ['Ремонт шнека', 'Шнековий (детальний)']);
+add(G1, 'Штрипс для спіралі', 'metal.strip.food', 'Нержавійка AISI 304 (харчова)', 'грн/кг', ['metals.strip_grades.3.price', 'shnek_core.prices.flight.food'], ['Ремонт шнека', 'Шнековий (детальний)']);
 add(G1, 'Штрипс для спіралі', 'metal.strip.black_conv', 'Чорна (спіраль транспортера)', 'грн/кг', 'shnek_core.prices.flight.black', ['Шнековий (детальний)'], 'Відрізняється від «Сталь 3» для ремонту (65).');
 add(G1, 'Труба', 'metal.tube.repair', 'Труба вала — нова труба при ремонті', 'грн/кг', 'metals.tube.price', ['Ремонт шнека']);
 const cls = { sheet: 'Лист', tube_body: 'Труба корпусу', shaft_tube: 'Труба вала (трубовал)', bar: 'Пруток (цапфи)' };
 const mats = { black: 'чорна', tech: 'нерж. технічна', food: 'нерж. харчова' };
 for (const c of Object.keys(cls)) for (const m of Object.keys(mats))
   add(G1, cls[c].split(' (')[0] === 'Лист' ? 'Лист' : (c === 'bar' ? 'Пруток' : 'Труба'), 'metal.' + c + '.' + m, cls[c] + ', ' + mats[m], 'грн/кг', 'shnek_core.prices.' + c + '.' + m, ['Шнековий (детальний, за секціями)']);
-add(G1, 'Інше', 'metal.density', 'Питома вага сталі', 'г/мм³', ['repair.density', 'spiral.density'], ['Ремонт шнека', 'Спіраль']);
+add(G1, 'Інше', 'metal.density', 'Питома вага сталі', 'г/мм³', 'repair.density', ['Ремонт шнека']);
 
 // ---- Коефіцієнти спіралі (однакові в ремонті, спіралі й детальному шнековому)
 const G2 = 'Коефіцієнти спіралі';
-add(G2, '', 'coef.spiral.retail', 'Роздріб (× ціна штрипса)', '×', ['repair.spiral_coef', 'spiral.coef_retail', 'shnek_core.spiral.coef_retail'], ['Ремонт шнека', 'Спіраль', 'Шнековий (детальний)']);
-add(G2, '', 'coef.spiral.wholesale', 'Опт (× ціна штрипса)', '×', ['repair.spiral_coef_wholesale', 'spiral.coef_wholesale', 'shnek_core.spiral.coef_wholesale'], ['Ремонт шнека', 'Спіраль', 'Шнековий (детальний)']);
-add(G2, '', 'coef.spiral.overhead', 'Запас матеріалу', '×', ['repair.spiral_overhead', 'spiral.overhead', 'shnek_core.spiral.allowance'], ['Ремонт шнека', 'Спіраль', 'Шнековий (детальний)']);
-add(G2, '', 'coef.spiral.strip_len', 'Коеф. довжини штрипса', '×', ['repair.strip_length_factor', 'spiral.strip_length_factor'], ['Ремонт шнека', 'Спіраль']);
-add(G2, '', 'coef.spiral.final', 'Кінцевий коефіцієнт ціни спіралі за метр', '×', 'spiral.final_coef', ['Спіраль']);
-add(G2, 'Сегменти', 'coef.segment.s2', 'Сегмент, s = 2 мм', '×', ['repair.segment.coef_s2', 'spiral.segment.coef_s2', 'shnek_core.spiral.seg_coef.2'], ['Ремонт шнека', 'Спіраль', 'Шнековий (детальний)']);
-add(G2, 'Сегменти', 'coef.segment.s3', 'Сегмент, s = 3 мм', '×', ['repair.segment.coef_s3', 'spiral.segment.coef_s3', 'shnek_core.spiral.seg_coef.3'], ['Ремонт шнека', 'Спіраль', 'Шнековий (детальний)']);
-add(G2, 'Сегменти', 'coef.segment.other', 'Сегмент, інші s', '×', ['repair.segment.coef_default', 'spiral.segment.coef_default', 'shnek_core.spiral.seg_coef.default'], ['Ремонт шнека', 'Спіраль', 'Шнековий (детальний)']);
+add(G2, '', 'coef.spiral.retail', 'Роздріб (× ціна штрипса)', '×', ['repair.spiral_coef', 'shnek_core.spiral.coef_retail'], ['Ремонт шнека', 'Шнековий (детальний)']);
+add(G2, '', 'coef.spiral.wholesale', 'Опт (× ціна штрипса)', '×', ['repair.spiral_coef_wholesale', 'shnek_core.spiral.coef_wholesale'], ['Ремонт шнека', 'Шнековий (детальний)']);
+add(G2, '', 'coef.spiral.overhead', 'Запас матеріалу', '×', ['repair.spiral_overhead', 'shnek_core.spiral.allowance'], ['Ремонт шнека', 'Шнековий (детальний)']);
+add(G2, '', 'coef.spiral.strip_len', 'Коеф. довжини штрипса', '×', 'repair.strip_length_factor', ['Ремонт шнека']);
+add(G2, 'Сегменти', 'coef.segment.s2', 'Сегмент, s = 2 мм', '×', ['repair.segment.coef_s2', 'shnek_core.spiral.seg_coef.2'], ['Ремонт шнека', 'Шнековий (детальний)']);
+add(G2, 'Сегменти', 'coef.segment.s3', 'Сегмент, s = 3 мм', '×', ['repair.segment.coef_s3', 'shnek_core.spiral.seg_coef.3'], ['Ремонт шнека', 'Шнековий (детальний)']);
+add(G2, 'Сегменти', 'coef.segment.other', 'Сегмент, інші s', '×', ['repair.segment.coef_default', 'shnek_core.spiral.seg_coef.default'], ['Ремонт шнека', 'Шнековий (детальний)']);
 
 // ---- Ремонт шнека
 const G3 = 'Ремонт шнека';
@@ -116,7 +115,7 @@ belt.widths.forEach((w, i) => w.kw_by_length.forEach((r, j) => add(G10, 'Стр�
 
 // ---- Націнки
 const G11 = 'Націнка, %';
-[['screw_conveyor', 'Шнековий транспортер'], ['tsh', 'ТШ'], ['belt_conveyor', 'Стрічковий'], ['noria', 'Норія'], ['spiral', 'Спіраль']]
+[['screw_conveyor', 'Шнековий транспортер'], ['tsh', 'ТШ'], ['belt_conveyor', 'Стрічковий'], ['noria', 'Норія']]
   .forEach(([k, l]) => add(G11, '', 'markup.' + k, l, '%', k + '.pricing.markup_pct', [l]));
 
 // ---- Запис
