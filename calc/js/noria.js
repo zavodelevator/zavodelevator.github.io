@@ -192,7 +192,7 @@
         { tab: 'Ручні ціни', note: 'Немає в каталозі — заповнити з PDF. Постійно — calc/data/noria.json.', fields: [
           { path: M + 'lagging', label: 'Футування привідного барабана', unit: 'грн' },
           { path: M + 'belt_oil_per_m', label: 'Стрічка маслостійка, за 1 м', unit: 'грн/м' },
-          { path: M + 'sprocket', label: 'Зірочка (ланцюгова), шт', unit: 'грн' },
+          { path: M + 'sprocket', label: 'Зірочка НКЗ-' + cap + ', шт', unit: 'грн' },
           { path: M + 'drum', label: 'Барабан (запчастина, довідково)', unit: 'грн' },
           { path: M + 'drum_chain', label: 'Барабан ланцюговий (запчастина, довідково)', unit: 'грн' },
           { path: M + 'backstop', label: 'Муфта зворотного ходу (якщо немає в каталозі)', unit: 'грн' },
@@ -234,7 +234,7 @@
         var ch = K.chains.filter(function (x) { return /ТРД-38/.test(x.name); })[0] || K.chains[0];
         convName = ch.name + (nChains > 1 ? ' × ' + nChains : '');
         rows.push({ name: 'Ланцюг ' + ch.name.replace(/^Ланцюг\s*/, ''), qty: convLen * nChains, unit: 'м', price: ch.price, note: nChains + ' ланцюг' + (nChains > 1 ? 'и' : '') + ' × (2·H + ' + N.belt_extra_m + ' м)' });
-        rows.push({ name: 'Зірочки', qty: 2 * nChains, unit: 'шт', qtyDigits: 0, price: m.sprocket, note: '2 на кожен ланцюг (головка + башмак)' });
+        rows.push({ name: 'Зірочка НКЗ-' + cap, qty: 2 * nChains, unit: 'шт', qtyDigits: 0, price: m.sprocket, note: '2 на кожен ланцюг (головка + башмак)' });
         if (!m.sprocket) warnings.push('Ціна зірочок для НКЗ-' + cap + ' не задана (панель «Ручні ціни»).');
       } else if (inp.belt === 'oil') {
         convName = 'маслостійка';

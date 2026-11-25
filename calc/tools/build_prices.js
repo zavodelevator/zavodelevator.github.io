@@ -101,9 +101,9 @@ add(G8, 'Геометрія', 'belt.bottom_pitch', 'Крок нижніх рол
 
 // ---- Норія: ручні ціни (решта — каталог НКЗ у Google-таблиці)
 const G9 = 'Норія — ціни, яких немає в каталозі НКЗ (з ПДВ)';
-const nf = { lagging: 'Футування привідного барабана', belt_oil_per_m: 'Стрічка маслостійка, за 1 м', sprocket: 'Зірочка (ланцюгова), шт', backstop: 'Муфта зворотного ходу (якщо немає в каталозі)',
+const nf = { lagging: 'Футування привідного барабана', belt_oil_per_m: 'Стрічка маслостійка, за 1 м', sprocket: 'Зірочка НКЗ-{cap}, шт', backstop: 'Муфта зворотного ходу (якщо немає в каталозі)',
   coupling: "З'єднувальна муфта (інша)", drum: 'Барабан (запчастина)', drum_chain: 'Барабан ланцюговий (запчастина)' };
-noria.models.forEach((m, i) => Object.keys(nf).forEach((f) => add(G9, 'НКЗ-' + m.capacity, 'noria.' + m.capacity + '.' + f, nf[f], /per_m/.test(f) ? 'грн/м' : 'грн', 'noria.models.' + i + '.' + f, ['Норія'])));
+noria.models.forEach((m, i) => Object.keys(nf).forEach((f) => add(G9, 'НКЗ-' + m.capacity, 'noria.' + m.capacity + '.' + f, nf[f].replace('{cap}', m.capacity), /per_m/.test(f) ? 'грн/м' : 'грн', 'noria.models.' + i + '.' + f, ['Норія'])));
 
 // ---- Потужності
 const G10 = 'Потужності мотор-редукторів, кВт';
