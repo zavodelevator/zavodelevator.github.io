@@ -17,7 +17,8 @@
    "drum": 0,
    "drum_chain": 0,
    "backstop": 0,
-   "coupling": 0
+   "coupling": 0,
+   "belt_heat_per_m": 0
   },
   {
    "capacity": 10,
@@ -28,7 +29,8 @@
    "drum": 0,
    "drum_chain": 0,
    "backstop": 0,
-   "coupling": 0
+   "coupling": 0,
+   "belt_heat_per_m": 0
   },
   {
    "capacity": 25,
@@ -39,7 +41,8 @@
    "drum": 0,
    "drum_chain": 0,
    "backstop": 0,
-   "coupling": 0
+   "coupling": 0,
+   "belt_heat_per_m": 0
   },
   {
    "capacity": 50,
@@ -50,7 +53,8 @@
    "drum": 0,
    "drum_chain": 0,
    "backstop": 0,
-   "coupling": 0
+   "coupling": 0,
+   "belt_heat_per_m": 0
   },
   {
    "capacity": 100,
@@ -61,7 +65,8 @@
    "drum": 0,
    "drum_chain": 0,
    "backstop": 0,
-   "coupling": 0
+   "coupling": 0,
+   "belt_heat_per_m": 0
   },
   {
    "capacity": 175,
@@ -72,7 +77,8 @@
    "drum": 0,
    "drum_chain": 0,
    "backstop": 0,
-   "coupling": 0
+   "coupling": 0,
+   "belt_heat_per_m": 0
   },
   {
    "capacity": 200,
@@ -83,7 +89,8 @@
    "drum": 0,
    "drum_chain": 0,
    "backstop": 0,
-   "coupling": 0
+   "coupling": 0,
+   "belt_heat_per_m": 0
   }
  ],
  "price_list": {

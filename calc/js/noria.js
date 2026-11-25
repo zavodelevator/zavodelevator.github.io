@@ -35,12 +35,12 @@
     var chain = document.querySelector('input[name="conv"]:checked').value === 'chain';
     document.querySelectorAll('input[name="conv"]').forEach(function (x) { x.parentNode.classList.toggle('active', x.checked); });
     $('belt-group').hidden = chain;
+    document.querySelectorAll('input[name="belt_kind"]').forEach(function (x) { x.parentNode.classList.toggle('active', x.checked); });
     $('sensor-belt').hidden = chain;
 
     var belts = forCap(Dt.noria_catalog.belts, cap), fallback = !belts.length;
     if (fallback) belts = Dt.noria_catalog.belts.slice().sort(function (a, b) { return b.width - a.width; });
     var bi = belts.map(function (b) { return [b.id, b.name + ' — ' + f(b.price, 0) + ' грн/м']; });
-    bi.push(['oil', 'Маслостійка' + (m.belt_oil_per_m ? ' — ' + f(m.belt_oil_per_m, 0) + ' грн/м' : ' (ціна не задана)')]);
     opts($('belt'), bi, !$('belt').dataset.capChanged);
     $('belt').dataset.capChanged = '';
 
@@ -77,6 +77,7 @@
     ['coupling', 'motor'].forEach(function (id) { $(id).addEventListener('change', function () { $(id).dataset.touched = '1'; }); });
     $('capacity').addEventListener('change', function () { $('belt').dataset.capChanged = '1'; $('bucket').innerHTML = ''; $('motor').dataset.touched = ''; $('coupling').dataset.touched = ''; refill(D0); Calc.renderPanel(); Calc.recompute(); });
     $('height').addEventListener('input', function () { if (!$('motor').dataset.touched) { refill(D0); Calc.recompute(); } });
+    document.querySelectorAll('input[name="belt_kind"]').forEach(function (r) { r.addEventListener('change', function () { refill(D0); Calc.recompute(); }); });
     document.querySelectorAll('input[name="conv"]').forEach(function (r) { r.addEventListener('change', function () { refill(D0); Calc.recompute(); }); });
     document.addEventListener('click', function (e) {
       var b = e.target.closest('[data-copy]');
@@ -192,6 +193,7 @@
         { tab: 'Ручні ціни', note: 'Немає в каталозі — заповнити з PDF. Постійно — calc/data/noria.json.', fields: [
           { path: M + 'lagging', label: 'Футування привідного барабана', unit: 'грн' },
           { path: M + 'belt_oil_per_m', label: 'Стрічка маслостійка, за 1 м', unit: 'грн/м' },
+          { path: M + 'belt_heat_per_m', label: 'Стрічка термостійка, за 1 м', unit: 'грн/м' },
           { path: M + 'sprocket', label: 'Зірочка НКЗ-' + cap + ', шт', unit: 'грн' },
           { path: M + 'drum', label: 'Барабан (запчастина, довідково)', unit: 'грн' },
           { path: M + 'drum_chain', label: 'Барабан ланцюговий (запчастина, довідково)', unit: 'грн' },
@@ -236,10 +238,12 @@
         rows.push({ name: 'Ланцюг ' + ch.name.replace(/^Ланцюг\s*/, ''), qty: convLen * nChains, unit: 'м', price: ch.price, note: nChains + ' ланцюг' + (nChains > 1 ? 'и' : '') + ' × (2·H + ' + N.belt_extra_m + ' м)' });
         rows.push({ name: 'Зірочка НКЗ-' + cap, qty: 2 * nChains, unit: 'шт', qtyDigits: 0, price: m.sprocket, note: '2 на кожен ланцюг (головка + башмак)' });
         if (!m.sprocket) warnings.push('Ціна зірочок для НКЗ-' + cap + ' не задана (панель «Ручні ціни»).');
-      } else if (inp.belt === 'oil') {
-        convName = 'маслостійка';
-        rows.push({ name: 'Стрічка маслостійка', qty: convLen, unit: 'м', price: m.belt_oil_per_m, note: '2·H + ' + N.belt_extra_m + ' м' });
-        if (!m.belt_oil_per_m) warnings.push('Ціна маслостійкої стрічки для НКЗ-' + cap + ' не задана (панель «Ручні ціни»).');
+      } else if (inp.belt_kind === 'oil' || inp.belt_kind === 'heat') {
+        var heat = inp.belt_kind === 'heat', kp = heat ? m.belt_heat_per_m : m.belt_oil_per_m, kn = heat ? 'термостійка' : 'маслостійка';
+        var bw = (K.belts.filter(function (b) { return b.id === inp.belt; })[0] || forCap(K.belts, cap)[0] || {}).width;
+        convName = kn + (bw ? ' ' + bw + ' мм' : '');
+        rows.push({ name: 'Стрічка ' + kn + (bw ? ' ' + bw + ' мм' : ''), qty: convLen, unit: 'м', price: kp, note: '2·H + ' + N.belt_extra_m + ' м · ціна для НКЗ-' + cap });
+        if (!kp) warnings.push('Ціна ' + (heat ? 'термостійкої' : 'маслостійкої') + ' стрічки для НКЗ-' + cap + ' не задана (панель «Ручні ціни»).');
       } else {
         var belt = K.belts.filter(function (b) { return b.id === inp.belt; })[0] || forCap(K.belts, cap)[0] || K.belts[0];
         convName = belt.width + ' мм';
