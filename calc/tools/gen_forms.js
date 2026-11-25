@@ -6,7 +6,18 @@ const root = path.resolve(process.argv[2] || 'calc');
 const J = (n) => JSON.parse(fs.readFileSync(path.join(root, 'data', n + '.json'), 'utf8'));
 const S = require(path.join(root, 'js', 'shnek_core.js'));
 const cfg = J('shnek_core'), metals = J('metals'), repair = J('repair'), sc = J('screw_conveyor'), sections = J('sections'),
-  gm = J('gear_motors'), noria = J('noria'), tsh = J('tsh'), spiral = J('spiral'), bc = J('belt_conveyor');
+  gm = J('gear_motors'), noria = J('noria'), tsh = J('tsh'), bc = J('belt_conveyor');
+// Накласти найсвіжіший файл цін (як калькулятори), щоб «зараз» = актуальні ціни
+const PRICES_FILE = fs.readdirSync(path.join(root, 'prices')).filter((f) => /^prices_\d{4}-\d{2}-\d{2}_\d{2}-\d{2}\.json$/.test(f)).sort().pop();
+const PR = JSON.parse(fs.readFileSync(path.join(root, 'prices', PRICES_FILE), 'utf8'));
+(() => {
+  const R = { metals, repair, screw_conveyor: sc, shnek_core: cfg, sections, gear_motors: gm, tsh, belt_conveyor: bc, noria };
+  for (const it of PR.items) for (const p of it.paths) {
+    const k = p.split('.'), last = k.pop(); let t = R;
+    for (const x of k) { t = t == null ? t : t[x]; }
+    if (t != null && last in t) t[last] = it.value;
+  }
+})();
 
 // Режим «заповнено»: FILL=1 node calc/tools/gen_forms.js calc → пропозиції з calc/forms/proposals.json
 const FILL = process.env.FILL === '1';
@@ -59,6 +70,8 @@ function page(title, subtitle, body) {
   .grid th, .grid td { text-align: center; } .grid tbody th { white-space: nowrap; font-size: 9.5pt; width: 22mm; }
   .grid td { height: 11mm; vertical-align: top; text-align: left; position: relative; } .grid thead th { font-size: 8pt; }
   .was { font-size: 6.8pt; color: #666; }
+  .all td { height: 7.5mm; } .all .subrow td { background: #f2f2f2; font-weight: bold; font-size: 9pt; height: auto; }
+  .airow td { background: #fff3b0; } .airow td.new { background: #fff; }
   .fill { font: 600 10.5pt 'Segoe Print', 'Comic Sans MS', cursive; color: #1a3d9e; line-height: 1.15; }
   .fsrc { font-size: 6.3pt; color: #1a3d9e; opacity: .8; }
   .alt { font-size: 6.8pt; color: #8a8a8a; font-style: italic; }
@@ -132,7 +145,7 @@ f1 += list('8. Бункери за об\'ємом', vols.map((v) => ['Прийм
 f1 += list('9. Покупні вузли', Object.keys(cfg.buy).map((k) => [k, 'шт', fmt(cfg.buy[k].price, 2), cfg.buy[k].src || '']));
 f1 += list('10. Спіраль цільнотягнута — ціна за 1 м (контроль)', [
   ['D159 × d60, крок 159, s=4 (ст.3), роздріб', 'грн/м', ''], ['D200 × d60, крок 200, s=4 (ст.3), роздріб', 'грн/м', ''],
-  ['D250 × d76, крок 250, s=5 (ст.3), роздріб', 'грн/м', ''], ['Коефіцієнт роздріб / опт', '×', spiral.coef_retail + ' / ' + spiral.coef_wholesale]
+  ['D250 × d76, крок 250, s=5 (ст.3), роздріб', 'грн/м', ''], ['Коефіцієнт роздріб / опт', '×', repair.spiral_coef + ' / ' + repair.spiral_coef_wholesale]
 ], { note: 'Для звірки з калькулятором спіралі.' });
 f1 += grid('11. Простий прайс шнекового транспортера (як стара сторінка)', ['Кінцеві вузли', 'За 1 м', 'Бункер', 'Підставка', 'Крот'],
   sc.diameters.map((d) => ['Ø' + d.d, [fmt(d.base, 0), fmt(d.per_m, 0), fmt(d.d < sc.coef.small_limit ? sc.coef.hopper_small : sc.coef.hopper_large, 0),
@@ -214,11 +227,49 @@ f5 += grid('3. Відстань між роликоопорами, м', ['Вер
 f5 += list('4. Довідково', [['Інші вузли стрічкового транспортера (завантажувальна воронка, скребок очищення, кожух), яких немає в калькуляторі', '', ''],
   ['Потужність мотор-редуктора — у формі «Потужності мотор-редукторів», розділ 4', '', '']], { vat: false });
 
+// ================= Форма 6: усі ціни й коефіцієнти (з файлу цін) =================
+let f6 = ''; CUR = 'all';
+const AI = { own: 'з ваших таблиць', web: 'з інтернету', estimate: 'оцінка Claude' };
+const fnum = (v) => (typeof v === 'number' ? Number(v).toLocaleString('uk-UA', { maximumFractionDigits: 4 }) : v);
+const groups = [];
+for (const it of PR.items) {
+  if (/за секціями/.test(it.group)) continue;
+  let g = groups.find((x) => x.name === it.group); if (!g) groups.push(g = { name: it.group, subs: [] });
+  let s = g.subs.find((x) => x.name === it.sub); if (!s) g.subs.push(s = { name: it.sub, items: [] });
+  s.items.push(it);
+}
+let gi = 0;
+for (const g of groups) {
+  gi++;
+  f6 += `<h2>${gi}. ${esc(g.name)}<span class="vat">ціни: ☐ з ПДВ &nbsp; ☐ без ПДВ</span></h2><table class="list all"><thead><tr><th class="n">№</th><th>Позиція</th><th class="u">Од.</th><th class="cur">Зараз</th><th class="new">Нова / ✓</th></tr></thead><tbody>`;
+  let n = 0;
+  for (const s of g.subs) {
+    if (s.name) f6 += `<tr class="subrow"><td colspan="5">${esc(s.name)}</td></tr>`;
+    for (const it of s.items) {
+      n++;
+      const src = (it.ai ? '✎ ' + AI[it.ai] + (it.note ? ': ' : '') : '') + (it.note || '');
+      f6 += `<tr${it.ai ? ' class="airow"' : ''}><td class="n">${n}</td><td>${esc(it.label)}${it.used && it.used.length ? `<div class="src">${esc(it.used.join(', '))}${it.paths.length > 1 ? ' · спільна ×' + it.paths.length : ''}</div>` : ''}${src ? `<div class="src">${esc(src)}</div>` : ''}</td><td class="u">${esc(it.unit)}</td><td class="cur">${esc(fnum(it.value))}</td><td class="new"></td></tr>`;
+    }
+  }
+  f6 += '</tbody></table>';
+}
+// секції: компактна сітка
+const secFields = ['casing_2m', 'shaft_2m', 'spiral_2m', 'hanger', 'end_plate', 'drive_gear', 'drive_motor', 'nozzles', 'consum_pct'];
+const secHead = ['Кожух 2 м', 'Трубовал 2 м', 'Спіраль 2 м', 'Підвіс', 'Торець з підш.', 'Привід. МР', 'Привід. рем.', 'Патрубки', 'Витр. %'];
+const presetLbl = { black: 'чорна', ss_screw_black_body: 'нерж. шнек + чорний корпус', food_full: 'харчова нерж.', tech_full: 'технічна нерж.' };
+for (const pr of Object.keys(sections.items)) {
+  gi++;
+  f6 += '<div class="pb"></div>' + grid(gi + '. Шнековий — за секціями (без ПДВ), ' + presetLbl[pr], secHead,
+    ['tube', 'trough'].flatMap((t) => sections.items[pr][t].map((it) => [(t === 'tube' ? 'Труба Ø' : 'Жолоб ') + it.size, secFields.map((f) => fmt(it[f], f === 'consum_pct' ? 2 : 0))])),
+    { first: 'Типорозмір', note: 'Ціни вузлів без ПДВ, з коеф. виготовлення; початково згенеровано з детального розрахунку CRM.' });
+}
+
 const today = new Date().toLocaleDateString('uk-UA');
 const forms = [
   ['Ціни для калькуляторів — шнекові.pdf', page('Ціни для калькуляторів: шнекове обладнання', 'Ремонт шнека · шнековий транспортер · спіраль. Сформовано ' + today + ' з calc/data/*.json. Впишіть ручкою нову ціну там, де вона змінилась.', f1)],
   ['Ціни для калькулятора ТШ.pdf', page('Ціни для калькулятора скребкового транспортера ТШ', 'ТШ 25 / 50 / 100 / 200: головки, секції, ланцюг зі шкребками, футування ПЕ-500 / ПЕ-1000, розподільник. Сформовано ' + today + '. Впишіть ручкою ціни.', f2)],
   ['Ціни для калькулятора стрічкового транспортера.pdf', page('Ціни для калькулятора стрічкового транспортера', 'Стрічка 400 / 500 / 600 / 800 мм: станції, став, роликоопори, стрічка, футування барабана. Сформовано ' + today + '. Впишіть ручкою ціни.', f5)],
+  ['Ціни і коефіцієнти — усі позиції.pdf', page('Ціни і коефіцієнти калькуляторів — усі позиції', 'З файлу ' + PRICES_FILE + '. ✎ і жовте тло — ціну заповнив Claude (неточно): впишіть правильну або поставте ✓. Сформовано ' + today + '.', f6)],
   ['Потужності мотор-редукторів.pdf', page('Потужності мотор-редукторів: скребкові й стрічкові транспортери', 'Впишіть потужність, кВт. Скребкові — звичайні за довжиною і в завальній ямі (розподільник 1–10 м). Сформовано ' + today + '.', f4)],
   ['Ціни для калькулятора норії.pdf', page('Ціни для калькулятора норії', 'Розділи 1–2 — заповнити (цін немає в каталозі). Розділи 3–7 — ціни з каталогу НКЗ, перевірити й виправити. Сформовано ' + today + '.', f3)]
 ];
